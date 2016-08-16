@@ -1,0 +1,11 @@
+#!/bin/bash
+# generate csharp code
+thrift -gen csharp test.thrift
+if [ $? -eq 0 ]; then
+    echo 'Successfully generated.'
+else
+    echo 'Generation failed.' >&2
+    exit 1
+fi
+# move generated files to Assets
+mv gen-csharp/de/dfki/test/TestEvent.cs ../TestProject/Assets/
