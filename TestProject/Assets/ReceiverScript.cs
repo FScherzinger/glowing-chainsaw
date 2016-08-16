@@ -22,7 +22,7 @@ public class ReceiverScript : MonoBehaviour {
 		thread.Start();
 	}
 
-	void OnApplicationClose(){
+	void OnApplicationQuit(){
 		client.Disconnect();
 		thread.Abort();
 	}
