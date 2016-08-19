@@ -23,7 +23,7 @@ public class PublisherScript : MonoBehaviour {
 	static void Connect()
 	{
 		Debug.Log( "waiting for tecs-server... (publisher)" );
-		Uri uri = PSFactory.CreateURI( "publish-client", "localhost", 9000 );
+		Uri uri = PSFactory.CreateURI( "publish-client", "192.168.1.141", 9000 );
 		publish_client = PSFactory.CreatePSClient( uri );
 		publish_client.Connect();
 		is_connected = true;
