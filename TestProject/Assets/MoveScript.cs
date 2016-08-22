@@ -6,12 +6,12 @@ using de.dfki.tecs;
 using de.dfki.tecs.ps;
 using de.dfki.tecs.basetypes;
 
-using de.dfki.test;
+using de.dfki.events;
 
 public class MoveScript : MonoBehaviour {
 
 	PSClient client;
-		
+
 	void Update () {
 		if(Input.GetKey("left"))
 			transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
