@@ -1,6 +1,6 @@
 #!/bin/bash
 # generate csharp code
-thrift -gen csharp test.thrift
+thrift -gen csharp events.thrift
 if [ $? -eq 0 ]; then
     echo 'Successfully generated.'
 else
@@ -8,4 +8,8 @@ else
     exit 1
 fi
 # move generated files to Assets
-mv gen-csharp/de/dfki/test/TestEvent.cs ../TestProject/Assets/
+mv gen-csharp/de/dfki/events/DirectionEvent.cs ../TestProject/Assets/
+mv gen-csharp/de/dfki/events/PositionEvent.cs ../TestProject/Assets/
+mv gen-csharp/de/dfki/events/MsgType.cs ../TestProject/Assets/
+mv gen-csharp/de/dfki/events/Position.cs ../TestProject/Assets/
+mv gen-csharp/de/dfki/events/Direction.cs ../TestProject/Assets/
