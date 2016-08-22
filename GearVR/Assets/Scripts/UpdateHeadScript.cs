@@ -10,11 +10,11 @@ using System.Runtime.InteropServices;
 
 using de.dfki.events;
 
-public class ReceiverScript : MonoBehaviour {
+public class UpdateHeadScript : MonoBehaviour {
 
 	static PSClient receive_client;
 	Thread receive_thread = new Thread( Receive );
-	static Position position;
+	static de.dfki.events.Direction direction;
 
 	void Start()
 	{
@@ -31,41 +31,40 @@ public class ReceiverScript : MonoBehaviour {
 	{
 		// establish connection
 		Debug.Log( "waiting for tecs-server... (receiver)" );
-		Uri uri = PSFactory.CreateURI( "receiver-client", "192.168.1.141", 9000 );
+		Uri uri = PSFactory.CreateURI( "update-head-client", "192.168.1.141", 9000 );
 		receive_client = PSFactory.CreatePSClient( uri );
-		receive_client.Subscribe( "TestEvent" );
+		receive_client.Subscribe( "DirectionEvent" );
 		receive_client.Connect();
 		Debug.Log( "connected. (receiver)" );
-
 		// start listening
 		while( receive_client.IsOnline() )
 			while( receive_client.CanRecv() )
 			{
 				de.dfki.tecs.Event eve = receive_client.Recv();
-				if( eve.Is( "PositionEvent" ) )
+				if( eve.Is( "DirectionEvent" ) )
 				{
-					PositionEvent pe = new PositionEvent();
-					eve.ParseData(pe);
-					switch(pe.Type){
-					case MsgType.TANGO:
-						position = pe.Position ;
-						break;
-					
-					case MsgType.GEARVR:
-						position = pe.Position ;
-						break;
+					DirectionEvent de = new DirectionEvent();
+					eve.ParseData(de);
+					switch(de.Type){
+						case MsgType.TANGO:
+							direction = de.Direction;
+							break;
 
-					case MsgType.VIVE:
-						position = pe.Position ;
-						break;
-					default:
-						break;
+						case MsgType.GEARVR:
+							direction = de.Direction;
+							break;
+
+						case MsgType.VIVE:
+							direction = de.Direction;
+							break;
+						default:
+							break;
 					}
 				}
 			}
 	}
 
 	void Update(){
-		transform.position = new Vector3((float)position.X, (float)position.Y, (float)position.Z);
+		transform.rotation = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
 	}
 }

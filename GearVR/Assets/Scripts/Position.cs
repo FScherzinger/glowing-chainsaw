@@ -15,25 +15,34 @@ using System.Runtime.Serialization;
 using Thrift.Protocol;
 using Thrift.Transport;
 
-namespace de.dfki.test
+namespace de.dfki.events
 {
 
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class TestEvent : TBase
+  public partial class Position : TBase
   {
 
+    /// <summary>
+    /// X-Coordinate *
+    /// </summary>
     public double X { get; set; }
 
+    /// <summary>
+    /// Y-Coordinate *
+    /// </summary>
     public double Y { get; set; }
 
+    /// <summary>
+    /// Z-Coordinate *
+    /// </summary>
     public double Z { get; set; }
 
-    public TestEvent() {
+    public Position() {
     }
 
-    public TestEvent(double x, double y, double z) : this() {
+    public Position(double x, double y, double z) : this() {
       this.X = x;
       this.Y = y;
       this.Z = z;
@@ -105,7 +114,7 @@ namespace de.dfki.test
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("TestEvent");
+        TStruct struc = new TStruct("Position");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         field.Name = "x";
@@ -136,7 +145,7 @@ namespace de.dfki.test
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("TestEvent(");
+      StringBuilder __sb = new StringBuilder("Position(");
       __sb.Append(", X: ");
       __sb.Append(X);
       __sb.Append(", Y: ");
