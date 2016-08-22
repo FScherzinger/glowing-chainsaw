@@ -7,7 +7,7 @@ using de.dfki.tecs;
 using de.dfki.tecs.ps;
 using de.dfki.tecs.basetypes;
 
-using de.dfki.test;
+using de.dfki.events;
 
 public class PublisherScript : MonoBehaviour {
 
@@ -45,7 +45,8 @@ public class PublisherScript : MonoBehaviour {
 	{
 		if( !is_connected )
 			return;
-		TestEvent te = new TestEvent( transform.position.x, transform.position.y, transform.position.z );
-		publish_client.Send( ".*", "TestEvent", te );
+		Position position = new Position( transform.position.x, transform.position.y, transform.position.z );
+		PositionEvent pe = new PositionEvent( MsgType.GEARVR, position );
+		publish_client.Send( ".*", "PositionEvent", pe );
 	}
 }
