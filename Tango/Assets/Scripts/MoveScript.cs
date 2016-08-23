@@ -1,17 +1,28 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 
-public class MoveScript : MonoBehaviour {
 
-	Vector3 vec = new Vector3(1,0,0);
-	int i = 0;
-	// Update is called once per frame
-	void Update () {
-		if (i < 150)
-			transform.RotateAround(transform.position, Vector3.up, 5);
-		else
-			transform.RotateAround(transform.position, Vector3.left, 5);
-		i %= 300;
-		i++;
+public class MoveScript : MonoBehaviour
+{
+	private Vector3 new_position;
+
+	void Start()
+	{
+		new_position = transform.position;
+	}
+
+	void Update()
+	{
+		if( Input.GetKey( "left" ) )
+			new_position.x -= .1f;
+		if( Input.GetKey( "right" ) )
+			new_position.x += .1f;
+		if( Input.GetKey( "up" ) )
+			new_position.z += .1f;
+		if( Input.GetKey( "down" ) )
+			new_position.z -= .1f;
+
+		transform.position = new_position;
 	}
 }

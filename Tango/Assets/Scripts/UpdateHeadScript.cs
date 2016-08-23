@@ -31,7 +31,7 @@ public class UpdateHeadScript : MonoBehaviour {
 	{
 		// establish connection
 		Debug.Log( "waiting for tecs-server... (receiver)" );
-		Uri uri = PSFactory.CreateURI( "update-head-tango-client", "192.168.43.105", 9000 );
+		Uri uri = PSFactory.CreateURI( "update-head-tango-client", "192.168.0.13", 9000 );
 		receive_client = PSFactory.CreatePSClient( uri );
 		receive_client.Subscribe( "DirectionEvent" );
 		receive_client.Connect();
@@ -66,10 +66,11 @@ public class UpdateHeadScript : MonoBehaviour {
 
 	void Update(){
 		if (direction != null) {
-			Quaternion q = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
-			Vector3 vec = q.eulerAngles;
-			vec.x = 270;
-			transform.eulerAngles = vec;
+			Quaternion newrot = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
+			Quaternion upatedrot = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+			Vector3 rot_vec = upatedrot.eulerAngles;
+			rot_vec.x = 270;
+			transform.rotation = Quaternion.Euler (rot_vec);
 		}
 
 	}
