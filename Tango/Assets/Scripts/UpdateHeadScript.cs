@@ -31,7 +31,7 @@ public class UpdateHeadScript : MonoBehaviour {
 	{
 		// establish connection
 		Debug.Log( "waiting for tecs-server... (receiver)" );
-		Uri uri = PSFactory.CreateURI( "update-head-client", "192.168.1.141", 9000 );
+		Uri uri = PSFactory.CreateURI( "update-head-tango-client", "192.168.43.105", 9000 );
 		receive_client = PSFactory.CreatePSClient( uri );
 		receive_client.Subscribe( "DirectionEvent" );
 		receive_client.Connect();
@@ -46,17 +46,17 @@ public class UpdateHeadScript : MonoBehaviour {
 					DirectionEvent de = new DirectionEvent();
 					eve.ParseData(de);
 					switch(de.Type){
-						case MsgType.TANGO:
-							direction = de.Direction;
-							break;
+//						case MsgType.TANGO:
+//							direction = de.Direction;
+//							break;
 
 						case MsgType.GEARVR:
 							direction = de.Direction;
 							break;
 
-						case MsgType.VIVE:
-							direction = de.Direction;
-							break;
+//						case MsgType.VIVE:
+//							direction = de.Direction;
+//							break;
 						default:
 							break;
 					}
@@ -65,6 +65,12 @@ public class UpdateHeadScript : MonoBehaviour {
 	}
 
 	void Update(){
-		transform.rotation = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
+		if (direction != null) {
+			Quaternion q = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
+			Vector3 vec = q.eulerAngles;
+			vec.x = 270;
+			transform.eulerAngles = vec;
+		}
+
 	}
 }
