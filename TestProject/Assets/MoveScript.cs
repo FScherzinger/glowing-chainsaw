@@ -2,25 +2,27 @@
 using System;
 using System.Collections;
 
-using de.dfki.tecs;
-using de.dfki.tecs.ps;
-using de.dfki.tecs.basetypes;
 
-using de.dfki.events;
+public class MoveScript : MonoBehaviour
+{
+	private Vector3 new_position;
 
-public class MoveScript : MonoBehaviour {
-
-	PSClient client;
-
-	void Update () {
-		if(Input.GetKey("left"))
-			transform.position = new Vector3(transform.position.x + 0.5f, transform.position.y, transform.position.z);
-		else if(Input.GetKey("right"))
-			transform.position = new Vector3(transform.position.x - 0.5f, transform.position.y, transform.position.z);
-		else if(Input.GetKey("up"))
-			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z + 0.5f);
-		else if(Input.GetKey("down"))
-			transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.5f);
+	void Start()
+	{
+		new_position = transform.position;
 	}
 
+	void Update()
+	{
+		if( Input.GetKey( "left" ) )
+			new_position.x -= .1f;
+		if( Input.GetKey( "right" ) )
+			new_position.x += .1f;
+		if( Input.GetKey( "up" ) )
+			new_position.z += .1f;
+		if( Input.GetKey( "down" ) )
+			new_position.z -= .1f;
+
+		transform.position = new_position;
+	}
 }

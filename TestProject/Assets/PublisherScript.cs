@@ -45,8 +45,11 @@ public class PublisherScript : MonoBehaviour {
 	{
 		if( !is_connected )
 			return;
-		Position position = new Position( transform.position.x, transform.position.y, transform.position.z );
-		PositionEvent pe = new PositionEvent( MsgType.GEARVR, position );
-		publish_client.Send( ".*", "PositionEvent", pe );
+		if( publish_client.IsOnline() && publish_client.IsConnected() )
+		{
+			Position position = new Position( transform.position.x, transform.position.y, transform.position.z );
+			PositionEvent pe = new PositionEvent( MsgType.GEARVR, position );
+			publish_client.Send( ".*", "PositionEvent", pe );
+		}
 	}
 }
