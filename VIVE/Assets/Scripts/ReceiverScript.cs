@@ -31,7 +31,7 @@ public class ReceiverScript : MonoBehaviour {
 	{
 		// establish connection
 		Debug.Log( "waiting for tecs-server... (receiver)" );
-		Uri uri = PSFactory.CreateURI( "receiver-client-vive", "192.168.1.141", 9000 );
+		Uri uri = PSFactory.CreateURI( "receiver-client", "192.168.43.105", 9000 );
 		receive_client = PSFactory.CreatePSClient( uri );
 		receive_client.Subscribe( "PositionEvent" );
 		receive_client.Connect();
@@ -66,6 +66,7 @@ public class ReceiverScript : MonoBehaviour {
 	}
 
 	void Update(){
-	//	transform.position = new Vector3((float)position.X, (float)position.Y, (float)position.Z);
+		if(position != null)
+			transform.position = new Vector3((float)position.X, (float)position.Y, (float)position.Z);
 	}
 }
