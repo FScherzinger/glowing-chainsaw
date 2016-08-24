@@ -10,5 +10,3 @@
 Download link for tecs-server binaries:
 <br />
 https://cloud.dfki.de/owncloud/index.php/s/aCcdLNm0jY2b04T?path=%2Ftecs-server
-<br />
-https://docs.google.com/presentation/d/19Edvlg5V0QohAJ4Z5Wfv-eRnYmOBRm6pOHdsYsXwyEE/edit?usp=sharing
