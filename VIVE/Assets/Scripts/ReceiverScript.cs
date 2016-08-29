@@ -31,7 +31,7 @@ public class ReceiverScript : MonoBehaviour {
 	{
 		// establish connection
 		Debug.Log( "waiting for tecs-server... (receiver)" );
-		Uri uri = PSFactory.CreateURI( "receiver-client", "192.168.43.105", 9000 );
+		Uri uri = PSFactory.CreateURI( "receiver-client", "10.42.0.120", 9000 );
 		receive_client = PSFactory.CreatePSClient( uri );
 		receive_client.Subscribe( "PositionEvent" );
 		receive_client.Connect();
