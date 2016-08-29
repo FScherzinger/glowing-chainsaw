@@ -28,7 +28,8 @@ public class ReceivePosRot : MonoBehaviour {
 
 	void Start()
 	{
-
+		PositionEvents = new LinkedList<PositionEvent> ();
+		DirectionEvents = new LinkedList<DirectionEvent> ();
 		Heads = new Dictionary<int,GameObject>();
 		ReceiverThread rc_thread = new ReceiverThread{
 			serverAddr = this.serveradress,
@@ -52,7 +53,7 @@ public class ReceivePosRot : MonoBehaviour {
 	}
 
 	void updatePosition(){
-		if (PositionEvents.Count == 0)
+		if (PositionEvents == null | PositionEvents.Count == 0)
 			return;
 		PositionEvent pe = PositionEvents.First.Value;
 		DirectionEvents.RemoveFirst();
@@ -91,9 +92,10 @@ public class ReceivePosRot : MonoBehaviour {
 			receive_client.Subscribe( "PositionEvent" );
 			receive_client.Connect();
 			Debug.Log( "connected. (receiver)" );
+			Receive ();
 		}
 
-		void Receive(Device device)
+		void Receive()
 		{
 
 			// start listening

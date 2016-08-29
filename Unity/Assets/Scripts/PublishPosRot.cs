@@ -12,27 +12,35 @@ using de.dfki.events;
 public class PublishPosRot : MonoBehaviour {
 
 	Publisher publisher;
-	static bool is_connected = false;
+	Thread publishThread;
 	public Device device;
+	public String serverAddr = "localhost";
+	public int serverPort = 9000;
 
 	void Start()
 	{
-		publisher = new Publisher ();
-		Thread publishThread = new Thread( publisher.Connect );
+		publisher = new Publisher {
+			device = this.device,
+			serverAddr = this.serverAddr,
+			serverPort = this.serverPort
+		};
+		publishThread = new Thread( publisher.Connect );
+		publishThread.Start ();
 	}
 
 
 
-	void OnApplicationQuit()
-	{
-		publisher.close ();
-	}
 
 	void FixedUpdate(){
 
 		publisher.SendPosition (gameObject);
 		publisher.SendRotation (gameObject);
 		
+	}
+
+	void OnApplicationQuit(){
+		publisher.close ();
+		publishThread.Abort ();
 	}
 		
 
@@ -45,35 +53,24 @@ public class PublishPosRot : MonoBehaviour {
 		public string serverAddr { get; set; }
 		public int serverPort { get; set;}
 		int id = 0;
+		long timeout = 10000;
 		public void Connect()
 		{
 			Debug.Log( "waiting for tecs-server... (publisher)" );
-			generateUniqueUri ();
-			Uri uri = PSFactory.CreateURI("publisher_"+device + "-" + id, serverAddr, serverPort );
+			string connection_id = "publisher_" + device + "_" + id;
+			Uri uri = PSFactory.CreateURI(connection_id, serverAddr, serverPort );
 			publish_client = PSFactory.CreatePSClient( uri );
 			publish_client.Connect();
-			Debug.Log( "connected. (publisher)" );
+
+			Debug.Log ("conneted as "+connection_id);
 		}
 
-
-		void generateUniqueUri(){
-			Uri uri = PSFactory.CreateURI ("Discover", serverAddr, serverPort);
-			PSClient client = PSFactory.CreatePSClient(uri);
-			client.Connect ();
-			long ping = client.Ping ("publisher_"+device + "-" + id,2000);
-			if (ping>0){
-				id++;
-				generateUniqueUri();
-			}
-			Debug.Log ("Deveice:"+device.ToString()+" | id:"+id);
-		}
 
 
 
 		public void SendRotation(GameObject go){
-			if( !is_connected )
+			if (go==null)
 				return;
-			
 			if( publish_client.IsOnline() && publish_client.IsConnected() )
 			{
 				DirectionEvent de = new DirectionEvent( device, new Direction(go.transform.rotation),id);
@@ -81,9 +78,8 @@ public class PublishPosRot : MonoBehaviour {
 			}
 		}
 
-		public void SendPosition(GameObject go)
-		{
-			if( !is_connected )
+		public void SendPosition(GameObject go){
+			if (go==null)
 				return;
 			if( publish_client.IsOnline() && publish_client.IsConnected() )
 			{
