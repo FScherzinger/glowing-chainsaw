@@ -45,10 +45,10 @@ public class UpdateHeadScript : MonoBehaviour {
 		Uri uri = PSFactory.CreateURI ("Discover", serverAddr, serverPort);
 		PSClient client = PSFactory.CreatePSClient(uri);
 		client.Connect ();
-		long ping = client.Ping (device + "-" + id,"2000");
+		long ping = client.Ping (device + "-" + id,2000);
 		if (ping>0){
 			id++;
-			return(generateUniqueUri());
+			generateUniqueUri();
 		}
 	}
 
@@ -60,23 +60,21 @@ public class UpdateHeadScript : MonoBehaviour {
 			while( receive_client.CanRecv() )
 			{
 				de.dfki.tecs.Event eve = receive_client.Recv();
-				switch(eve.Is){
-				case "PositionEvent":
-					PositionEvent pos_event = eve.ParseData (PositionEvent);
-					if (pos_event.id = id && pos_event.Type == device) {
+				if (eve.Is ("PositionEvent")) {
+					PositionEvent pos_event = new PositionEvent ();
+					eve.ParseData (pos_event);
+					if (pos_event.Id == id && pos_event.Type == device) {
 						position = pos_event.Position;
 					}
-
-
-					break;
-				case "RotationEvent":
-					DirectionEvent dir_event = eve.ParseData (DirectionEvent);
-					if (dir_event.id = id && dir_event.Type == device) {
+					continue;
+				}
+				if (eve.Is ("RotationEvent")) {
+					DirectionEvent dir_event = new DirectionEvent ();	
+					eve.ParseData (dir_event);
+					if (dir_event.Id == id && dir_event.Type == device) {
 						direction = dir_event.Direction;
 					}
-					break;
-				default:
-					return;
+					continue;
 				}
 					
 			}
