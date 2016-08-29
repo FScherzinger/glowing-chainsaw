@@ -42,9 +42,9 @@ public class SteamVR_LaserPointer : MonoBehaviour
         pointer.transform.localPosition = new Vector3(0f, 0f, 50f);
 
         pointerhit= GameObject.CreatePrimitive(PrimitiveType.Cylinder);
-        pointer.transform.parent = holder.transform;
-        pointer.transform.localScale = new Vector3(5, 0.01f,5);
-        pointer.transform.localPosition = new Vector3(0f, 0f, 50f);
+        pointerhit.transform.localScale = new Vector3(0.2f, 0.01f,0.02f);
+        pointerhit.transform.parent = holder.transform;
+
 
         BoxCollider collider = pointer.GetComponent<BoxCollider>();
         if (addRigidBody)
@@ -143,7 +143,7 @@ public class SteamVR_LaserPointer : MonoBehaviour
         }
         pointer.transform.localPosition = new Vector3(0f, 0f, dist/2f);
 
-        pointerhit.transform.position = hit.transform.position;
-        pointerhit.transform.rotation = hit.transform.rotation;
+        pointerhit.transform.position = hit.point;
+        Destroy(pointerhit.GetComponent<Collider>());
     }
 }
