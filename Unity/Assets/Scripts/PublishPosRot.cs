@@ -9,7 +9,7 @@ using de.dfki.tecs.basetypes;
 
 using de.dfki.events;
 
-public class PublisherScript : MonoBehaviour {
+public class PublishPosRot : MonoBehaviour {
 
 	static PSClient publish_client;
 	Thread connection_thread = new Thread( Connect );
