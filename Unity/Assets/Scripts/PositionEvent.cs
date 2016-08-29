@@ -25,23 +25,22 @@ namespace de.dfki.events
   {
 
     /// <summary>
-    /// Type *
     /// 
-    /// <seealso cref="MsgType"/>
+    /// <seealso cref="Device"/>
     /// </summary>
-    public MsgType Type { get; set; }
+    public Device Type { get; set; }
 
-    /// <summary>
-    /// Position *
-    /// </summary>
     public Position Position { get; set; }
+
+    public int Id { get; set; }
 
     public PositionEvent() {
     }
 
-    public PositionEvent(MsgType type, Position position) : this() {
+    public PositionEvent(Device type, Position position, int Id) : this() {
       this.Type = type;
       this.Position = position;
+      this.Id = Id;
     }
 
     public void Read (TProtocol iprot)
@@ -51,6 +50,7 @@ namespace de.dfki.events
       {
         bool isset_type = false;
         bool isset_position = false;
+        bool isset_Id = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -63,7 +63,7 @@ namespace de.dfki.events
           {
             case 1:
               if (field.Type == TType.I32) {
-                Type = (MsgType)iprot.ReadI32();
+                Type = (Device)iprot.ReadI32();
                 isset_type = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
@@ -78,6 +78,14 @@ namespace de.dfki.events
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
+            case 3:
+              if (field.Type == TType.I32) {
+                Id = iprot.ReadI32();
+                isset_Id = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
             default: 
               TProtocolUtil.Skip(iprot, field.Type);
               break;
@@ -88,6 +96,8 @@ namespace de.dfki.events
         if (!isset_type)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
         if (!isset_position)
+          throw new TProtocolException(TProtocolException.INVALID_DATA);
+        if (!isset_Id)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
       }
       finally
@@ -115,6 +125,12 @@ namespace de.dfki.events
         oprot.WriteFieldBegin(field);
         Position.Write(oprot);
         oprot.WriteFieldEnd();
+        field.Name = "Id";
+        field.Type = TType.I32;
+        field.ID = 3;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteI32(Id);
+        oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -130,6 +146,8 @@ namespace de.dfki.events
       __sb.Append(Type);
       __sb.Append(", Position: ");
       __sb.Append(Position== null ? "<null>" : Position.ToString());
+      __sb.Append(", Id: ");
+      __sb.Append(Id);
       __sb.Append(")");
       return __sb.ToString();
     }

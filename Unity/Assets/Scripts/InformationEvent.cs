@@ -14,7 +14,6 @@ using Thrift.Collections;
 using System.Runtime.Serialization;
 using Thrift.Protocol;
 using Thrift.Transport;
-using UnityEngine;
 
 namespace de.dfki.events
 {
@@ -22,57 +21,59 @@ namespace de.dfki.events
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class Direction : TBase
+  public partial class InformationEvent : TBase
   {
+    private string _informtion;
 
     /// <summary>
-    /// X-Coordinate *
+    /// 
+    /// <seealso cref="Device"/>
     /// </summary>
-    public double X { get; set; }
+    public Device Type { get; set; }
 
-    /// <summary>
-    /// Y-Coordinate *
-    /// </summary>
-    public double Y { get; set; }
+    public Position Inspect_pos { get; set; }
 
-    /// <summary>
-    /// Z-Coordinate *
-    /// </summary>
-    public double Z { get; set; }
+    public int Id { get; set; }
 
-    /// <summary>
-    /// W-Coordinate *
-    /// </summary>
-    public double W { get; set; }
-
-    public Direction() {
+    public string Informtion
+    {
+      get
+      {
+        return _informtion;
+      }
+      set
+      {
+        __isset.informtion = true;
+        this._informtion = value;
+      }
     }
 
-		public Direction(Quaternion dir) {
-			this.X = dir.x;
-			this.Y = dir.y;
-			this.Z = dir.z;
-			this.W = dir.w;
-		}
 
-    public Direction(double x, double y, double z, double w) : this() {
-      this.X = x;
-      this.Y = y;
-      this.Z = z;
-      this.W = w;
+    public Isset __isset;
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public struct Isset {
+      public bool informtion;
     }
 
-	
+    public InformationEvent() {
+    }
+
+    public InformationEvent(Device type, Position inspect_pos, int Id) : this() {
+      this.Type = type;
+      this.Inspect_pos = inspect_pos;
+      this.Id = Id;
+    }
 
     public void Read (TProtocol iprot)
     {
       iprot.IncrementRecursionDepth();
       try
       {
-        bool isset_x = false;
-        bool isset_y = false;
-        bool isset_z = false;
-        bool isset_w = false;
+        bool isset_type = false;
+        bool isset_inspect_pos = false;
+        bool isset_Id = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -84,33 +85,33 @@ namespace de.dfki.events
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.Double) {
-                X = iprot.ReadDouble();
-                isset_x = true;
+              if (field.Type == TType.I32) {
+                Type = (Device)iprot.ReadI32();
+                isset_type = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 2:
-              if (field.Type == TType.Double) {
-                Y = iprot.ReadDouble();
-                isset_y = true;
+              if (field.Type == TType.Struct) {
+                Inspect_pos = new Position();
+                Inspect_pos.Read(iprot);
+                isset_inspect_pos = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 3:
-              if (field.Type == TType.Double) {
-                Z = iprot.ReadDouble();
-                isset_z = true;
+              if (field.Type == TType.I32) {
+                Id = iprot.ReadI32();
+                isset_Id = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 4:
-              if (field.Type == TType.Double) {
-                W = iprot.ReadDouble();
-                isset_w = true;
+              if (field.Type == TType.String) {
+                Informtion = iprot.ReadString();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -122,13 +123,11 @@ namespace de.dfki.events
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
-        if (!isset_x)
+        if (!isset_type)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_y)
+        if (!isset_inspect_pos)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_z)
-          throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_w)
+        if (!isset_Id)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
       }
       finally
@@ -141,33 +140,35 @@ namespace de.dfki.events
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("Direction");
+        TStruct struc = new TStruct("InformationEvent");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        field.Name = "x";
-        field.Type = TType.Double;
+        field.Name = "type";
+        field.Type = TType.I32;
         field.ID = 1;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(X);
+        oprot.WriteI32((int)Type);
         oprot.WriteFieldEnd();
-        field.Name = "y";
-        field.Type = TType.Double;
+        field.Name = "inspect_pos";
+        field.Type = TType.Struct;
         field.ID = 2;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(Y);
+        Inspect_pos.Write(oprot);
         oprot.WriteFieldEnd();
-        field.Name = "z";
-        field.Type = TType.Double;
+        field.Name = "Id";
+        field.Type = TType.I32;
         field.ID = 3;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(Z);
+        oprot.WriteI32(Id);
         oprot.WriteFieldEnd();
-        field.Name = "w";
-        field.Type = TType.Double;
-        field.ID = 4;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(W);
-        oprot.WriteFieldEnd();
+        if (Informtion != null && __isset.informtion) {
+          field.Name = "informtion";
+          field.Type = TType.String;
+          field.ID = 4;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Informtion);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -178,15 +179,17 @@ namespace de.dfki.events
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("Direction(");
-      __sb.Append(", X: ");
-      __sb.Append(X);
-      __sb.Append(", Y: ");
-      __sb.Append(Y);
-      __sb.Append(", Z: ");
-      __sb.Append(Z);
-      __sb.Append(", W: ");
-      __sb.Append(W);
+      StringBuilder __sb = new StringBuilder("InformationEvent(");
+      __sb.Append(", Type: ");
+      __sb.Append(Type);
+      __sb.Append(", Inspect_pos: ");
+      __sb.Append(Inspect_pos== null ? "<null>" : Inspect_pos.ToString());
+      __sb.Append(", Id: ");
+      __sb.Append(Id);
+      if (Informtion != null && __isset.informtion) {
+        __sb.Append(", Informtion: ");
+        __sb.Append(Informtion);
+      }
       __sb.Append(")");
       return __sb.ToString();
     }

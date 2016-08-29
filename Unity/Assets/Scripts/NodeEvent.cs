@@ -14,7 +14,6 @@ using Thrift.Collections;
 using System.Runtime.Serialization;
 using Thrift.Protocol;
 using Thrift.Transport;
-using UnityEngine;
 
 namespace de.dfki.events
 {
@@ -22,37 +21,29 @@ namespace de.dfki.events
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class Position : TBase
+  public partial class NodeEvent : TBase
   {
 
     /// <summary>
-    /// X-Coordinate *
+    /// 
+    /// <seealso cref="Device"/>
     /// </summary>
-    public double X { get; set; }
+    public Device Type { get; set; }
 
-    /// <summary>
-    /// Y-Coordinate *
-    /// </summary>
-    public double Y { get; set; }
+    public Position Position { get; set; }
 
-    /// <summary>
-    /// Z-Coordinate *
-    /// </summary>
-    public double Z { get; set; }
+    public int Id { get; set; }
 
-    public Position() {
+    public string Information { get; set; }
+
+    public NodeEvent() {
     }
 
-	public Position(Vector3 vec) {
-			this.X = vec.x;
-			this.Y = vec.y;
-			this.Z = vec.z;
-	}
-
-    public Position(double x, double y, double z) : this() {
-      this.X = x;
-      this.Y = y;
-      this.Z = z;
+    public NodeEvent(Device type, Position position, int Id, string information) : this() {
+      this.Type = type;
+      this.Position = position;
+      this.Id = Id;
+      this.Information = information;
     }
 
     public void Read (TProtocol iprot)
@@ -60,9 +51,10 @@ namespace de.dfki.events
       iprot.IncrementRecursionDepth();
       try
       {
-        bool isset_x = false;
-        bool isset_y = false;
-        bool isset_z = false;
+        bool isset_type = false;
+        bool isset_position = false;
+        bool isset_Id = false;
+        bool isset_information = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -74,25 +66,34 @@ namespace de.dfki.events
           switch (field.ID)
           {
             case 1:
-              if (field.Type == TType.Double) {
-                X = iprot.ReadDouble();
-                isset_x = true;
+              if (field.Type == TType.I32) {
+                Type = (Device)iprot.ReadI32();
+                isset_type = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 2:
-              if (field.Type == TType.Double) {
-                Y = iprot.ReadDouble();
-                isset_y = true;
+              if (field.Type == TType.Struct) {
+                Position = new Position();
+                Position.Read(iprot);
+                isset_position = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 3:
-              if (field.Type == TType.Double) {
-                Z = iprot.ReadDouble();
-                isset_z = true;
+              if (field.Type == TType.I32) {
+                Id = iprot.ReadI32();
+                isset_Id = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 4:
+              if (field.Type == TType.String) {
+                Information = iprot.ReadString();
+                isset_information = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -104,11 +105,13 @@ namespace de.dfki.events
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
-        if (!isset_x)
+        if (!isset_type)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_y)
+        if (!isset_position)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_z)
+        if (!isset_Id)
+          throw new TProtocolException(TProtocolException.INVALID_DATA);
+        if (!isset_information)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
       }
       finally
@@ -121,26 +124,32 @@ namespace de.dfki.events
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("Position");
+        TStruct struc = new TStruct("NodeEvent");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        field.Name = "x";
-        field.Type = TType.Double;
+        field.Name = "type";
+        field.Type = TType.I32;
         field.ID = 1;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(X);
+        oprot.WriteI32((int)Type);
         oprot.WriteFieldEnd();
-        field.Name = "y";
-        field.Type = TType.Double;
+        field.Name = "position";
+        field.Type = TType.Struct;
         field.ID = 2;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(Y);
+        Position.Write(oprot);
         oprot.WriteFieldEnd();
-        field.Name = "z";
-        field.Type = TType.Double;
+        field.Name = "Id";
+        field.Type = TType.I32;
         field.ID = 3;
         oprot.WriteFieldBegin(field);
-        oprot.WriteDouble(Z);
+        oprot.WriteI32(Id);
+        oprot.WriteFieldEnd();
+        field.Name = "information";
+        field.Type = TType.String;
+        field.ID = 4;
+        oprot.WriteFieldBegin(field);
+        oprot.WriteString(Information);
         oprot.WriteFieldEnd();
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
@@ -152,17 +161,18 @@ namespace de.dfki.events
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("Position(");
-      __sb.Append(", X: ");
-      __sb.Append(X);
-      __sb.Append(", Y: ");
-      __sb.Append(Y);
-      __sb.Append(", Z: ");
-      __sb.Append(Z);
+      StringBuilder __sb = new StringBuilder("NodeEvent(");
+      __sb.Append(", Type: ");
+      __sb.Append(Type);
+      __sb.Append(", Position: ");
+      __sb.Append(Position== null ? "<null>" : Position.ToString());
+      __sb.Append(", Id: ");
+      __sb.Append(Id);
+      __sb.Append(", Information: ");
+      __sb.Append(Information);
       __sb.Append(")");
       return __sb.ToString();
     }
-
 
   }
 

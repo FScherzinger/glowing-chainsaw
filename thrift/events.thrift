@@ -1,9 +1,11 @@
 namespace csharp de.dfki.events
 
-enum MsgType{
+enum Device{
 	TANGO,
 	GEARVR,
-	VIVE
+	VIVE,
+	PC,
+	BAXTER
 }
 
 struct Direction{
@@ -27,15 +29,43 @@ struct Position{
 }
 
 struct PositionEvent{
-	/** Type **/
-	1:required MsgType type;
-	/** Position **/
+	1:required Device type;
 	2:required Position position;
+	3:required i32 Id;
+}
+
+struct InformationEvent{
+	1:required Device type;
+	2:required Position inspect_pos;
+	3:required i32 Id;
+	4:string informtion;
 }
 
 struct DirectionEvent{
-	/** Type **/
-	1:required MsgType type;
-	/** Direction **/
+	1:required Device type;
 	2:required Direction direction;
+	3:required i32 Id;
+}
+
+struct PointerEvent{
+	1:required Device type;
+	/** direction vector **/
+	2:required Direction direction;
+		/** base point **/
+	3:required Position position;
+	4:required i32 Id;
+}
+
+struct AnnotateEvent{
+	1:required Device type;
+	2:required i32 ObjectID;
+	4:required i32 Id;
+	3:required string information;
+}
+
+struct NodeEvent{
+	1:required Device type;
+	2:required Position position;
+	3:required i32 Id;
+	4:required string information;
 }
