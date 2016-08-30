@@ -57,7 +57,7 @@ public class ReceivePosRot : MonoBehaviour {
 		if (PositionEvents == null || PositionEvents.Count == 0)
 			return;
 		PositionEvent pe = PositionEvents.First.Value;
-		DirectionEvents.RemoveFirst();
+		PositionEvents.RemoveFirst();
 
 		if (pe.Id == publishcam.id)
 			return;
