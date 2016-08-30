@@ -18,7 +18,6 @@ public class ReceivePosRot : MonoBehaviour {
 
 
 	public GameObject Head;
-	public int id = 0;
 	public String serveradress = "localhost";
 	public int serverport = 9000;
 	public Device device;
@@ -58,25 +57,29 @@ public class ReceivePosRot : MonoBehaviour {
 		PositionEvent pe = PositionEvents.First.Value;
 		DirectionEvents.RemoveFirst();
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-
-		if (!Heads.ContainsKey (id)) {
-			GameObject head = Instantiate (Head);
-			Heads.Add(id,head);
-		}
-		Heads[id].transform.position =  Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
+		getHead(pe.Id).transform.position =  Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
 	}
 
 
 
 	void updateDirection(){
-//		if (direction != null) {
-//			Quaternion newrot = new Quaternion((float)direction.X, (float)direction.Y, (float)direction.Z, (float)direction.W);
-//			Quaternion upatedrot = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
-//			Vector3 rot_vec = upatedrot.eulerAngles;
-//			rot_vec.x = 270;
-//			transform.rotation = Quaternion.Euler (rot_vec);
-//		}
+		if (DirectionEvents == null | DirectionEvents.Count == 0)
+			return;
+		DirectionEvent de = DirectionEvents.First.Value;
+		DirectionEvents.RemoveFirst();
+		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
+		getHead (de.Id).transform.rotation = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+
 	}
+
+	private GameObject getHead(int id){
+		if (!Heads.ContainsKey (id)) {
+			GameObject head = Instantiate (Head);
+			Heads.Add(id,head);
+		} 
+		return Heads[id];
+	}
+
 
 
 	public class ReceiverThread {
