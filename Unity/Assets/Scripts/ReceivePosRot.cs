@@ -111,7 +111,7 @@ public class ReceivePosRot : MonoBehaviour {
 						eve.ParseData (pos_event);
 						PositionEvents.AddLast(pos_event);
 					}
-					if (eve.Is ("RotationEvent")) {
+					if (eve.Is ("DirectionEvent")) {
 						DirectionEvent dir_event = new DirectionEvent ();	
 						eve.ParseData (dir_event);
 						DirectionEvents.AddLast (dir_event);
