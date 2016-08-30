@@ -75,7 +75,8 @@ public class ReceivePosRot : MonoBehaviour {
 		if (de.Id == publishcam.id)
 			return;
 		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
-		getHead (de.Id).transform.rotation = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+        newrot = newrot * this.transform.rotation;
+        getHead (de.Id).transform.rotation = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
 
 	}
 
