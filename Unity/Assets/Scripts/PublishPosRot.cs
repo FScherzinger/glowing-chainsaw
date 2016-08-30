@@ -48,12 +48,19 @@ public class PublishPosRot : MonoBehaviour {
 
 
 	public class Publisher{
+
 		PSClient publish_client;
+	
 		public Device device { get; set; }
 		public string serverAddr { get; set; }
 		public int serverPort { get; set;}
-		int id = 0;
-		long timeout = 10000;
+		public int id;
+
+		public Publisher(){
+			System.Random rnd = new System.Random();
+			id = rnd.Next();
+		}
+
 		public void Connect()
 		{
 			Debug.Log( "waiting for tecs-server... (publisher)" );
@@ -93,4 +100,5 @@ public class PublishPosRot : MonoBehaviour {
 
 		}
 	}
+
 }
