@@ -16,13 +16,17 @@ public class PublishPosRot : MonoBehaviour {
 	public Device device;
 	public String serverAddr = "localhost";
 	public int serverPort = 9000;
+	public int id { get; set; }
 
 	void Start()
 	{
+		System.Random rnd = new System.Random();
+		id = rnd.Next();
 		publisher = new Publisher {
 			device = this.device,
 			serverAddr = this.serverAddr,
-			serverPort = this.serverPort
+			serverPort = this.serverPort,
+			id = this.id
 		};
 		publishThread = new Thread( publisher.Connect );
 		publishThread.Start ();
@@ -54,12 +58,8 @@ public class PublishPosRot : MonoBehaviour {
 		public Device device { get; set; }
 		public string serverAddr { get; set; }
 		public int serverPort { get; set;}
-		public int id;
+		public int id { get; set;}
 
-		public Publisher(){
-			System.Random rnd = new System.Random();
-			id = rnd.Next();
-		}
 
 		public void Connect()
 		{

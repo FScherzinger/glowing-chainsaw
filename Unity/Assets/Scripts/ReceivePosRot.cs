@@ -24,9 +24,11 @@ public class ReceivePosRot : MonoBehaviour {
 	public static volatile LinkedList<PositionEvent> PositionEvents;
 	public static volatile LinkedList<DirectionEvent> DirectionEvents;
 	public volatile Dictionary<int,GameObject> Heads;
+	PublishPosRot publishcam;
 
 	void Start()
 	{
+		publishcam = GameObject.Find("Multi Camera").GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new LinkedList<PositionEvent> ();
 		DirectionEvents = new LinkedList<DirectionEvent> ();
 		Heads = new Dictionary<int,GameObject>();
@@ -52,10 +54,13 @@ public class ReceivePosRot : MonoBehaviour {
 	}
 
 	void updatePosition(){
-		if (PositionEvents == null | PositionEvents.Count == 0)
+		if (PositionEvents == null || PositionEvents.Count == 0)
 			return;
 		PositionEvent pe = PositionEvents.First.Value;
 		DirectionEvents.RemoveFirst();
+
+		if (pe.Id == publishcam.id)
+			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
 		getHead(pe.Id).transform.position =  Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
 	}
@@ -63,10 +68,12 @@ public class ReceivePosRot : MonoBehaviour {
 
 
 	void updateDirection(){
-		if (DirectionEvents == null | DirectionEvents.Count == 0)
+		if (DirectionEvents == null || DirectionEvents.Count == 0)
 			return;
 		DirectionEvent de = DirectionEvents.First.Value;
 		DirectionEvents.RemoveFirst();
+		if (de.Id == publishcam.id)
+			return;
 		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
 		getHead (de.Id).transform.rotation = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
 
