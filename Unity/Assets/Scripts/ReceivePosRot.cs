@@ -28,7 +28,7 @@ public class ReceivePosRot : MonoBehaviour {
 
 	void Start()
 	{
-		publishcam = gameObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+		publishcam = GameObject.Find("Tango Delta Cam").GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new LinkedList<PositionEvent> ();
 		DirectionEvents = new LinkedList<DirectionEvent> ();
 		Heads = new Dictionary<int,GameObject>();
