@@ -62,7 +62,8 @@ public class ReceivePosRot : MonoBehaviour {
 		if (pe.Id == publishcam.id)
 			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-		getHead(pe.Id).transform.position =  Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
+        getHead( pe.Id ).transform.position = newpos;
+        //Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
 	}
 
 
@@ -76,7 +77,8 @@ public class ReceivePosRot : MonoBehaviour {
 			return;
 		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
         newrot = newrot * this.transform.rotation;
-        getHead (de.Id).transform.rotation = Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+        getHead( de.Id ).transform.rotation = newrot;
+        //Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
 
 	}
 
