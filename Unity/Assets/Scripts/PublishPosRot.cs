@@ -76,7 +76,7 @@ public class PublishPosRot : MonoBehaviour {
 
 
 		public void SendRotation(GameObject go){
-			if (go==null)
+			if (go==null || publish_client == null)
 				return;
 			if( publish_client.IsOnline() && publish_client.IsConnected() )
 			{
@@ -86,7 +86,7 @@ public class PublishPosRot : MonoBehaviour {
 		}
 
 		public void SendPosition(GameObject go){
-			if (go==null)
+			if (go==null || publish_client == null)
 				return;
 			if( publish_client.IsOnline() && publish_client.IsConnected() )
 			{
