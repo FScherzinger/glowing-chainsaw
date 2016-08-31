@@ -28,7 +28,7 @@ public class ReceivePosRot : MonoBehaviour {
 
 	void Start()
 	{
-		publishcam = GameObject.Find("Multi Camera").GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+		publishcam = gameObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new LinkedList<PositionEvent> ();
 		DirectionEvents = new LinkedList<DirectionEvent> ();
 		Heads = new Dictionary<int,GameObject>();
@@ -62,8 +62,9 @@ public class ReceivePosRot : MonoBehaviour {
 		if (pe.Id == publishcam.id)
 			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-        getHead( pe.Id ).transform.position = newpos;
+		getHead( pe.Id ).transform.position = Vector3.MoveTowards(transform.position,newpos,Time.fixedDeltaTime);
         //Vector3.Lerp (this.transform.position, newpos, Time.deltaTime * 5);
+
 	}
 
 
