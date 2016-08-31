@@ -63,7 +63,7 @@ public class ReceivePosRot : MonoBehaviour {
 			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
 		if(this.transform.position != newpos)
-			getHead (pe.Id).transform.position = Vector3.Lerp (this.transform.position, newpos, Time.fixedTime*40);
+			getHead (pe.Id).transform.position = Vector3.Lerp (this.transform.position, newpos, Time.fixedTime);
 
 		
 	}
@@ -74,7 +74,7 @@ public class ReceivePosRot : MonoBehaviour {
 		if (DirectionEvents == null || DirectionEvents.Count == 0)
 			return;
 		DirectionEvent de = DirectionEvents.First.Value;
-		if (DirectionEvents.Count != 1)
+		if (DirectionEvents.Count > 1)
 			DirectionEvents.RemoveFirst();
 		if (de.Id == publishcam.id)
 			return;
