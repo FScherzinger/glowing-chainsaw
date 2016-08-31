@@ -21,16 +21,16 @@ public class ReceivePosRot : MonoBehaviour {
 	public String serveradress = "localhost";
 	public int serverport = 9000;
 	public Device device;
-	public static volatile LinkedList<PositionEvent> PositionEvents;
-	public static volatile LinkedList<DirectionEvent> DirectionEvents;
+	public static volatile Queue<PositionEvent> PositionEvents;
+	public static volatile Queue<DirectionEvent> DirectionEvents;
 	public volatile Dictionary<int,GameObject> Heads;
 	PublishPosRot publishcam;
 
 	void Start()
 	{
 		publishcam = GameObject.Find("Tango Delta Camera").GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
-		PositionEvents = new LinkedList<PositionEvent> ();
-		DirectionEvents = new LinkedList<DirectionEvent> ();
+		PositionEvents = new Queue<PositionEvent> ();
+		DirectionEvents = new Queue<DirectionEvent> ();
 		Heads = new Dictionary<int,GameObject>();
 		ReceiverThread rc_thread = new ReceiverThread{
 			serverAddr = this.serveradress,
@@ -56,26 +56,22 @@ public class ReceivePosRot : MonoBehaviour {
 	void updatePosition(){
 		if (PositionEvents.Count == 0)
 			return;
-		PositionEvent pe = PositionEvents.First.Value;
-		if (PositionEvents.Count > 1)
-			PositionEvents.RemoveFirst();
+		PositionEvent pe = PositionEvents.Dequeue ();
 		if (pe.Id == publishcam.id)
 			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-		if(this.transform.position != newpos)
-			getHead (pe.Id).transform.position = Vector3.Lerp (this.transform.position, newpos, Time.fixedTime);
+		if ((this.transform.position - newpos).sqrMagnitude > 0.00001)
+			getHead (pe.Id).transform.position = newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
 
-		
+
 	}
 
 
 
 	void updateDirection(){
-		if (DirectionEvents == null || DirectionEvents.Count == 0)
+		if (DirectionEvents.Count == 0)
 			return;
-		DirectionEvent de = DirectionEvents.First.Value;
-		if (DirectionEvents.Count > 1)
-			DirectionEvents.RemoveFirst();
+		DirectionEvent de =DirectionEvents.Dequeue();
 		if (de.Id == publishcam.id)
 			return;
 
@@ -123,12 +119,12 @@ public class ReceivePosRot : MonoBehaviour {
 					if (eve.Is ("PositionEvent")) {
 						PositionEvent pos_event = new PositionEvent ();
 						eve.ParseData (pos_event);
-						PositionEvents.AddLast(pos_event);
+						PositionEvents.Enqueue(pos_event);
 					}
 					if (eve.Is ("DirectionEvent")) {
 						DirectionEvent dir_event = new DirectionEvent ();	
 						eve.ParseData (dir_event);
-						DirectionEvents.AddLast (dir_event);
+						DirectionEvents.Enqueue (dir_event);
 					}
 
 				}
