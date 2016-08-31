@@ -15,8 +15,7 @@ class PickAndPlace
 
     public string serverAddr { get; set; }
     public int serverPort { get; set; }
-//    public MoveArmEvent move { get; set; }
-    public PickAndPlaceEvent pap { get; set; }
+    public PickAndPlaceEvent pap_event { get; set; }
 
 
     private void Connect()
@@ -27,7 +26,7 @@ class PickAndPlace
         // subscribe before connecting
         client.Subscribe( "DoneEvent" );
         client.Subscribe( "PickAndPlaceEvent" );
-        // connect
+
         client.Connect();
     }
 
@@ -39,7 +38,7 @@ class PickAndPlace
         {
             // Send event to client "receiver"
             // client.Send([ClientAddress], [Event = Struct Name], [Struct])
-            client.Send( "baxter_dummy", "PickAndPlaceEvent", pap );
+            client.Send( "baxter_dummy", "PickAndPlaceEvent", pap_event );
             client.Disconnect();
         }
     }
