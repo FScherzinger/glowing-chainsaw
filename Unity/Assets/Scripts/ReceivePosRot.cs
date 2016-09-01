@@ -17,21 +17,23 @@ public class ReceivePosRot : MonoBehaviour {
 	Thread receive_thread;
 
 
-	public GameObject Head;
+    public GameObject Head;
+    public GameObject BaxterObject;
 	public String serveradress = "localhost";
 	public int serverport = 9000;
 	public Device device;
 	public static volatile Queue<PositionEvent> PositionEvents;
 	public static volatile Queue<DirectionEvent> DirectionEvents;
-	public volatile Dictionary<int,GameObject> Heads;
+	public volatile Dictionary<int,GameObject> Objects;
+    public GameObject PublisherObject;
 	PublishPosRot publishcam;
 
 	void Start()
 	{
-		publishcam = GameObject.Find("Tango Delta Camera").GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+		publishcam = PublisherObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new Queue<PositionEvent> ();
 		DirectionEvents = new Queue<DirectionEvent> ();
-		Heads = new Dictionary<int,GameObject>();
+		Objects = new Dictionary<int,GameObject>();
 		ReceiverThread rc_thread = new ReceiverThread{
 			serverAddr = this.serveradress,
 			serverPort = this.serverport,
@@ -60,9 +62,15 @@ public class ReceivePosRot : MonoBehaviour {
 		if (pe.Id == publishcam.id)
 			return;
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-		if ((this.transform.position - newpos).sqrMagnitude > 0.00001)
-			getHead (pe.Id).transform.position = newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
-
+        if (pe.Type == Device.BAXTER)
+        {
+            getBaxterObject(pe.Id).transform.position = newpos;
+        }
+        else
+        {
+            if ((this.transform.position - newpos).sqrMagnitude > 0.00001)
+                getHead(pe.Id).transform.position = newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
+        }
 
 	}
 
@@ -77,22 +85,35 @@ public class ReceivePosRot : MonoBehaviour {
 
 		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
         newrot = newrot * this.transform.rotation;
-        getHead( de.Id ).transform.rotation = newrot;
+        if (de.Type == Device.BAXTER)
+        {
+            getBaxterObject(de.Id).transform.rotation = newrot;
+        }else
+            getHead( de.Id ).transform.rotation = newrot;
         //Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
 
 	}
 
 	private GameObject getHead(int id){
-		if (!Heads.ContainsKey (id)) {
+		if (!Objects.ContainsKey (id)) {
 			GameObject head = Instantiate (Head);
-			Heads.Add(id,head);
+			Objects.Add(id,head);
 		} 
-		return Heads[id];
+		return Objects[id];
 	}
 
+    private GameObject getBaxterObject(int id)
+    {
+        if (!Objects.ContainsKey(id))
+        {
+            GameObject obj = Instantiate(BaxterObject);
+            Objects.Add(id, obj);
+        }
+        return Objects[id];
+    }
 
 
-	public class ReceiverThread {
+    public class ReceiverThread {
 		public string serverAddr { get; set; }
 		public int serverPort { get; set;}
 		public Device device { get; set; }
@@ -129,6 +150,5 @@ public class ReceivePosRot : MonoBehaviour {
 
 				}
 		}
-
 	}
 }
