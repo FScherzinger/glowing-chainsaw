@@ -38,7 +38,7 @@ class PickAndPlace
         {
             // Send event to client "receiver"
             // client.Send([ClientAddress], [Event = Struct Name], [Struct])
-            client.Send( "baxter_dummy", "PickAndPlaceEvent", pap_event );
+            client.Send( "receiver_right", "PickAndPlaceEvent", pap_event );
             client.Disconnect();
         }
     }

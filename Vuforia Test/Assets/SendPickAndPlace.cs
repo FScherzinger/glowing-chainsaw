@@ -21,45 +21,46 @@ public class SendPickAndPlace : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        /*pick_n_place = new PickAndPlace
+        Vector3 pickrot = armAtFixedMarkerrotation;
+        pickrot = pickrot * Mathf.PI / 180; pick_n_place = new PickAndPlace
         {
-            serverAddr = "localhost",
+            serverAddr = "192.168.1.101",
             serverPort = 9000,
             pap_event = new PickAndPlaceEvent
             {
-                Limb = Limb.LEFT,
+                Limb = Limb.RIGHT,
 
                 Initial_pos = new Position
                 {
-                    X_left = "1",
-                    Y_left = "2",
-                    Z_left = "3"
+                    X_right = "0.5",
+                    Y_right = "0.5",
+                    Z_right = "0"
                 },
 
                 Final_pos = new Position
                 {
-                    X_left = "1",
-                    Y_left = "2",
-                    Z_left = "3"
+                    X_right = "0.5",
+                    Y_right = "0.5",
+                    Z_right = "0"
                 },
 
                 Initial_ori = new Orientation
                 {
-                    Yaw_left = "1",
-                    Pitch_left = "1",
-                    Roll_left = "1"
+                    Yaw_right = pickrot.x.ToString(),
+                    Pitch_right = pickrot.y.ToString(),
+                    Roll_right = pickrot.z.ToString()
                 },
 
                 Final_ori = new Orientation
                 {
-                    Yaw_left = "1",
-                    Pitch_left = "1",
-                    Roll_left = "1"
+                    Yaw_right = pickrot.x.ToString(),
+                    Pitch_right = pickrot.y.ToString(),
+                    Roll_right = pickrot.z.ToString()
                 },
 
                 Speed = new Speed
                 {
-                    Speed_left = "0.2"
+                    Speed_right = "0.2"
                 },
 
                 Angls = new Angles(),
@@ -69,14 +70,14 @@ public class SendPickAndPlace : MonoBehaviour
         };
 
         thread = new Thread( pick_n_place.Send );
-        thread.Start();*/
+        thread.Start();
         state = 0;
         pickandPlaceButtonClicked = false;
     }
 
     private void SendPAP(Vector3 from, Vector3 to)
     {
-        if (true/*!thread.IsAlive*/)
+        if (!thread.IsAlive)
         {
             Vector3 pickpos = from - fixedMarker.transform.position + armAtFixedMarkerposition;
             Vector3 placepos = to - fixedMarker.transform.position + armAtFixedMarkerposition;
@@ -88,43 +89,43 @@ public class SendPickAndPlace : MonoBehaviour
             Debug.Log(placerot);
             pick_n_place = new PickAndPlace
             {
-                serverAddr = "localhost",
+                serverAddr = "192.168.1.101",
                 serverPort = 9000,
                 pap_event = new PickAndPlaceEvent
                 {
-                    Limb = Limb.LEFT,
+                    Limb = Limb.RIGHT,
 
                     Initial_pos = new Position
                     {
-                        X_left = pickpos.x.ToString(),
-                        Y_left = pickpos.y.ToString(),
-                        Z_left = pickpos.z.ToString()
+                        X_right = pickpos.x.ToString(),
+                        Y_right = pickpos.y.ToString(),
+                        Z_right = pickpos.z.ToString()
                     },
 
                     Final_pos = new Position
                     {
-                        X_left = placepos.x.ToString(),
-                        Y_left = placepos.y.ToString(),
-                        Z_left = placepos.z.ToString()
+                        X_right = placepos.x.ToString(),
+                        Y_right = placepos.y.ToString(),
+                        Z_right = placepos.z.ToString()
                     },
 
                     Initial_ori = new Orientation
                     {
-                        Yaw_left = pickrot.x.ToString(),
-                        Pitch_left = pickrot.y.ToString(),
-                        Roll_left = pickrot.z.ToString()
+                        Yaw_right = pickrot.x.ToString(),
+                        Pitch_right = pickrot.y.ToString(),
+                        Roll_right = pickrot.z.ToString()
                     },
 
                     Final_ori = new Orientation
                     {
-                        Yaw_left = placerot.x.ToString(),
-                        Pitch_left = placerot.y.ToString(),
-                        Roll_left = placerot.z.ToString()
+                        Yaw_right = placerot.x.ToString(),
+                        Pitch_right = placerot.y.ToString(),
+                        Roll_right = placerot.z.ToString()
                     },
 
                     Speed = new Speed
                     {
-                        Speed_left = "0.2"
+                        Speed_right = "0.2"
                     },
 
                     Angls = new Angles(),
