@@ -58,19 +58,28 @@ public class ReceivePosRot : MonoBehaviour {
 	void updatePosition(){
 		if (PositionEvents.Count == 0)
 			return;
-		PositionEvent pe = PositionEvents.Dequeue ();
-		if (pe.Id == publishcam.id)
-			return;
-		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-        if (pe.Type == Device.BAXTER)
-        {
-            getBaxterObject(pe.Id).transform.position = newpos;
-        }
-        else
-        {
-            if ((transform.position - newpos).sqrMagnitude > 0.00001)
-                getHead(pe.Id).transform.position = newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
-        }
+		for(int i = 0 ; i<PositionEvents.Count;i++){
+			PositionEvent pe = PositionEvents.Dequeue ();
+			if (pe.Id == publishcam.id)
+				continue;
+			Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
+			if (pe.Type == Device.BAXTER)
+			{
+				getBaxterObject(pe.Id).transform.position = newpos;
+			}
+			else
+			{
+				if ( (transform.position - newpos).sqrMagnitude > 0.00001){
+					Debug.Log(transform.position);
+					GameObject head = getHead(pe.Id);
+					head.transform.position = newpos;
+
+					;// newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
+				}
+			}
+
+		}
+	
 
 	}
 
@@ -79,26 +88,31 @@ public class ReceivePosRot : MonoBehaviour {
 	void updateDirection(){
 		if (DirectionEvents.Count == 0)
 			return;
-		DirectionEvent de =DirectionEvents.Dequeue();
-		if (de.Id == publishcam.id)
-			return;
 
-		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
-        newrot = newrot * this.transform.rotation;
-        if (de.Type == Device.BAXTER)
-        {
-            getBaxterObject(de.Id).transform.rotation = newrot;
-        }else
-            getHead( de.Id ).transform.rotation = newrot;
-        //Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+		for(int i =0;i<DirectionEvents.Count;i++){
+
+			DirectionEvent de =DirectionEvents.Dequeue();
+			if (de.Id == publishcam.id)
+				continue;
+
+			Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
+			newrot = newrot * this.transform.rotation;
+			if (de.Type == Device.BAXTER)
+			{
+				getBaxterObject(de.Id).transform.rotation = newrot;
+			}else
+				getHead( de.Id ).transform.rotation = newrot;
+			//Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
+		}
+
 
 	}
 
 	private GameObject getHead(int id){
 		if (!Objects.ContainsKey (id)) {
 			GameObject head = Instantiate (Head);
-			transform.rotation = Quaternion.Euler(273,24,254);
 			Objects.Add(id,head);
+			head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
 		return Objects[id];
 	}
