@@ -68,7 +68,7 @@ public class ReceivePosRot : MonoBehaviour {
         }
         else
         {
-            if ((this.transform.position - newpos).sqrMagnitude > 0.00001)
+            if ((transform.position - newpos).sqrMagnitude > 0.00001)
                 getHead(pe.Id).transform.position = newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
         }
 
@@ -97,6 +97,7 @@ public class ReceivePosRot : MonoBehaviour {
 	private GameObject getHead(int id){
 		if (!Objects.ContainsKey (id)) {
 			GameObject head = Instantiate (Head);
+			transform.rotation = Quaternion.Euler(273,24,254);
 			Objects.Add(id,head);
 		} 
 		return Objects[id];
