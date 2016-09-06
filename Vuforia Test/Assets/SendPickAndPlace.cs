@@ -22,7 +22,9 @@ public class SendPickAndPlace : MonoBehaviour
     void Start()
     {
         Vector3 pickrot = armAtFixedMarkerrotation;
-        pickrot = pickrot * Mathf.PI / 180; pick_n_place = new PickAndPlace
+        pickrot = pickrot * Mathf.PI / 180;
+        Vector3 pickpos = armAtFixedMarkerposition;
+        pick_n_place = new PickAndPlace
         {
             serverAddr = "192.168.1.101",
             serverPort = 9000,
@@ -32,30 +34,31 @@ public class SendPickAndPlace : MonoBehaviour
 
                 Initial_pos = new Position
                 {
-                    X_right = "0.5",
-                    Y_right = "0.5",
-                    Z_right = "0"
+                    X_right = (pickpos.x).ToString().Replace(',', '.'),
+                    Y_right = pickpos.y.ToString().Replace(',', '.'),
+                    Z_right = pickpos.z.ToString().Replace(',', '.')
+                    
                 },
 
                 Final_pos = new Position
                 {
-                    X_right = "0.5",
-                    Y_right = "0.5",
-                    Z_right = "0"
+                    X_right = (pickpos.x-0.2f).ToString().Replace(',', '.'),
+                    Y_right = pickpos.y.ToString().Replace(',', '.'),
+                    Z_right = pickpos.z.ToString().Replace(',', '.')
                 },
 
                 Initial_ori = new Orientation
                 {
-                    Yaw_right = pickrot.x.ToString(),
-                    Pitch_right = pickrot.y.ToString(),
-                    Roll_right = pickrot.z.ToString()
+                    Yaw_right = pickrot.x.ToString().Replace(',', '.'),
+                    Pitch_right = pickrot.y.ToString().Replace(',', '.'),
+                    Roll_right = pickrot.z.ToString().Replace(',', '.')
                 },
 
                 Final_ori = new Orientation
                 {
-                    Yaw_right = pickrot.x.ToString(),
-                    Pitch_right = pickrot.y.ToString(),
-                    Roll_right = pickrot.z.ToString()
+                    Yaw_right = pickrot.x.ToString().Replace(',', '.'),
+                    Pitch_right = pickrot.y.ToString().Replace(',', '.'),
+                    Roll_right = pickrot.z.ToString().Replace(',', '.')
                 },
 
                 Speed = new Speed
@@ -79,8 +82,11 @@ public class SendPickAndPlace : MonoBehaviour
     {
         if (!thread.IsAlive)
         {
-            Vector3 pickpos = from - fixedMarker.transform.position + armAtFixedMarkerposition;
-            Vector3 placepos = to - fixedMarker.transform.position + armAtFixedMarkerposition;
+            Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, armAtFixedMarkerposition.z);
+            from = new Vector3(-from.z, from.x+0.025f, armAtFixedMarkerposition.z);
+            Vector3 pickpos = from - markertoarm + armAtFixedMarkerposition;
+            to = new Vector3(-to.z, to.x, armAtFixedMarkerposition.z);
+            Vector3 placepos = to - markertoarm + armAtFixedMarkerposition;
             //Rotation currently only Armposition of Baxter when picking one Object. Is this even always the same for same Objectrotation???
             Vector3 pickrot = armAtFixedMarkerrotation;
             pickrot = pickrot * Mathf.PI / 180;
