@@ -25,12 +25,14 @@ public class ReceivePosRot : MonoBehaviour {
 	public static volatile Queue<PositionEvent> PositionEvents;
 	public static volatile Queue<DirectionEvent> DirectionEvents;
 	public volatile Dictionary<int,GameObject> Objects;
-    public GameObject PublisherObject;
+    public GameObject PublishedObject;
 	PublishPosRot publishcam;
+    [SerializeField] public GameObject Cube;
 
-	void Start()
+
+    void Start()
 	{
-		publishcam = PublisherObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+	//	publishcam = PublishedObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new Queue<PositionEvent> ();
 		DirectionEvents = new Queue<DirectionEvent> ();
 		Objects = new Dictionary<int,GameObject>();
@@ -52,7 +54,7 @@ public class ReceivePosRot : MonoBehaviour {
 
 	void Update(){
 		updatePosition ();
-		updateDirection ();
+		//updateDirection ();
 	}
 
 	void updatePosition(){
@@ -60,7 +62,8 @@ public class ReceivePosRot : MonoBehaviour {
 			return;
 		for(int i = 0 ; i<PositionEvents.Count;i++){
 			PositionEvent pe = PositionEvents.Dequeue ();
-			if (pe.Id == publishcam.id)
+            Cube.transform.position = new Vector3((float)pe.Position.X, (float)pe.Position.Y, (float)pe.Position.Z);
+			/*if (pe.Id == publishcam.id)
 				continue;
 			Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
 			if (pe.Type == Device.BAXTER)
@@ -76,7 +79,7 @@ public class ReceivePosRot : MonoBehaviour {
 
 					;// newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
 				}
-			}
+			}*/
 
 		}
 	

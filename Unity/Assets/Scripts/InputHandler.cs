@@ -1,6 +1,7 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using VRStandardAssets.Utils;
+using System.Threading;
 
 // This script is a simple example of how an interactive item can
 // be used to change things on gameobjects by handling events.
@@ -14,6 +15,7 @@ public class InputHandler : MonoBehaviour
 	[SerializeField] private Material m_DoubleClickedMaterial;         
 	[SerializeField] private VRInteractiveItem m_InteractiveItem;
 	[SerializeField] private Renderer m_Renderer;
+    [SerializeField] private PublishPosRot m_publisher;
 	private bool draggable = false;
 
 	private void Awake ()
@@ -90,6 +92,7 @@ public class InputHandler : MonoBehaviour
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled= true;
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = false;
+            m_publisher.sendPosition(m_InteractiveItem.gameObject);
 		}
 	}
 		
