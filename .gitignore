@@ -35,3 +35,5 @@ sysinfo.txt
 gen-*
 
 *.log
+
+Unity/ProjectSettings/GraphicsSettings.asset

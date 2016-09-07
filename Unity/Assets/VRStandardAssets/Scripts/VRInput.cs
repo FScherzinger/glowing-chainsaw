@@ -19,7 +19,6 @@ namespace VRStandardAssets.Utils
             RIGHT
         };
 
-
         public event Action<SwipeDirection> OnSwipe;                // Called every frame passing in the swipe, including if there is no swipe.
         public event Action OnClick;                                // Called when Fire1 is released and it's not a double click.
         public event Action OnDown;                                 // Called when Fire1 is pressed.
