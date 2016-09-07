@@ -16,7 +16,6 @@ namespace VRStandardAssets.Utils
         public event Action OnUp;               // Called when Fire1 is released whilst the gaze is over this object.
         public event Action OnDown;             // Called when Fire1 is pressed whilst the gaze is over this object.
 
-
         protected bool m_IsOver;
 
 
