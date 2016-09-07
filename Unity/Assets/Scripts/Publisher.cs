@@ -5,12 +5,14 @@ using de.dfki.tecs.ps;
 using System;
 using UnityEngine;
 
+
 public class Publisher
 {
 
     PSClient publish_client;
 
     public Device device { get; set; }
+	public ObjType objname { get; set; }
     public string serverAddr { get; set; }
     public int serverPort { get; set; }
     public int id { get; set; }
@@ -19,7 +21,7 @@ public class Publisher
     public void Connect()
     {
         Debug.Log( "waiting for tecs-server... (publisher)" );
-        string connection_id = "publisher_" + device + "_" + id;
+        string connection_id = "p_" + device + "_" + objname+ "_"+ id;
         Uri uri = PSFactory.CreateURI( connection_id, serverAddr, serverPort );
         publish_client = PSFactory.CreatePSClient( uri );
         publish_client.Connect();
@@ -33,7 +35,11 @@ public class Publisher
             return;
         if( publish_client.IsOnline() && publish_client.IsConnected() )
         {
-            DirectionEvent de = new DirectionEvent( device, new Direction( go.transform.rotation ), id );
+			float x = go.transform.rotation.x;
+			float y = go.transform.rotation.y;
+			float z = go.transform.rotation.z;
+			float w = go.transform.rotation.w;
+			DirectionEvent de = new DirectionEvent( device,objname, new Direction( x,y,z,w), id );
             publish_client.Send( ".*", "DirectionEvent", de );
         }
     }
@@ -44,7 +50,11 @@ public class Publisher
             return;
         if( publish_client.IsOnline() && publish_client.IsConnected() )
         {
-            PositionEvent pe = new PositionEvent( device, new Position( go.transform.position ), id );
+			float x = go.transform.position.x;
+			float y = go.transform.position.y;
+			float z = go.transform.position.z;
+		
+			PositionEvent pe = new PositionEvent( device,objname, new Position(x,y,z ), id );
             publish_client.Send( ".*", "PositionEvent", pe );
         }
     }

@@ -14,7 +14,7 @@ GameObject:
   - 54: {fileID: 5440818}
   - 114: {fileID: 11416536}
   m_Layer: 0
-  m_Name: DemoCube
+  m_Name: PublishDemoCube
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295859223eae4fd459585e82f1cdbab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  device: 1
+  device: 0
   serverAddr: localhost
   serverPort: 9000
-  autoUpdate: 0
+  autoUpdate: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

@@ -54,7 +54,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 459930}
   m_Layer: 0
-  m_Name: Plane(Left)
+  m_Name: Room
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

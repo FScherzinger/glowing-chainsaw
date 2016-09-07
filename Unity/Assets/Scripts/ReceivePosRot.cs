@@ -17,29 +17,36 @@ public class ReceivePosRot : MonoBehaviour {
 	Thread receive_thread;
 
 
-    public GameObject Head;
-    public GameObject BaxterObject;
+    public GameObject renderObject;
 	public String serveradress = "localhost";
 	public int serverport = 9000;
 	public Device device;
 	public static volatile Queue<PositionEvent> PositionEvents;
 	public static volatile Queue<DirectionEvent> DirectionEvents;
-	public volatile Dictionary<int,GameObject> Objects;
-    public GameObject PublishedObject;
-	PublishPosRot publishcam;
-    [SerializeField] public GameObject Cube;
+	private volatile Dictionary<int,GameObject> Objects;
+	public GameObject publisherObject;
+	private PublishPosRot publisher;
 
 
     void Start()
 	{
-	//	publishcam = PublishedObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+		if (publisherObject != null )
+			publisher = publisherObject.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 		PositionEvents = new Queue<PositionEvent> ();
 		DirectionEvents = new Queue<DirectionEvent> ();
 		Objects = new Dictionary<int,GameObject>();
+		ObjType objtype;
+		if(this.gameObject.name.ToLower().Contains("cube"))
+			objtype = ObjType.CUBE;
+		else
+			objtype = ObjType.CAMERA;
+		
+
 		ReceiverThread rc_thread = new ReceiverThread{
 			serverAddr = this.serveradress,
 			serverPort = this.serverport,
-			device = this.device
+			device = this.device,
+			objtype = objtype
 		};
 		receive_thread = new Thread (rc_thread.Connect);
 		receive_thread.Start();
@@ -62,28 +69,16 @@ public class ReceivePosRot : MonoBehaviour {
 			return;
 		for(int i = 0 ; i<PositionEvents.Count;i++){
 			PositionEvent pe = PositionEvents.Dequeue ();
-            Cube.transform.position = new Vector3((float)pe.Position.X, (float)pe.Position.Y, (float)pe.Position.Z);
-			/*if (pe.Id == publishcam.id)
+			if (publisherObject != null && pe.Id == publisher.id)
 				continue;
 			Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-			if (pe.Type == Device.BAXTER)
-			{
-				getBaxterObject(pe.Id).transform.position = newpos;
-			}
-			else
-			{
-				if ( (transform.position - newpos).sqrMagnitude > 0.00001){
-					Debug.Log(transform.position);
-					GameObject head = getHead(pe.Id);
-					head.transform.position = newpos;
-
-					;// newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
-				}
-			}*/
-
+		//	if ( (transform.position - newpos).sqrMagnitude > 0.00001){
+				Debug.Log(transform.position);
+				GameObject head = getObject(pe.Id);
+				head.transform.position = newpos;
+				// newpos;//Vector3.Lerp (this.transform.position, newpos, Time.fixedDeltaTime);
+		//	}
 		}
-	
-
 	}
 
 
@@ -95,50 +90,37 @@ public class ReceivePosRot : MonoBehaviour {
 		for(int i =0;i<DirectionEvents.Count;i++){
 
 			DirectionEvent de =DirectionEvents.Dequeue();
-			if (de.Id == publishcam.id)
+			if (publisherObject !=null && de.Id == publisher.id)
 				continue;
 
 			Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
 			newrot = newrot * this.transform.rotation;
-			if (de.Type == Device.BAXTER)
-			{
-				getBaxterObject(de.Id).transform.rotation = newrot;
-			}else
-				getHead( de.Id ).transform.rotation = newrot;
+			getObject( de.Id ).transform.rotation = newrot;
 			//Quaternion.Lerp(this.transform.rotation, newrot, Time.deltaTime * 30);
 		}
 
 
 	}
 
-	private GameObject getHead(int id){
+	private GameObject getObject(int id){
 		if (!Objects.ContainsKey (id)) {
-			GameObject head = Instantiate (Head);
-			Objects.Add(id,head);
-			head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
+			GameObject obj = Instantiate (renderObject);
+			Objects.Add(id,obj);
+			//head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
 		return Objects[id];
 	}
-
-    private GameObject getBaxterObject(int id)
-    {
-        if (!Objects.ContainsKey(id))
-        {
-            GameObject obj = Instantiate(BaxterObject);
-            Objects.Add(id, obj);
-        }
-        return Objects[id];
-    }
 
 
     public class ReceiverThread {
 		public string serverAddr { get; set; }
 		public int serverPort { get; set;}
 		public Device device { get; set; }
+		public ObjType objtype { get; set; }
 
 		public void Connect(){
 			Debug.Log( "waiting for tecs-server... (receiver)" );
-			Uri uri = PSFactory.CreateURI ("receiver_"+device, serverAddr, serverPort);
+			Uri uri = PSFactory.CreateURI ("r_" + device + "_" + objtype, serverAddr, serverPort);
 			receive_client = PSFactory.CreatePSClient(uri);
 			receive_client.Subscribe( "DirectionEvent" );
 			receive_client.Subscribe( "PositionEvent" );

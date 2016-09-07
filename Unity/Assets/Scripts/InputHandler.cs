@@ -92,7 +92,7 @@ public class InputHandler : MonoBehaviour
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled= true;
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            m_publisher.sendPosition(m_InteractiveItem.gameObject);
+            m_publisher.sendPosition();
 		}
 	}
 		

@@ -13,14 +13,21 @@ public class PublishPosRot : MonoBehaviour {
 	public String serverAddr = "localhost";
 	public int serverPort = 9000;
 	public int id { get; set; }
-    public bool autoUpdate = false;
+    public bool autoUpdate = true;
 
 	void Start()
 	{
 		System.Random rnd = new System.Random();
 		id = rnd.Next();
+		ObjType objtype;
+		if(this.gameObject.name.ToLower().Contains("cube"))
+			objtype = ObjType.CUBE;
+		else
+			objtype = ObjType.CAMERA;
+
 		publisher = new Publisher {
 			device = this.device,
+			objname = objtype,
 			serverAddr = this.serverAddr,
 			serverPort = this.serverPort,
 			id = this.id
@@ -37,10 +44,12 @@ public class PublishPosRot : MonoBehaviour {
         }
 	}
 
-    public void sendPosition(GameObject go )
+	public void sendPosition()
     {
-        publisher.SendPosition( go );
-        publisher.SendRotation( go );
+		if(publisher == null)
+			return;
+		publisher.SendPosition( this.gameObject );
+		publisher.SendRotation( this.gameObject );
     }
 
 	void OnApplicationQuit(){

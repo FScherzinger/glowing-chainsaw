@@ -8,6 +8,11 @@ enum Device{
 	BAXTER
 }
 
+enum ObjType{
+	CUBE,
+	CAMERA
+}
+
 struct Direction{
 	/** X-Coordinate **/
 	1:required double x;
@@ -29,9 +34,10 @@ struct Position{
 }
 
 struct PositionEvent{
-	1:required Device type;
-	2:required Position position;
-	3:required i32 Id;
+	1:required Device device;
+	2:required ObjType objtype;
+	3:required Position position;
+	4:required i32 Id;
 }
 
 struct InformationEvent{
@@ -42,9 +48,10 @@ struct InformationEvent{
 }
 
 struct DirectionEvent{
-	1:required Device type;
-	2:required Direction direction;
-	3:required i32 Id;
+	1:required Device device;
+	2:required ObjType objtype;
+	3:required Direction direction;
+	4:required i32 Id;
 }
 
 struct PointerEvent{
