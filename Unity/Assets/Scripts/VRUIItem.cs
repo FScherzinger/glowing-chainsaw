@@ -36,22 +36,23 @@ public class VRUIItem: MonoBehaviour
 			break;
 		case VRInput.SwipeDirection.LEFT:
 			i--;
-			i %= 3;
-			switch(i){
-			case 0:
-				image.texture = m_FirstTool;
-				break;
-			case 1:
-				image.texture = m_SecondTool;
-				break;
-			case 2:
-				image.texture = m_ThirdTool;
-				break;
-			}
 			break;
 		case VRInput.SwipeDirection.RIGHT:
+			i++;
 			break;
 		}
-			
+
+		i %= 3;
+		switch(i){
+		case 0:
+			image.texture = m_FirstTool;
+			break;
+		case 1:
+			image.texture = m_SecondTool;
+			break;
+		case 2:
+			image.texture = m_ThirdTool;
+			break;
+		}
 	}
 }
