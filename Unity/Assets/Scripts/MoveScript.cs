@@ -15,8 +15,6 @@ public class MoveScript : MonoBehaviour
 
 	void Update()
 	{
-		if( Input.GetKey( "space") )
-	;		
 		if( Input.GetKey( "left" ) )
 			transform.Rotate(new Vector3(0,-.1f,0));	
 		if( Input.GetKey( "right" ) )
