@@ -1,13 +1,14 @@
 ﻿using UnityEngine;
 using System.Collections;
 using System.Threading;
+
 using de.dfki.tecs.robot.baxter;
+
 
 public class BaxterTest : MonoBehaviour {
 
     Thread thread;
 
-	// Use this for initialization
 	void Start () {
         thread = new Thread( new PickAndPlace
         {
@@ -18,15 +19,17 @@ public class BaxterTest : MonoBehaviour {
         }.Send );
 
         thread.Start();
+
+
     }
-	
+
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 
     void OnApplicationClose()
     {
         thread.Abort();
-    }
+      }
 }
