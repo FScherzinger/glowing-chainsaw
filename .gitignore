@@ -31,9 +31,6 @@ sysinfo.txt
 *.apk
 *.unitypackage
 
-#Thrift generated
-gen-*
-
 *.log
 
 Unity/ProjectSettings/GraphicsSettings.asset
