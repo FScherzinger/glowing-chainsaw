@@ -7,8 +7,8 @@ using System.Threading;
 // be used to change things on gameobjects by handling events.
 public class InputHandler : MonoBehaviour
 {
-	[SerializeField] private Image reticle;
-	[SerializeField] private VRInput m_VRInput;
+	public Image reticle {get;set;}
+	public VRInput m_VRInput;
 	[SerializeField] private Material m_NormalMaterial;                
 	[SerializeField] private Material m_OverMaterial;                  
 	[SerializeField] private Material m_ClickedMaterial;               
@@ -17,6 +17,15 @@ public class InputHandler : MonoBehaviour
 	[SerializeField] private Renderer m_Renderer;
     [SerializeField] private PublishPosRot m_publisher;
 	private bool draggable = false;
+
+	private enum inputobj{
+		VRInput,InteractiveItem
+	}
+
+	public void setVRInput(VRInput input){
+		m_VRInput = input;
+		//m_VRInput.OnClick += HandleSecondClick;
+	}
 
 	private void Awake ()
 	{
@@ -30,7 +39,6 @@ public class InputHandler : MonoBehaviour
 		m_InteractiveItem.OnOut += HandleOut;
 		m_InteractiveItem.OnClick += HandleClick;
 		m_InteractiveItem.OnDoubleClick += HandleDoubleClick;
-		m_VRInput.OnClick += HandleSecondClick;
 	}
 
 
@@ -40,6 +48,7 @@ public class InputHandler : MonoBehaviour
 		m_InteractiveItem.OnOut -= HandleOut;
 		m_InteractiveItem.OnClick -= HandleClick;
 		m_InteractiveItem.OnDoubleClick -= HandleDoubleClick;
+		m_VRInput.OnClick -= HandleClick;
 	}
 
 
@@ -62,12 +71,14 @@ public class InputHandler : MonoBehaviour
 	//Handle the Click event
 	private void HandleClick()
 	{
-		Debug.Log("Show click state");
+		Debug.Log("Show click");
 		m_Renderer.material = m_ClickedMaterial;
-		draggable = true;
-		Debug.Log(draggable);
-		m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled = false;
+		if (!draggable){
+			draggable = true;
+			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled = false;
+		}
 	}
+	
 
 
 	//Handle the DoubleClick event
@@ -92,8 +103,7 @@ public class InputHandler : MonoBehaviour
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled= true;
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-            m_publisher.sendPosition();
+			//m_publisher.sendPosition();
 		}
-	}
-		
+	}		
 }

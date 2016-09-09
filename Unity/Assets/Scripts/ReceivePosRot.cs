@@ -10,6 +10,8 @@ using System.Runtime.InteropServices;
 
 using de.dfki.events;
 using System.Collections.Generic;
+using VRStandardAssets.Utils;
+using UnityEngine.UI;
 
 public class ReceivePosRot : MonoBehaviour {
 
@@ -40,8 +42,6 @@ public class ReceivePosRot : MonoBehaviour {
 			objtype = ObjType.CUBE;
 		else
 			objtype = ObjType.CAMERA;
-		
-
 		ReceiverThread rc_thread = new ReceiverThread{
 			serverAddr = this.serveradress,
 			serverPort = this.serverport,
@@ -50,6 +50,15 @@ public class ReceivePosRot : MonoBehaviour {
 		};
 		receive_thread = new Thread (rc_thread.Connect);
 		receive_thread.Start();
+
+		//temp
+		float x = 0.4f;
+		float y = 1.1f;
+		float z = 0.6f;
+
+		PositionEvent pe = new PositionEvent( device,ObjType.CUBE, new Position(x,y,z ), 1 );
+
+		PositionEvents.Enqueue(pe);
 	}
 
 	void OnApplicationQuit()
@@ -105,6 +114,10 @@ public class ReceivePosRot : MonoBehaviour {
 	private GameObject getObject(int id){
 		if (!Objects.ContainsKey (id)) {
 			GameObject obj = Instantiate (renderObject);
+			InputHandler handler = obj.GetComponent( typeof(InputHandler)) as InputHandler;
+			handler.reticle = (Image)GameObject.Find("Reticle").GetComponent<Image>();
+			VRInput input = GameObject.Find("Main Camera").GetComponent<VRInput>();
+			handler.setVRInput(input);
 			Objects.Add(id,obj);
 			//head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
