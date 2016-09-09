@@ -44,7 +44,8 @@ namespace VRStandardAssets.Utils
         private void Update()
         {
             CheckInput();
-        }
+
+		}
 
 
         private void CheckInput()

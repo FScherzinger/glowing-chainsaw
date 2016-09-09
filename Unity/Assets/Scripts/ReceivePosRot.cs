@@ -51,14 +51,6 @@ public class ReceivePosRot : MonoBehaviour {
 		receive_thread = new Thread (rc_thread.Connect);
 		receive_thread.Start();
 
-		//temp
-		float x = 0.4f;
-		float y = 1.1f;
-		float z = 0.6f;
-
-		PositionEvent pe = new PositionEvent( device,ObjType.CUBE, new Position(x,y,z ), 1 );
-
-		PositionEvents.Enqueue(pe);
 	}
 
 	void OnApplicationQuit()
@@ -114,16 +106,20 @@ public class ReceivePosRot : MonoBehaviour {
 	private GameObject getObject(int id){
 		if (!Objects.ContainsKey (id)) {
 			GameObject obj = Instantiate (renderObject);
-			InputHandler handler = obj.GetComponent( typeof(InputHandler)) as InputHandler;
-			handler.reticle = (Image)GameObject.Find("Reticle").GetComponent<Image>();
-			VRInput input = GameObject.Find("Main Camera").GetComponent<VRInput>();
-			handler.setVRInput(input);
+			//Cube
+			initCube(obj);
 			Objects.Add(id,obj);
 			//head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
 		return Objects[id];
 	}
 
+	public void initCube(GameObject cube){
+		InputHandler handler = cube.GetComponent( typeof(InputHandler)) as InputHandler;
+		handler.reticle = (Image)GameObject.Find("Reticle").GetComponent<Image>();
+		VRInput input = GameObject.Find("Main Camera").GetComponent<VRInput>();
+		handler.setVRInput(input);
+	}
 
     public class ReceiverThread {
 		public string serverAddr { get; set; }

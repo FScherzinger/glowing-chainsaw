@@ -18,13 +18,14 @@ public class InputHandler : MonoBehaviour
     [SerializeField] private PublishPosRot m_publisher;
 	private bool draggable = false;
 
+
 	private enum inputobj{
 		VRInput,InteractiveItem
 	}
 
 	public void setVRInput(VRInput input){
 		m_VRInput = input;
-		//m_VRInput.OnClick += HandleSecondClick;
+		m_VRInput.OnClick += VRClick;
 	}
 
 	private void Awake ()
@@ -37,7 +38,7 @@ public class InputHandler : MonoBehaviour
 	{
 		m_InteractiveItem.OnOver += HandleOver;
 		m_InteractiveItem.OnOut += HandleOut;
-		m_InteractiveItem.OnClick += HandleClick;
+		m_InteractiveItem.OnClick += InteractiveItemClick;
 		m_InteractiveItem.OnDoubleClick += HandleDoubleClick;
 	}
 
@@ -46,9 +47,9 @@ public class InputHandler : MonoBehaviour
 	{
 		m_InteractiveItem.OnOver -= HandleOver;
 		m_InteractiveItem.OnOut -= HandleOut;
-		m_InteractiveItem.OnClick -= HandleClick;
+		m_InteractiveItem.OnClick -= InteractiveItemClick;
 		m_InteractiveItem.OnDoubleClick -= HandleDoubleClick;
-		m_VRInput.OnClick -= HandleClick;
+		m_VRInput.OnClick -= InteractiveItemClick;
 	}
 
 
@@ -69,12 +70,12 @@ public class InputHandler : MonoBehaviour
 
 
 	//Handle the Click event
-	private void HandleClick()
+	private void InteractiveItemClick()
 	{
-		Debug.Log("Show click");
 		m_Renderer.material = m_ClickedMaterial;
 		if (!draggable){
 			draggable = true;
+			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
 			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled = false;
 		}
 	}
@@ -96,11 +97,12 @@ public class InputHandler : MonoBehaviour
 		}
 	}
 
-	public void HandleSecondClick(){
-		Debug.Log("Second click");
+	public void VRClick(){
+		if (m_InteractiveItem.IsOver)
+			return;
 		if(draggable){
 			draggable = false;
-			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
+
 			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled= true;
 			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = false;
 			//m_publisher.sendPosition();
