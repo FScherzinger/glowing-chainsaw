@@ -15,7 +15,6 @@ public class InputHandler : MonoBehaviour
 	[SerializeField] private Material m_DoubleClickedMaterial;         
 	[SerializeField] private VRInteractiveItem m_InteractiveItem;
 	[SerializeField] private Renderer m_Renderer;
-    [SerializeField] private PublishPosRot m_publisher;
 	private bool draggable = false;
 
 
