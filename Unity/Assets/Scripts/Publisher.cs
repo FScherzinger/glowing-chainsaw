@@ -9,7 +9,7 @@ using UnityEngine;
 public class Publisher
 {
 
-    PSClient publish_client;
+    public PSClient publish_client;
 
     public Device device { get; set; }
 	public ObjType objname { get; set; }
@@ -47,7 +47,6 @@ public class Publisher
     public void SendPosition( GameObject go )
     {
 		if (publish_client == null){
-			SendPosition(go);
 			return;
 		}
 

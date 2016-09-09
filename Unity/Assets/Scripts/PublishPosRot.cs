@@ -7,7 +7,7 @@ using de.dfki.events;
 
 public class PublishPosRot : MonoBehaviour {
 
-	Publisher publisher;
+	public Publisher publisher;
 	Thread publishThread;
 	public Device device;
 	public String serverAddr = "localhost";
@@ -15,7 +15,7 @@ public class PublishPosRot : MonoBehaviour {
 	public int id { get; set; }
     public bool autoUpdate = true;
 
-	void Awake(){
+	public PublishPosRot(){
 		System.Random rnd = new System.Random();
 		id = rnd.Next();
 	}
@@ -38,7 +38,7 @@ public class PublishPosRot : MonoBehaviour {
 		};
 		publishThread = new Thread( publisher.Connect );
 		publishThread.Start ();
-		sendPosition();
+	
 	}
 
 	void FixedUpdate(){

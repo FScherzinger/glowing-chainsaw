@@ -20,7 +20,6 @@ public class CreateDemoCube : MonoBehaviour {
 			ReceivePosRot.addGameObject(publisher.id,clone);
 
 
-
 		}
 	}
 }

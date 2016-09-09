@@ -120,7 +120,7 @@ MonoBehaviour:
   device: 1
   serverAddr: localhost
   serverPort: 9000
-  autoUpdate: 0
+  autoUpdate: 1
 --- !u!114 &11423966
 MonoBehaviour:
   m_ObjectHideFlags: 1
