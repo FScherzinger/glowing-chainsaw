@@ -17,6 +17,9 @@ public class CreateDemoCube : MonoBehaviour {
 		if(Input.GetKeyDown("space")){
 			GameObject clone = Instantiate(cube);
 			PublishPosRot publisher = clone.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
+			System.Random rnd = new System.Random();
+			int id = rnd.Next();
+			ReceivePosRot.addGameObject(id,clone);
 			publisher.sendPosition();
 
 

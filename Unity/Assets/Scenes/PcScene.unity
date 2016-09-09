@@ -121,15 +121,15 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 51137418}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 27f0d37d022f0d644bf43d90c14945f4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   renderObject: {fileID: 170872, guid: 63cb10cd9ed4b41fe9069235384b9057, type: 2}
-  serveradress: localhost
+  serveradress: 10.9.32.158
   serverport: 9000
-  device: 0
+  device: 3
   publisherObject: {fileID: 0}
 --- !u!114 &51137421
 MonoBehaviour:

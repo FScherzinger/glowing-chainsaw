@@ -25,10 +25,14 @@ public class ReceivePosRot : MonoBehaviour {
 	public Device device;
 	public static volatile Queue<PositionEvent> PositionEvents;
 	public static volatile Queue<DirectionEvent> DirectionEvents;
-	private volatile Dictionary<int,GameObject> Objects;
+	private static volatile Dictionary<int,GameObject> Objects;
 	public GameObject publisherObject;
 	private PublishPosRot publisher;
 
+
+	public static void addGameObject(int id,GameObject go){
+		Objects.Add(id, go);
+	}
 
     void Start()
 	{
@@ -108,7 +112,7 @@ public class ReceivePosRot : MonoBehaviour {
 			GameObject obj = Instantiate (renderObject);
 			//Cube
 			initCube(obj);
-			Objects.Add(id,obj);
+			addGameObject(id, obj);
 			//head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
 		return Objects[id];
