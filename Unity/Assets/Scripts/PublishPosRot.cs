@@ -15,10 +15,14 @@ public class PublishPosRot : MonoBehaviour {
 	public int id { get; set; }
     public bool autoUpdate = true;
 
-	void Start()
-	{
+	public PublishPosRot(){
 		System.Random rnd = new System.Random();
 		id = rnd.Next();
+	}
+
+	void Start()
+	{
+
 		ObjType objtype;
 		if(this.gameObject.name.ToLower().Contains("cube"))
 			objtype = ObjType.CUBE;
@@ -46,8 +50,10 @@ public class PublishPosRot : MonoBehaviour {
 
 	public void sendPosition()
     {
-		if(publisher == null)
+		if(publisher == null){
 			return;
+		}
+			
 		publisher.SendPosition( this.gameObject );
 		publisher.SendRotation( this.gameObject );
     }

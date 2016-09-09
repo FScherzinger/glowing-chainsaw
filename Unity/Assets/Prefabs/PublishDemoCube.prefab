@@ -104,10 +104,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 295859223eae4fd459585e82f1cdbab2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  device: 0
-  serverAddr: localhost
+  device: 3
+  serverAddr: 10.9.32.158
   serverPort: 9000
-  autoUpdate: 0
+  autoUpdate: 1
 --- !u!1001 &100100000
 Prefab:
   m_ObjectHideFlags: 1

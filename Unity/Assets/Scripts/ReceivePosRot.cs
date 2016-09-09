@@ -111,7 +111,8 @@ public class ReceivePosRot : MonoBehaviour {
 		if (!Objects.ContainsKey (id)) {
 			GameObject obj = Instantiate (renderObject);
 			//Cube
-			initCube(obj);
+			if(device == Device.GEARVR)
+				initCube(obj);
 			addGameObject(id, obj);
 			//head.transform.localScale = new Vector3(0.1f,0.1f,0.1f);
 		} 
