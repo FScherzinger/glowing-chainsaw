@@ -18,7 +18,7 @@ public class CreateDemoCube : MonoBehaviour {
 			GameObject clone = Instantiate(cube);
 			PublishPosRot publisher = clone.GetComponent( typeof(PublishPosRot) ) as PublishPosRot;
 			ReceivePosRot.addGameObject(publisher.id,clone);
-			publisher.sendPosition();
+
 
 
 		}

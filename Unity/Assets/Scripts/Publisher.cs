@@ -46,7 +46,12 @@ public class Publisher
 
     public void SendPosition( GameObject go )
     {
-        if( go == null || publish_client == null )
+		if (publish_client == null){
+			SendPosition(go);
+			return;
+		}
+
+		if( go == null )
             return;
         if( publish_client.IsOnline() && publish_client.IsConnected() )
         {

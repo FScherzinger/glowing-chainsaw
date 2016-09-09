@@ -15,7 +15,7 @@ public class PublishPosRot : MonoBehaviour {
 	public int id { get; set; }
     public bool autoUpdate = true;
 
-	public PublishPosRot(){
+	void Awake(){
 		System.Random rnd = new System.Random();
 		id = rnd.Next();
 	}
@@ -38,6 +38,7 @@ public class PublishPosRot : MonoBehaviour {
 		};
 		publishThread = new Thread( publisher.Connect );
 		publishThread.Start ();
+		sendPosition();
 	}
 
 	void FixedUpdate(){
