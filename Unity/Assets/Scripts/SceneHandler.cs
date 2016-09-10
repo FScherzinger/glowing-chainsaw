@@ -33,7 +33,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface {
 			return;
 		foreach (int id in SceneObjects.Keys) {
 			ps_publisher.SendPosition (id, SceneObjects [id]);
-			//ps_publisher.SendRotation (id, SceneObjects [id]);
+			ps_publisher.SendRotation (id, SceneObjects [id]);
 		}
 
 	}
