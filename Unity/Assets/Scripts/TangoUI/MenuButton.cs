@@ -10,7 +10,7 @@ public class MenuButton : MonoBehaviour
     public Button Button3;
     public Button Button4;
 
-    private bool MenuState = false; // extended = false, collapsed = true
+    private bool MenuState = false; // collapsed = false, extended = true
 
     // instead of a boolean we use an unsigned integer as lock.
     // with that we have more inside on how many coroutines are still running
@@ -68,7 +68,7 @@ public class MenuButton : MonoBehaviour
         int covered_track = 0;
 
         // distinguish whether we will collapse or extend the menu
-        float step = (distance < 0) ? 10f : -10f;
+        float step = (distance < 0) ? 40f : -40f;
         distance = Mathf.Abs( distance );
 
         while ( covered_track < distance )
