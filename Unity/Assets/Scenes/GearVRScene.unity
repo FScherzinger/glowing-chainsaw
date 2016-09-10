@@ -190,6 +190,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea6f8eea666334aaf9869ad8f7bcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsOver: 0
 --- !u!114 &338624081
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,6 +209,8 @@ MonoBehaviour:
   m_DoubleClickedMaterial: {fileID: 0}
   m_InteractiveItem: {fileID: 338624080}
   m_Renderer: {fileID: 338624075}
+  draggable: 0
+  <reticle>k__BackingField: {fileID: 0}
 --- !u!1001 &524634688
 Prefab:
   m_ObjectHideFlags: 0
@@ -489,6 +492,72 @@ MonoBehaviour:
   m_FillAmount: 1
   m_FillClockwise: 1
   m_FillOrigin: 0
+--- !u!1001 &1089461910
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: -0.38741297
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 2.4118865
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.43287018
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0.36390612
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0.6068511
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0.6060071
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: -0.36339992
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_RootOrder
+      value: 11
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalScale.x
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalScale.y
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalScale.z
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 270.0791
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: -241.8288
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: -360
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+  m_IsPrefabParent: 0
 --- !u!1 &1239562810
 GameObject:
   m_ObjectHideFlags: 0
@@ -528,6 +597,8 @@ MonoBehaviour:
   m_DoubleClickedMaterial: {fileID: 0}
   m_InteractiveItem: {fileID: 1239562812}
   m_Renderer: {fileID: 1239562814}
+  draggable: 0
+  <reticle>k__BackingField: {fileID: 0}
 --- !u!114 &1239562812
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -539,6 +610,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea6f8eea666334aaf9869ad8f7bcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsOver: 0
 --- !u!54 &1239562813
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -707,7 +779,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ps_port: 9000
-  serveradress: 192.168.0.10
+  serveradress: 3139322e3136382e302e3130
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -764,6 +836,46 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
+--- !u!1 &1621271852
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 1621271854}
+  - 114: {fileID: 1621271853}
+  m_Layer: 0
+  m_Name: HeadInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1621271853
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1621271852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 007e6193550b49b4d96690c1fe622f77, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1621271854
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1621271852}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.389, y: 1.154, z: 0.591}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 12
 --- !u!1001 &1747439560
 Prefab:
   m_ObjectHideFlags: 0
@@ -964,6 +1076,8 @@ MonoBehaviour:
   m_DoubleClickedMaterial: {fileID: 0}
   m_InteractiveItem: {fileID: 2003626032}
   m_Renderer: {fileID: 2003626034}
+  draggable: 0
+  <reticle>k__BackingField: {fileID: 0}
 --- !u!114 &2003626032
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -975,6 +1089,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7fea6f8eea666334aaf9869ad8f7bcda, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_IsOver: 0
 --- !u!54 &2003626033
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -1216,12 +1331,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cursorTimer: {fileID: 0}
-  cursorTimerColor: {r: 0, g: 0.643, b: 1, a: 1}
+  cursorTimerColor:
+    r: 0
+    g: 0.643
+    b: 1
+    a: 1
   fixedDepth: 3
   keyCode: 27
   doubleTapHandler: 0
   shortPressHandler: 2
   longPressHandler: 1
+  instantiatedCursorTimer: {fileID: 0}
+  cursorTimerMaterial: {fileID: 0}
+  doubleTapDelay: 0.25
+  shortPressDelay: 0.25
+  longPressDelay: 0.75
+  downCount: 0
+  upCount: 0
+  initialDownTime: -1
+  waitForUp: 0
 --- !u!114 &2116470504
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1234,15 +1362,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Camera: {fileID: 2116470502}
-  m_ExclusionLayers:
-    serializedVersion: 2
-    m_Bits: 0
+  m_ExclusionLayers: {}
   m_Reticle: {fileID: 2116470506}
   m_VrInput: {fileID: 2116470505}
   m_ShowDebugRay: 1
   m_DebugRayLength: 5
   m_DebugRayDuration: 1
   m_RayLength: 500
+  m_CurrentInteractible: {fileID: 0}
+  m_LastInteractible: {fileID: 0}
 --- !u!114 &2116470505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1256,6 +1384,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_DoubleClickTime: 0.3
   m_SwipeWidth: 0.3
+  m_MouseDownPosition: {x: 0, y: 0}
+  m_MouseUpPosition: {x: 0, y: 0}
+  m_LastMouseUpTime: 0
+  m_LastHorizontalValue: 0
+  m_LastVerticalValue: 0
 --- !u!114 &2116470506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1272,6 +1405,8 @@ MonoBehaviour:
   m_Image: {fileID: 1022149712}
   m_ReticleTransform: {fileID: 1022149710}
   m_Camera: {fileID: 2116470502}
+  m_OriginalScale: {x: 0, y: 0, z: 0}
+  m_OriginalRotation: {x: 0, y: 0, z: 0, w: 0}
 --- !u!114 &2116470507
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1283,6 +1418,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e162cac6d3f764e50b7747251a86a56a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  new_position: {x: 0, y: 0, z: 0}
   menu: {fileID: 1909881469}
 --- !u!114 &2116470508
 MonoBehaviour:
@@ -1300,3 +1436,4 @@ MonoBehaviour:
   m_SecondTool: {fileID: 2800000, guid: dc421b8dda3d14af394c118bc3968a7c, type: 3}
   m_ThirdTool: {fileID: 2800000, guid: d0796adc062874dfc96d3aa5d6f698a3, type: 3}
   image: {fileID: 1285064986}
+  i: 0
