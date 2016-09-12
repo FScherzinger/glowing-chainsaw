@@ -84,6 +84,11 @@ namespace de.dfki.events
       IAsyncResult Begin_Move_And_Rotate(AsyncCallback callback, object state, PositionEvent e, DirectionEvent d);
       bool End_Move_And_Rotate(IAsyncResult asyncResult);
       #endif
+      ObjType getObjType(int id);
+      #if SILVERLIGHT
+      IAsyncResult Begin_getObjType(AsyncCallback callback, object state, int id);
+      ObjType End_getObjType(IAsyncResult asyncResult);
+      #endif
     }
 
     public class Client : IDisposable, Iface {
@@ -949,6 +954,68 @@ namespace de.dfki.events
         throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "Move_And_Rotate failed: unknown result");
       }
 
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_getObjType(AsyncCallback callback, object state, int id)
+      {
+        return send_getObjType(callback, state, id);
+      }
+
+      public ObjType End_getObjType(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_getObjType();
+      }
+
+      #endif
+
+      public ObjType getObjType(int id)
+      {
+        #if !SILVERLIGHT
+        send_getObjType(id);
+        return recv_getObjType();
+
+        #else
+        var asyncResult = Begin_getObjType(null, null, id);
+        return End_getObjType(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_getObjType(AsyncCallback callback, object state, int id)
+      #else
+      public void send_getObjType(int id)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("getObjType", TMessageType.Call, seqid_));
+        getObjType_args args = new getObjType_args();
+        args.Id = id;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public ObjType recv_getObjType()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        getObjType_result result = new getObjType_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getObjType failed: unknown result");
+      }
+
     }
     public class Processor : TProcessor {
       public Processor(Iface iface)
@@ -967,6 +1034,7 @@ namespace de.dfki.events
         processMap_["LockGameObject"] = LockGameObject_Process;
         processMap_["Move"] = Move_Process;
         processMap_["Move_And_Rotate"] = Move_And_Rotate_Process;
+        processMap_["getObjType"] = getObjType_Process;
       }
 
       protected delegate void ProcessFunction(int seqid, TProtocol iprot, TProtocol oprot);
@@ -1163,6 +1231,19 @@ namespace de.dfki.events
         Move_And_Rotate_result result = new Move_And_Rotate_result();
         result.Success = iface_.Move_And_Rotate(args.E, args.D);
         oprot.WriteMessageBegin(new TMessage("Move_And_Rotate", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void getObjType_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        getObjType_args args = new getObjType_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        getObjType_result result = new getObjType_result();
+        result.Success = iface_.getObjType(args.Id);
+        oprot.WriteMessageBegin(new TMessage("getObjType", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -4074,6 +4155,227 @@ namespace de.dfki.events
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("Move_And_Rotate_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getObjType_args : TBase
+    {
+      private int _id;
+
+      public int Id
+      {
+        get
+        {
+          return _id;
+        }
+        set
+        {
+          __isset.id = true;
+          this._id = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool id;
+      }
+
+      public getObjType_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.I32) {
+                  Id = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getObjType_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (__isset.id) {
+            field.Name = "id";
+            field.Type = TType.I32;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(Id);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getObjType_args(");
+        bool __first = true;
+        if (__isset.id) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Id: ");
+          __sb.Append(Id);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getObjType_result : TBase
+    {
+      private ObjType _success;
+
+      /// <summary>
+      /// 
+      /// <seealso cref="ObjType"/>
+      /// </summary>
+      public ObjType Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public getObjType_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.I32) {
+                  Success = (ObjType)iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getObjType_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.I32;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32((int)Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getObjType_result(");
         bool __first = true;
         if (__isset.success) {
           if(!__first) { __sb.Append(", "); }

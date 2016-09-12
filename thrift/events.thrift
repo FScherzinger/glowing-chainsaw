@@ -76,7 +76,8 @@ service Scene{
 		bool Can_Interact(1:i32 id),
 		bool LockGameObject(1:i32 id),
 		bool Move(1:PositionEvent e),
-		bool Move_And_Rotate(1:PositionEvent e,2:DirectionEvent d)
+		bool Move_And_Rotate(1:PositionEvent e,2:DirectionEvent d),
+		ObjType getObjType(1:i32 id)
 
 }
 
