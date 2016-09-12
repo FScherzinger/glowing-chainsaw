@@ -69,7 +69,8 @@ public class InputHandler : MonoBehaviour
 		}
 		else if(m_MovingCube != null && draggable){
 			draggable = false;
-			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(m_MovingCube.transform.position), id);
+			Vector3 pos = m_MovingCube.transform.position;
+			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
 			RPCClient.client.Move(posEvent);
 			Destroy(m_MovingCube);
 			m_MovingCube = null;
