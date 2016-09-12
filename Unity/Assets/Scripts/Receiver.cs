@@ -28,29 +28,31 @@ using UnityEngine;
 		{
 
 			// start listening
-			while( receive_client.IsOnline() )
+			while( receive_client.IsOnline() ){
 				while( receive_client.CanRecv() )
 				{
-				if (obj_init == null)
-					continue;
-					
-				de.dfki.tecs.Event eve = receive_client.Recv();
-				if (eve.Is ("PositionEvent")) {
-					PositionEvent pos_event = new PositionEvent ();
-					eve.ParseData (pos_event);
-					obj_init.handle (pos_event);
+					if (obj_init == null)
+						continue;
+						
+					de.dfki.tecs.Event eve = receive_client.Recv();
+					if (eve.Is ("PositionEvent")) {
+						PositionEvent pos_event = new PositionEvent ();
+						eve.ParseData (pos_event);
+						obj_init.handle (pos_event);
+					}
+					if (eve.Is ("DirectionEvent")) {
+						DirectionEvent dir_event = new DirectionEvent ();	
+						eve.ParseData (dir_event);
+						obj_init.handle (dir_event);
+					}
 				}
-				if (eve.Is ("DirectionEvent")) {
-					DirectionEvent dir_event = new DirectionEvent ();	
-					eve.ParseData (dir_event);
-					obj_init.handle (dir_event);
-				}
+			}
+	}
 
-				}
-		}
 
 	public void Disconnect(){
-		receive_client.Disconnect ();
+		if(receive_client.IsOnline())
+			receive_client.Disconnect ();
 	}
 }
 

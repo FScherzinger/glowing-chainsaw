@@ -3,15 +3,31 @@ using System.Collections;
 using Thrift.Transport;
 using Thrift.Protocol;
 using de.dfki.events;
+using System;
 
-public class RPCClient : MonoBehaviour {
+public class RPCClient {
 
 	public static Scene.Client client {get; set;}
+	public string address {get;set;}
+	public int port {get;set;} 
+
+	TTransport transport;
+
 
 	// Use this for initialization
-	void Start () {
-		TTransport transport = new TSocket("localhost", 9090);
-		TProtocol protocol = new TBinaryProtocol(transport);
-		client = new Scene.Client(protocol);
+	public void Connect () {
+		try {
+			transport = new TSocket(address, port);
+			TProtocol protocol = new TBinaryProtocol(transport);
+			client = new Scene.Client(protocol);
+			transport.Open();
+		} catch (Exception e){
+			Debug.LogError(e);
+			Application.Quit();
+		}
+	}
+
+	public void Disconnect(){
+		transport.Close();
 	}
 }

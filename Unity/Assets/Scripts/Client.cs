@@ -6,13 +6,16 @@ using System;
 public class Client : MonoBehaviour  {
 
 
-	private System.Threading.Thread receiverThread;
+	private Thread receiverThread;
+	private Thread rpcThread;
 	public int ps_port = 9000;
-	public string serveradress = "localhost";
+	public int rpc_port = 9001;
+	public string ps_serveraddress = "localhost";
+	public string rpc_serveraddress = "localhost";
 	public Device device;
 	public GameObject objectInitializer;
 
-
+	RPCClient rpcclient;
 	Receiver receiver;
 
 	void Start(){
@@ -22,26 +25,34 @@ public class Client : MonoBehaviour  {
 			throw new Exception("Client needs an ObjectInitializer gameobject with attached ObjectInitializer script"); 
 		receiver = new Receiver {
 			serverPort = ps_port,
-			serverAddr = serveradress,
+			serverAddr = ps_serveraddress,
 			device = device,
 			obj_init = obj_init
 		};
 		receiverThread = new Thread(receiver.Connect);
 		receiverThread.Start ();
-
+		//RPC
+		rpcclient = new RPCClient {
+			address = rpc_serveraddress,
+			port = rpc_port		
+		};
+		rpcThread = new Thread(rpcclient.Connect);
+		rpcThread.Start();
 	}
-
-	void update(){
-	}
+		
 
 	void OnApplicationQuit(){
 		receiver.Disconnect ();
 		receiverThread.Join ();
+		rpcclient.Disconnect();
+		rpcThread.Join();
 	}
 
 	void OnDisable(){
 		receiver.Disconnect ();
 		receiverThread.Join ();
+		rpcclient.Disconnect();
+		rpcThread.Join();
 	}
 
 

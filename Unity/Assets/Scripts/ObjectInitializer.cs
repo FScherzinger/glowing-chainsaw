@@ -87,7 +87,7 @@ public class ObjectInitializer : MonoBehaviour
 		if(go.GetComponent<MetaData>() != null)
 			go.GetComponent<MetaData>().id = id;
 		else{
-			Debug.LogError("No Metadata attached");
+			Debug.LogError("No Meta\tdata attached");
 			Debug.Break();
 		}
 		return go;
