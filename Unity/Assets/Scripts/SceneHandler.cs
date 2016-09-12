@@ -122,9 +122,13 @@ public class SceneHandler : MonoBehaviour, Scene.Iface {
 
     public ObjType getObjType(int id)
     {
-        if (SceneObjects[id].GetComponent(ObjType).equals(PrimitiveType.Cube))
+        if (SceneObjects[id].GetComponent<MetaData>().ObjType.equals(ObjType.CUBE))
         {
             return ObjType.CUBE;
+        }
+        else
+        {
+            return ObjType.CAMERA;
         }
     }
 
