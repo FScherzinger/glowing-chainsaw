@@ -10,7 +10,7 @@ public class MenuButton : MonoBehaviour
     public Button Button3;
     public Button Button4;
 
-    private bool MenuState = false; // collapsed = false, extended = true
+    private bool MenuState = false; // collapsed = true, extended = false
 
     // instead of a boolean we use an unsigned integer as lock.
     // with that we have more inside on how many coroutines are still running
@@ -19,13 +19,13 @@ public class MenuButton : MonoBehaviour
     public void MenuButtonClick()
     {
         // first of all check if we are allowed to click.
-        if (locked > 0)
+        if( locked > 0 )
         {
-            Debug.Log("locked");
+            Debug.Log( "locked" );
             return;
         }
         // check menu state and perform the proper operation.
-        if (MenuState)
+        if( MenuState )
             CollapseMenu();
         else
             ExtendMenu();
@@ -34,20 +34,20 @@ public class MenuButton : MonoBehaviour
 
     private void CollapseMenu()
     {
-        Debug.Log("Collapsing Menu");
-        StartCoroutine(MoveButton(Button1, -5));
-        StartCoroutine(MoveButton(Button2, -10));
-        StartCoroutine(MoveButton(Button3, -15));
-        StartCoroutine(MoveButton(Button4, -20));
+        Debug.Log( "Collapsing Menu" );
+        StartCoroutine( MoveButton( Button1, -5 ) );
+        StartCoroutine( MoveButton( Button2, -10 ) );
+        StartCoroutine( MoveButton( Button3, -15 ) );
+        StartCoroutine( MoveButton( Button4, -20 ) );
     }
 
     private void ExtendMenu()
     {
-        Debug.Log("Extending Menu");
-        StartCoroutine(MoveButton(Button1, 5));
-        StartCoroutine(MoveButton(Button2, 10));
-        StartCoroutine(MoveButton(Button3, 15));
-        StartCoroutine(MoveButton(Button4, 20));
+        Debug.Log( "Extending Menu" );
+        StartCoroutine( MoveButton( Button1, 5 ) );
+        StartCoroutine( MoveButton( Button2, 10 ) );
+        StartCoroutine( MoveButton( Button3, 15 ) );
+        StartCoroutine( MoveButton( Button4, 20 ) );
     }
 
     /// <summary>
@@ -61,9 +61,9 @@ public class MenuButton : MonoBehaviour
     private IEnumerator MoveButton( Button button, int distance )
     {
         ++locked;
-        // activate the button if we collapse the menu
-        if (distance > 0)
-            button.gameObject.SetActive(true);
+        // activate the button if we extend the menu
+        if( distance > 0 )
+            button.gameObject.SetActive( true );
 
         int covered_track = 0;
 
@@ -71,7 +71,7 @@ public class MenuButton : MonoBehaviour
         float step = (distance < 0) ? 40f : -40f;
         distance = Mathf.Abs( distance );
 
-        while ( covered_track < distance )
+        while( covered_track < distance )
         {
             button.transform.position += new Vector3( 0f, step, 0f );
             covered_track++;
