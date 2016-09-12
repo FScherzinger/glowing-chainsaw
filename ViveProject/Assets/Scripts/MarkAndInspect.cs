@@ -18,7 +18,9 @@ public class MarkAndInspect : VRTK_InteractableObject
             ismarked = !ismarked;
         }else if (inspect)
         {
+            infoObj.GetComponent<TextMesh>().text = ismarked.ToString();
             infoObj.gameObject.SetActive(true);
+
         }
     }
 

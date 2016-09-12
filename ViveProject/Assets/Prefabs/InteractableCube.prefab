@@ -26,7 +26,7 @@ GameObject:
   - 114: {fileID: 114000012426437820}
   m_Layer: 0
   m_Name: InteractableCube
-  m_TagString: Untagged
+  m_TagString: InteractableCube
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -189,7 +189,7 @@ TextMesh:
   m_Font: {fileID: 0}
   m_Color:
     serializedVersion: 2
-    rgba: 4294967295
+    rgba: 4278190335
 --- !u!114 &114000012426437820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -225,10 +225,10 @@ MonoBehaviour:
   isUsable: 0
   useOnlyIfGrabbed: 0
   holdButtonToUse: 1
-  pointerActivatesUseAction: 0
+  pointerActivatesUseAction: 1
   rumbleOnUse: {x: 0, y: 0}
   allowedUseControllers: 0
   hideControllerOnUse: 0
   mark: 0
   ismarked: 0
-  inspect: 0
+  inspect: 1
