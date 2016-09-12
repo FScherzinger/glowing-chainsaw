@@ -201,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ea8748f112d4a558efbcfbd50615c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_VRInput: {fileID: 0}
   m_NormalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
   m_OverMaterial: {fileID: 2100000, guid: f2718aa0266784e2984001cf035a229f, type: 2}
   m_InteractiveItem: {fileID: 338624080}
@@ -346,6 +347,65 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 582e320d34da24844b95a9ba820789c7, type: 3}
   m_IsPrefabParent: 0
+--- !u!1001 &726561816
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0.389
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 1.154
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: 0.591
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_RootOrder
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 170872, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6563960, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 170872, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+      propertyPath: m_Name
+      value: MovingCube
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 11413164, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+  m_ParentPrefab: {fileID: 100100000, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &726561817 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 170872, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
+  m_PrefabInternal: {fileID: 726561816}
 --- !u!1001 &1003509936
 Prefab:
   m_ObjectHideFlags: 0
@@ -598,6 +658,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ea8748f112d4a558efbcfbd50615c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_VRInput: {fileID: 0}
   m_NormalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
   m_OverMaterial: {fileID: 2100000, guid: f2718aa0266784e2984001cf035a229f, type: 2}
   m_InteractiveItem: {fileID: 1239562812}
@@ -783,8 +844,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 10.9.32.110
-  rpc_serveraddress: 10.9.32.110
+  ps_serveraddress: localhost
+  rpc_serveraddress: 10.9.33.102
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -827,7 +888,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312e42c993ed78040a14bc243dc2d9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temporaryGO: {fileID: 524634689}
+  temporaryGO: {fileID: 1747439561}
 --- !u!4 &1563991091
 Transform:
   m_ObjectHideFlags: 0
@@ -902,6 +963,46 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de9c324949989a84683d4c93a12e936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1747439563 stripped
+MonoBehaviour:
+  m_PrefabParentObject: {fileID: 11413164, guid: b678aa050b76f48ca944922034618a8e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1747439560}
+  m_Script: {fileID: 11500000, guid: 7fea6f8eea666334aaf9869ad8f7bcda, type: 3}
+--- !u!114 &1747439564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1747439561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 59926cddfa7f941ce9347b500fa6464f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjType: 0
+--- !u!23 &1747439565 stripped
+MeshRenderer:
+  m_PrefabParentObject: {fileID: 2347654, guid: b678aa050b76f48ca944922034618a8e,
+    type: 2}
+  m_PrefabInternal: {fileID: 1747439560}
+--- !u!114 &1747439566
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1747439561}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 43ea8748f112d4a558efbcfbd50615c3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_VRInput: {fileID: 2116470505}
+  m_NormalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
+  m_OverMaterial: {fileID: 2100000, guid: b43e5571a9fe23946bf3070cdfceb1b0, type: 2}
+  m_InteractiveItem: {fileID: 1747439563}
+  m_Renderer: {fileID: 1747439565}
+  m_MovingCubeModel: {fileID: 726561817}
 --- !u!1 &1815493926 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 582e320d34da24844b95a9ba820789c7, type: 3}
@@ -1034,6 +1135,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43ea8748f112d4a558efbcfbd50615c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  m_VRInput: {fileID: 0}
   m_NormalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
   m_OverMaterial: {fileID: 2100000, guid: f2718aa0266784e2984001cf035a229f, type: 2}
   m_InteractiveItem: {fileID: 2003626032}

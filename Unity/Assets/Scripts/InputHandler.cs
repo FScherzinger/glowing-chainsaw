@@ -10,6 +10,7 @@ using de.dfki.events;
 
 public class InputHandler : MonoBehaviour
 {
+	[SerializeField] private VRInput m_VRInput;
 	[SerializeField] private Material m_NormalMaterial;                
 	[SerializeField] private Material m_OverMaterial;                  
 	[SerializeField] private VRInteractiveItem m_InteractiveItem;
@@ -30,6 +31,7 @@ public class InputHandler : MonoBehaviour
 		m_InteractiveItem.OnOver += HandleOver;
 		m_InteractiveItem.OnOut += HandleOut;
 		m_InteractiveItem.OnClick += Click;
+		m_VRInput.OnClick += VRClick;
 	}
 
 
@@ -38,6 +40,7 @@ public class InputHandler : MonoBehaviour
 		m_InteractiveItem.OnOver -= HandleOver;
 		m_InteractiveItem.OnOut -= HandleOut;
 		m_InteractiveItem.OnClick -= Click;
+		m_VRInput.OnClick -= VRClick;
 	}
 
 
@@ -59,6 +62,7 @@ public class InputHandler : MonoBehaviour
 	//Handle the Click event
 	private void Click()
 	{
+		Debug.Log("Click fired");
 		int id = this.gameObject.GetComponent<MetaData>().id;
 		if(m_MovingCube == null && !draggable){
 			draggable = true;
@@ -67,16 +71,18 @@ public class InputHandler : MonoBehaviour
 				m_MovingCube = Instantiate(m_MovingCubeModel);
 			}
 		}
-		else if(m_MovingCube != null && draggable){
+	}
+
+	private void VRClick(){
+		Debug.Log("VRClick fired");
+		int id = this.gameObject.GetComponent<MetaData>().id;
+		if(draggable && m_MovingCube != null){
 			draggable = false;
 			Vector3 pos = m_MovingCube.transform.position;
 			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
 			RPCClient.client.Move(posEvent);
 			Destroy(m_MovingCube);
 			m_MovingCube = null;
-		}else{
-			Debug.LogError("This shouldn't happen");
-			Debug.Break();
 		}
 	}
 }

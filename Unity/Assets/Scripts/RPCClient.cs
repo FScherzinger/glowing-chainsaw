@@ -20,10 +20,11 @@ public class RPCClient {
 			transport = new TSocket(address, port);
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new Scene.Client(protocol);
-			transport.Open();
+			//transport.Open();
+			client.InputProtocol.Transport.Open();
+			Debug.Log("connected");
 		} catch (Exception e){
 			Debug.LogError(e);
-			Application.Quit();
 		}
 	}
 
