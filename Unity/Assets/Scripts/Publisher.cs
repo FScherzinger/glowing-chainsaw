@@ -43,18 +43,30 @@ public class Publisher
         }
     }
 
-	public void SendPosition(int id, GameObject go )
+    public void SendPosition(int id, GameObject go)
     {
-		if( go == null || publish_client == null )
-			return;
-        if( publish_client.IsOnline() && publish_client.IsConnected() )
+        if (go == null || publish_client == null)
+            return;
+        if (publish_client.IsOnline() && publish_client.IsConnected())
         {
-			float x = go.transform.position.x;
-			float y = go.transform.position.y;
-			float z = go.transform.position.z;
-		
-			PositionEvent pe = new PositionEvent( device,ObjType.CUBE, new Position(x,y,z ), id );
-            publish_client.Send( ".*", "PositionEvent", pe );
+            float x = go.transform.position.x;
+            float y = go.transform.position.y;
+            float z = go.transform.position.z;
+
+            PositionEvent pe;
+            if (getObjType(id).equals(ObjType.CUBE))
+            {
+                pe = new PositionEvent(device, ObjType.CUBE, new Position(x, y, z), id);
+                publish_client.Send(".*", "PositionEvent", pe);
+            }
+            else
+            {
+                if (getObjType(id).equals(ObjType.CAMERA))
+                {
+                    pe = new PositionEvent(device, ObjType.CAMERA, new Position(x, y, z), id);
+                    publish_client.Send(".*", "PositionEvent", pe);
+                }
+            }
         }
     }
 

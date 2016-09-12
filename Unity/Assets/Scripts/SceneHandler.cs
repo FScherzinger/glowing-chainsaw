@@ -120,6 +120,14 @@ public class SceneHandler : MonoBehaviour, Scene.Iface {
 		throw new System.NotImplementedException ();
 	}
 
+    public ObjType getObjType(int id)
+    {
+        if (SceneObjects[id].GetComponent(ObjType).equals(PrimitiveType.Cube))
+        {
+            return ObjType.CUBE;
+        }
+    }
+
 	public bool Node (Node node)
 	{
 		throw new System.NotImplementedException ();
