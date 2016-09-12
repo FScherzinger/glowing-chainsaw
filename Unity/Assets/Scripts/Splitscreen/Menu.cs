@@ -8,12 +8,6 @@ public class Menu : MonoBehaviour
 
     public GameObject menu_panel;
 
-    public Button button1;
-    public Button button2;
-    public Button button3;
-    public Button button4;
-    public Button button5;
-
     private bool menu_state = false;
     private bool locked = false;
 
