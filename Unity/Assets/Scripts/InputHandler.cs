@@ -5,28 +5,20 @@ using System.Threading;
 
 // This script is a simple example of how an interactive item can
 // be used to change things on gameobjects by handling events.
+using de.dfki.events;
+
+
 public class InputHandler : MonoBehaviour
 {
-	public Image reticle {get;set;}
-	public VRInput m_VRInput;
 	[SerializeField] private Material m_NormalMaterial;                
 	[SerializeField] private Material m_OverMaterial;                  
-	[SerializeField] private Material m_ClickedMaterial;               
-	[SerializeField] private Material m_DoubleClickedMaterial;         
 	[SerializeField] private VRInteractiveItem m_InteractiveItem;
 	[SerializeField] private Renderer m_Renderer;
+	[SerializeField] private GameObject m_MovingCubeModel;
+	private GameObject m_MovingCube;
+
 	private bool draggable = false;
-
-
-	private enum inputobj{
-		VRInput,InteractiveItem
-	}
-
-	public void setVRInput(VRInput input){
-		m_VRInput = input;
-		m_VRInput.OnClick += VRClick;
-	}
-
+		
 	private void Awake ()
 	{
 		m_Renderer.material = m_NormalMaterial;
@@ -37,8 +29,7 @@ public class InputHandler : MonoBehaviour
 	{
 		m_InteractiveItem.OnOver += HandleOver;
 		m_InteractiveItem.OnOut += HandleOut;
-		m_InteractiveItem.OnClick += InteractiveItemClick;
-		m_InteractiveItem.OnDoubleClick += HandleDoubleClick;
+		m_InteractiveItem.OnClick += Click;
 	}
 
 
@@ -46,9 +37,7 @@ public class InputHandler : MonoBehaviour
 	{
 		m_InteractiveItem.OnOver -= HandleOver;
 		m_InteractiveItem.OnOut -= HandleOut;
-		m_InteractiveItem.OnClick -= InteractiveItemClick;
-		m_InteractiveItem.OnDoubleClick -= HandleDoubleClick;
-		m_VRInput.OnClick -= InteractiveItemClick;
+		m_InteractiveItem.OnClick -= Click;
 	}
 
 
@@ -67,44 +56,26 @@ public class InputHandler : MonoBehaviour
 		m_Renderer.material = m_NormalMaterial;
 	}
 
-
 	//Handle the Click event
-	private void InteractiveItemClick()
+	private void Click()
 	{
-		m_Renderer.material = m_ClickedMaterial;
-		if (!draggable){
+		int id = this.gameObject.GetComponent<MetaData>().id;
+		if(m_MovingCube == null && !draggable){
 			draggable = true;
-			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = true;
-			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled = false;
+			if(RPCClient.client.Can_Interact(id)){
+				RPCClient.client.LockGameObject(id);
+				m_MovingCube = Instantiate(m_MovingCubeModel);
+			}
 		}
-	}
-	
-
-
-	//Handle the DoubleClick event
-	private void HandleDoubleClick()
-	{
-		Debug.Log("Show double click");
-		m_Renderer.material = m_DoubleClickedMaterial;
-	}
-
-	public void Update(){
-		if(draggable){
-			Vector3 pos = reticle.transform.position;
-			pos.y += .1f;
-			m_InteractiveItem.transform.position = pos;
-		}
-	}
-
-	public void VRClick(){
-		if (m_InteractiveItem.IsOver)
-			return;
-		if(draggable){
+		else if(m_MovingCube != null && draggable){
 			draggable = false;
-
-			m_InteractiveItem.gameObject.GetComponent<BoxCollider>().enabled= true;
-			m_InteractiveItem.gameObject.GetComponent<Rigidbody>().isKinematic = false;
-			//m_publisher.sendPosition();
+			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(m_MovingCube.transform.position), id);
+			RPCClient.client.Move(posEvent);
+			Destroy(m_MovingCube);
+			m_MovingCube = null;
+		}else{
+			Debug.LogError("This shouldn't happen");
+			Debug.Break();
 		}
-	}		
+	}
 }
