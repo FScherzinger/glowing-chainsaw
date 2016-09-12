@@ -67,8 +67,6 @@ public class Menu : MonoBehaviour
 
     public void StartSplitscreen()
     {
-        Debug.Log( "asfasdfdsf" );
-        SceneManager.LoadScene( "Slitscreen" );
-        //Application.LoadLevel( "Slitscreen" );
+        SceneManager.LoadScene( "Splitscreen" );
     }
 }

@@ -26,4 +26,4 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PcScene.unity
   - enabled: 1
-    path: Assets/Scenes/Slitscreen.unity
+    path: Assets/Scenes/Splitscreen.unity
