@@ -66,12 +66,10 @@ public class InputHandler : MonoBehaviour
 		int id = this.gameObject.GetComponent<MetaData>().id;
 		if(m_MovingCube == null && !draggable){
 			draggable = true;
-			RPCClient.client.InputProtocol.Transport.Open();
 			if(RPCClient.client.Can_Interact(id)){
 				RPCClient.client.LockGameObject(id);
 				m_MovingCube = Instantiate(m_MovingCubeModel);
 			}
-			RPCClient.client.InputProtocol.Transport.Close();
 		}
 	}
 
@@ -82,9 +80,7 @@ public class InputHandler : MonoBehaviour
 			draggable = false;
 			Vector3 pos = m_MovingCube.transform.position;
 			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
-			RPCClient.client.InputProtocol.Transport.Open();
-			RPCClient.client.Move(posEvent);
-			RPCClient.client.InputProtocol.Transport.Close();
+			//RPCClient.client.Move(posEvent);
 			Destroy(m_MovingCube);
 			m_MovingCube = null;
 		}
