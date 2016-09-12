@@ -21,7 +21,6 @@ public class RPCClient {
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new Scene.Client(protocol);
 			//transport.Open();
-			client.InputProtocol.Transport.Open();
 			Debug.Log("connected");
 		} catch (Exception e){
 			Debug.LogError(e);
@@ -29,6 +28,6 @@ public class RPCClient {
 	}
 
 	public void Disconnect(){
-		transport.Close();
+		//transport.Close();
 	}
 }

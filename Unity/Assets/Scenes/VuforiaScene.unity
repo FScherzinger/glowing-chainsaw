@@ -264,7 +264,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rpc_port: 9001
   ps_port: 9000
-  serveradress: 192.168.0.10
+  serveradress: localhost
 --- !u!4 &1291829395
 Transform:
   m_ObjectHideFlags: 0
