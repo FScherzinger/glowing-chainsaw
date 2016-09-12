@@ -54,17 +54,17 @@ public class Publisher
             float z = go.transform.position.z;
 
             PositionEvent pe;
-            if (RPCClient.client.getObjType(id) == (ObjType.CUBE))
-            {
+       //     if (RPCClient.client.getObjType(id) == (ObjType.CUBE))
+       //     {
                 pe = new PositionEvent(device, ObjType.CUBE, new Position(x, y, z), id);
-                publish_client.Send(".*", "PositionEvent", pe);
-            }
-            else
-            {
-                    pe = new PositionEvent(device, ObjType.CAMERA, new Position(x, y, z), id);
-                    publish_client.Send(".*", "PositionEvent", pe);
-
-            }
+	                publish_client.Send(".*", "PositionEvent", pe);
+//            }
+//            else
+//            {
+//                    pe = new PositionEvent(device, ObjType.CAMERA, new Position(x, y, z), id);
+//                    publish_client.Send(".*", "PositionEvent", pe);
+//
+//            }
         }
     }
 
