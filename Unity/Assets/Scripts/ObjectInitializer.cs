@@ -2,6 +2,10 @@
 using UnityEngine;
 using System.Collections.Generic;
 using de.dfki.events;
+using Thrift.Transport;
+using Thrift.Protocol;
+
+
 /// <summary>
 /// Initialize object in the scene and push events to the correct gameobject
 /// </summary>
@@ -13,7 +17,6 @@ public class ObjectInitializer : MonoBehaviour
 	public GameObject temporaryGO;
 	public volatile Queue<PositionEvent> pos_events;
 	public volatile Queue<DirectionEvent> dir_events;
-
 	private volatile Dictionary<int,ReceivedObject> ObjReceivers; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 
 	void Start(){
@@ -55,7 +58,7 @@ public class ObjectInitializer : MonoBehaviour
 		if (ObjReceivers.ContainsKey (id))
 			return ObjReceivers [id];
 		else {
-			GameObject go = initGameObject ();
+			GameObject go = initGameObject (id);
 			go.SetActive(true);
 			ReceivedObject objr = go.GetComponent<ReceivedObject> ();
 			if (objr == null) {
@@ -70,9 +73,16 @@ public class ObjectInitializer : MonoBehaviour
 
 	}
 
-	public GameObject initGameObject(){
+	public GameObject initGameObject(int id){
 		//TODO: Implement using RPC-Call: Get ObjectType from Server and instantiate correct prefab
-		return Instantiate(temporaryGO);
+		GameObject go = Instantiate(temporaryGO);
+		if(go.GetComponent<MetaData>() != null)
+			go.GetComponent<MetaData>().id = id;
+		else{
+			Debug.LogError("No Metadata attached");
+			Debug.Break();
+		}
+		return go;
 	}
 }
 
