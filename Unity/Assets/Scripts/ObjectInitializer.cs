@@ -27,16 +27,25 @@ public class ObjectInitializer : MonoBehaviour
 		
 
 	void Update(){
-		for (int i = 0; i < pos_events.Count; i++) {
-			PositionEvent pe = pos_events.Dequeue ();
-			ReceivedObject obj = getObjectReceiver (pe.Id);
-			obj.updatePosition (pe);
-
+		if(pos_events != null){
+			int pos_counter = pos_events.Count;
+			for (int i = 0; i < pos_counter; i++) {
+				PositionEvent pe = pos_events.Dequeue ();
+				if(pe == null)
+					continue;
+				ReceivedObject obj = getObjectReceiver (pe.Id);
+				obj.updatePosition (pe);
+			}
 		}
-		for (int i = 0; i < dir_events.Count; i++) {
-			DirectionEvent de = dir_events.Dequeue ();
-			ReceivedObject obj = getObjectReceiver (de.Id);
-			obj.updateDirection (de);
+		if(dir_events != null){
+			int dir_counter = dir_events.Count;
+			for (int i = 0; i < dir_counter; i++) {
+				DirectionEvent de = dir_events.Dequeue ();
+				if(de == null)
+					continue;
+				ReceivedObject obj = getObjectReceiver (de.Id);
+				obj.updateDirection (de);
+			}
 		}
 	}
 
@@ -54,7 +63,6 @@ public class ObjectInitializer : MonoBehaviour
 	public ReceivedObject getObjectReceiver(int id){
 		if (ObjReceivers == null)
 			throw new Exception ("ObjReceivers not yet initialized");
-
 		if (ObjReceivers.ContainsKey (id))
 			return ObjReceivers [id];
 		else {
