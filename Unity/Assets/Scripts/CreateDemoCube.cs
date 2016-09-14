@@ -1,5 +1,8 @@
-﻿using UnityEngine;
+﻿//#define TOUCH
+
+using UnityEngine;
 using System.Collections;
+
 
 public class CreateDemoCube : MonoBehaviour {
 
@@ -15,11 +18,15 @@ public class CreateDemoCube : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-        if( Input.touchCount < 0 )
-            return;
-        if(Input.GetKeyDown("space") || Input.GetTouch(0).phase == TouchPhase.Began){
 
-			if (s_handler == null)
+#if TOUCH
+        if( Input.GetKeyDown( "space" ) || Input.GetTouch( 0 ).phase == TouchPhase.Began )
+#else
+        if( Input.GetKeyDown( "space" ) )
+#endif
+        {
+
+            if (s_handler == null)
 				return;
 			GameObject clone = Instantiate(cube);
 			s_handler.addToSceneObjects (clone);

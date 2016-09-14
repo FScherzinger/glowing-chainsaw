@@ -81,11 +81,13 @@ public class ObjectInitializer : MonoBehaviour
 
 	}
 
-	public GameObject initGameObject(int id){
-		//TODO: Implement using RPC-Call: Get ObjectType from Server and instantiate correct prefab
-		GameObject go = Instantiate(temporaryGO);
-		if(go.GetComponent<MetaData>() != null)
-			go.GetComponent<MetaData>().id = id;
+    public GameObject initGameObject(int id) {
+        //TODO: Implement using RPC-Call: Get ObjectType from Server and instantiate correct prefab
+        GameObject go = Instantiate(temporaryGO);
+        if (go.GetComponent<MetaData>() != null) { 
+            go.GetComponent<MetaData>().id = id;
+            go.GetComponent<MetaData>().ObjType = RPCClient.client.getObjType(id);
+    }
 		else{
 			Debug.LogError("No Meta\tdata attached");
 			Debug.Break();
