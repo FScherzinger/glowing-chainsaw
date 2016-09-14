@@ -24,6 +24,8 @@ GameObject:
   - 23: {fileID: 23000011985323704}
   - 54: {fileID: 54000012726378562}
   - 114: {fileID: 114000012426437820}
+  - 114: {fileID: 114000012130017692}
+  - 114: {fileID: 114000013345091226}
   m_Layer: 0
   m_Name: InteractableCube
   m_TagString: InteractableCube
@@ -190,6 +192,18 @@ TextMesh:
   m_Color:
     serializedVersion: 2
     rgba: 4278190335
+--- !u!114 &114000012130017692
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010535058262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa65172695c56ec4ab008ee5473f07ee, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ObjType: 0
 --- !u!114 &114000012426437820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -231,4 +245,15 @@ MonoBehaviour:
   hideControllerOnUse: 0
   mark: 0
   ismarked: 0
-  inspect: 1
+  inspect: 0
+--- !u!114 &114000013345091226
+MonoBehaviour:
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1000010535058262}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01fc6462ec1922343a5269d76d3e4290, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

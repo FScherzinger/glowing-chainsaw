@@ -13,6 +13,6 @@ namespace de.dfki.events
     GEARVR = 1,
     VIVE = 2,
     PC = 3,
-    BAXTER = 4,
+    VUFORIA = 4,
   }
 }

@@ -21,7 +21,7 @@ namespace de.dfki.events
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class AnnotateEvent : TBase
+  public partial class Annotation : TBase
   {
 
     /// <summary>
@@ -36,10 +36,10 @@ namespace de.dfki.events
 
     public string Information { get; set; }
 
-    public AnnotateEvent() {
+    public Annotation() {
     }
 
-    public AnnotateEvent(Device type, int ObjectID, int Id, string information) : this() {
+    public Annotation(Device type, int ObjectID, int Id, string information) : this() {
       this.Type = type;
       this.ObjectID = ObjectID;
       this.Id = Id;
@@ -123,7 +123,7 @@ namespace de.dfki.events
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("AnnotateEvent");
+        TStruct struc = new TStruct("Annotation");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         field.Name = "type";
@@ -160,7 +160,7 @@ namespace de.dfki.events
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("AnnotateEvent(");
+      StringBuilder __sb = new StringBuilder("Annotation(");
       __sb.Append(", Type: ");
       __sb.Append(Type);
       __sb.Append(", ObjectID: ");

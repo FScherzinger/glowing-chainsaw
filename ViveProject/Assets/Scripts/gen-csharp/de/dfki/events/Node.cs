@@ -21,7 +21,7 @@ namespace de.dfki.events
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class NodeEvent : TBase
+  public partial class Node : TBase
   {
 
     /// <summary>
@@ -36,10 +36,10 @@ namespace de.dfki.events
 
     public string Information { get; set; }
 
-    public NodeEvent() {
+    public Node() {
     }
 
-    public NodeEvent(Device type, Position position, int Id, string information) : this() {
+    public Node(Device type, Position position, int Id, string information) : this() {
       this.Type = type;
       this.Position = position;
       this.Id = Id;
@@ -124,7 +124,7 @@ namespace de.dfki.events
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("NodeEvent");
+        TStruct struc = new TStruct("Node");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         field.Name = "type";
@@ -161,7 +161,7 @@ namespace de.dfki.events
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("NodeEvent(");
+      StringBuilder __sb = new StringBuilder("Node(");
       __sb.Append(", Type: ");
       __sb.Append(Type);
       __sb.Append(", Position: ");
