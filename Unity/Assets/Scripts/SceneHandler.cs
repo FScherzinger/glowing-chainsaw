@@ -30,7 +30,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         LockedObjects = new List<int>();
         Annotations = new Dictionary<int, List<Annotation>>();
         PositionUpdates = new Queue<PositionEvent>();
-
+        DirectionUpdates = new Queue<DirectionEvent>();
     }
 
 
@@ -39,11 +39,12 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         for( int i = 0; i < PositionUpdates.Count; ++i )
         {
             PositionEvent p = PositionUpdates.Dequeue();
-            Vector3 temp = new Vector3( (float) p.Position.X,
-                                        (float) p.Position.Y,
-                                        (float) p.Position.Z );
-            SceneObjects[p.Id].transform.position = temp;
+            Vector3 position = new Vector3( (float) p.Position.X,
+                                            (float) p.Position.Y,
+                                            (float) p.Position.Z );
+            SceneObjects[p.Id].transform.position = position;
         }
+
 
         for( int i = 0; i < DirectionUpdates.Count; ++i )
         {
