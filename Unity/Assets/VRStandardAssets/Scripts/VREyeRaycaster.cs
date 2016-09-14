@@ -39,6 +39,7 @@ namespace VRStandardAssets.Utils
             m_VrInput.OnDoubleClick += HandleDoubleClick;
             m_VrInput.OnUp += HandleUp;
             m_VrInput.OnDown += HandleDown;
+			m_VrInput.OnSwipe += HandleSwipe;
         }
 
 
@@ -48,6 +49,7 @@ namespace VRStandardAssets.Utils
             m_VrInput.OnDoubleClick -= HandleDoubleClick;
             m_VrInput.OnUp -= HandleUp;
             m_VrInput.OnDown -= HandleDown;
+			m_VrInput.OnSwipe -= HandleSwipe;
         }
 
 
@@ -142,5 +144,12 @@ namespace VRStandardAssets.Utils
                 m_CurrentInteractible.DoubleClick();
 
         }
+
+		private void HandleSwipe(VRInput.SwipeDirection swipe)
+		{
+			if (m_CurrentInteractible != null)
+				m_CurrentInteractible.Swipe(swipe);
+
+		}
     }
 }

@@ -10,45 +10,49 @@ using de.dfki.events;
 
 public class InputHandler : MonoBehaviour
 {
-	[SerializeField] private VRInput m_VRInput;
-	[SerializeField] private Material m_NormalMaterial;                
-	[SerializeField] private Material m_OverMaterial;
-	[SerializeField] private Material m_DragMaterial;
-	[SerializeField] private VRInteractiveItem m_InteractiveItem;
-	[SerializeField] private Renderer m_Renderer;
-	[SerializeField] private GameObject m_MovingCubeModel;
-	private GameObject m_MovingCube;
+	[SerializeField] private VRInput vRInput;
+	[SerializeField] private Material normalMaterial;                
+	[SerializeField] private Material overMaterial;
+	[SerializeField] private Material dragMaterial;
+	[SerializeField] private VRInteractiveItem interactiveItem;
+	[SerializeField] private Renderer renderer;
+	[SerializeField] private GameObject movingCubeModel;
+	private GameObject movingCube;
+	private int id;
 
 	private bool draggable = false;
 		
 	private void Awake ()
 	{
-		m_Renderer.material = m_NormalMaterial;
+		renderer.material = normalMaterial;
+		id = this.gameObject.GetComponent<MetaData>().id;
 	}
 
 
 	private void OnEnable()
 	{
-		m_InteractiveItem.OnOver += HandleOver;
-		m_InteractiveItem.OnOut += HandleOut;
-		m_InteractiveItem.OnClick += Click;
-		m_VRInput.OnClick += VRClick;
+		interactiveItem.OnOver += HandleOver;
+		interactiveItem.OnOut += HandleOut;
+		interactiveItem.OnClick += Click;
+		interactiveItem.OnSwipe += Rotate;
+		vRInput.OnClick += VRClick;
 	}
 
 
 	private void OnDisable()
 	{
-		m_InteractiveItem.OnOver -= HandleOver;
-		m_InteractiveItem.OnOut -= HandleOut;
-		m_InteractiveItem.OnClick -= Click;
-		m_VRInput.OnClick -= VRClick;
+		interactiveItem.OnOver -= HandleOver;
+		interactiveItem.OnOut -= HandleOut;
+		interactiveItem.OnClick -= Click;
+		interactiveItem.OnSwipe -= Rotate;
+		vRInput.OnClick -= VRClick;
 	}
 
 
 	//Handle the Over event
 	private void HandleOver()
 	{
-		m_Renderer.material = m_OverMaterial;
+		renderer.material = overMaterial;
 	}
 
 
@@ -56,37 +60,82 @@ public class InputHandler : MonoBehaviour
 	private void HandleOut()
 	{
 		if(!draggable)
-			m_Renderer.material = m_NormalMaterial;
+			renderer.material = normalMaterial;
 	}
 
 	//Handle the Click event
 	private void Click()
 	{
-		int id = this.gameObject.GetComponent<MetaData>().id;
-		if(m_MovingCube == null && !draggable){
-			draggable = true;
-			m_Renderer.material = m_DragMaterial;
-			if(RPCClient.client.Can_Interact(id)){
-				RPCClient.client.LockGameObject(id);
-				m_MovingCube = Instantiate(m_MovingCubeModel);
-				m_MovingCube.SetActive(true);
+		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGNDROP){
+			if(movingCube == null && !draggable){
+				draggable = true;
+				renderer.material = dragMaterial;
+				if(RPCClient.client.Can_Interact(id)){
+					RPCClient.client.LockGameObject(id);
+					movingCube = Instantiate(movingCubeModel);
+					movingCube.SetActive(true);
+				}
 			}
 		}
 	}
 
 	private void VRClick(){
-		if(!m_InteractiveItem.IsOver){
-			int id = this.gameObject.GetComponent<MetaData>().id;
-			if(draggable && m_MovingCube != null){
-				draggable = false;
-				m_Renderer.material = m_NormalMaterial;
-				Vector3 pos = m_MovingCube.transform.position;
-				PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
-				if(!RPCClient.client.Move(posEvent))
-					Debug.Log("Could not move cube");
-				Destroy(m_MovingCube);
-				m_MovingCube = null;
+		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGNDROP){
+			if(!interactiveItem.IsOver){
+				if(draggable && movingCube != null){
+					draggable = false;
+					renderer.material = normalMaterial;
+					Vector3 pos = movingCube.transform.position;
+					PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
+					if(!RPCClient.client.Move(posEvent))
+						Debug.Log("Could not move cube");
+					Destroy(movingCube);
+					movingCube = null;
+				}
 			}
+		}
+	}
+
+	private void Rotate(VRInput.SwipeDirection swipeDirection){
+		if(GearVRMenu.currentTool == GearVRMenu.Tool.ROTATE){
+			float degree;
+			switch(swipeDirection){
+				case VRInput.SwipeDirection.DOWN:
+				case VRInput.SwipeDirection.NONE:
+				case VRInput.SwipeDirection.UP:
+					return;
+				case VRInput.SwipeDirection.LEFT:
+					if(RPCClient.client.Can_Interact(id)){
+						RPCClient.client.LockGameObject(id);
+						movingCube = Instantiate(movingCubeModel);
+						movingCube.SetActive(true);
+						movingCube.transform.position = this.gameObject.transform.position;
+						movingCube.transform.rotation = this.gameObject.transform.rotation;
+						this.gameObject.SetActive(false);
+						movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+					}
+					break;
+				case VRInput.SwipeDirection.RIGHT:
+					if(RPCClient.client.Can_Interact(id)){
+						RPCClient.client.LockGameObject(id);
+						movingCube = Instantiate(movingCubeModel);
+						movingCube.SetActive(true);
+						movingCube.transform.position = this.gameObject.transform.position;
+						movingCube.transform.rotation = this.gameObject.transform.rotation;
+						this.gameObject.SetActive(false);
+						movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+					}
+					break;
+			}
+			Vector3 pos = this.gameObject.transform.position;
+			PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
+			Quaternion dir = movingCube.transform.rotation;
+			DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+			Destroy(movingCube);
+			movingCube = null;
+			this.gameObject.SetActive(true);
+			if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+				Debug.Log("Could not rotate cube");
 		}
 	}
 }

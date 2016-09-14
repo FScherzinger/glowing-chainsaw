@@ -15,6 +15,8 @@ namespace VRStandardAssets.Utils
         public event Action OnDoubleClick;      // Called when double click input is detected whilst the gaze is over this object.
         public event Action OnUp;               // Called when Fire1 is released whilst the gaze is over this object.
         public event Action OnDown;             // Called when Fire1 is pressed whilst the gaze is over this object.
+		public event Action<VRInput.SwipeDirection> OnSwipe; //Called when swipe input is detected.
+
 
         protected bool m_IsOver;
 
@@ -71,5 +73,10 @@ namespace VRStandardAssets.Utils
             if (OnDown != null)
                 OnDown();
         }
+
+		public void Swipe(VRInput.SwipeDirection swipe){
+			if(OnSwipe != null)
+				OnSwipe(swipe);
+		}
     }
 }
