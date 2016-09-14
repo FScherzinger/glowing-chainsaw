@@ -41,13 +41,24 @@ public class MarkAndInspect : VRTK_InteractableObject
 
     public override void StartUsing(GameObject usingObject)
     {
+        int id = this.gameObject.GetComponent<MetaData>().id;
         base.StartUsing(usingObject);
         if (mark)
         {
-            ismarked = !ismarked;
-        }else if (inspect)
+            string msg = "";
+            System.Random rnd = new System.Random();
+            int anno_id = rnd.Next();
+            Annotation annote = new Annotation(Device.VIVE, id, anno_id, msg);
+            if (!RPCClient.client.Annotate(annote))
+                Debug.Log("Could not annotate cube");
+        }
+        else if (inspect)
         {
-            infoObj.GetComponent<TextMesh>().text = ismarked.ToString();
+            Information inf = RPCClient.client.GetInformationById(id);
+            string msg = inf.Informtion;
+
+
+            infoObj.GetComponent<TextMesh>().text = msg;
             infoObj.gameObject.SetActive(true);
 
         }
