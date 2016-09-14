@@ -45,7 +45,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             SceneObjects[p.Id].transform.position = position;
         }
 
-
+        
         for( int i = 0; i < DirectionUpdates.Count; ++i )
         {
             DirectionEvent d = DirectionUpdates.Dequeue();
