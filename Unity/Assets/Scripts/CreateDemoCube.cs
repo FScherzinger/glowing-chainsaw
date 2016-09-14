@@ -15,7 +15,10 @@ public class CreateDemoCube : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if(Input.GetKeyDown("space") || Input.GetTouch(0).phase == TouchPhase.Began){
+        if( Input.touchCount < 0 )
+            return;
+        if(Input.GetKeyDown("space") || Input.GetTouch(0).phase == TouchPhase.Began){
+
 			if (s_handler == null)
 				return;
 			GameObject clone = Instantiate(cube);
