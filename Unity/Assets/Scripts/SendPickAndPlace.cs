@@ -78,7 +78,7 @@ public class SendPickAndPlace : MonoBehaviour
         pickandPlaceButtonClicked = false;
     }
 
-    private void SendPAP(Vector3 from, Vector3 to)
+    public void SendPAP(Vector3 from, Vector3 to)
     {
         if (!thread.IsAlive)
         {

@@ -21,6 +21,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     private System.Random rnd;
     public Publisher ps_publisher { get; set; }
+    public GameObject baxterCommunicator;
 
 
     void Start()
@@ -257,7 +258,11 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         }
 
         PositionUpdates.Enqueue( e );
-
+        Vector3 curposition = new Vector3((float)e.Position.X,
+                                (float)e.Position.Y,
+                                (float)e.Position.Z);
+        Vector3 goalpos = SceneObjects[e.Id].transform.position;
+        baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition,goalpos);
         //unlock gameobject
         LockedObjects.Remove( e.Id );
         return true;
