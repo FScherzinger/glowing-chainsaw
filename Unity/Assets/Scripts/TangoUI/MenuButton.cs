@@ -9,6 +9,7 @@ public class MenuButton : MonoBehaviour
     public Button Button2;
     public Button Button3;
     public Button Button4;
+    public Button Button5;
 
     private bool MenuState = false; // collapsed = true, extended = false
 
@@ -35,19 +36,21 @@ public class MenuButton : MonoBehaviour
     private void CollapseMenu()
     {
         Debug.Log( "Collapsing Menu" );
-        StartCoroutine( MoveButton( Button1, -5 ) );
-        StartCoroutine( MoveButton( Button2, -10 ) );
-        StartCoroutine( MoveButton( Button3, -15 ) );
-        StartCoroutine( MoveButton( Button4, -20 ) );
+        StartCoroutine( MoveButton( Button1, -3 ) );
+        StartCoroutine( MoveButton( Button2, -5 ) );
+        StartCoroutine( MoveButton( Button3, -7 ) );
+        StartCoroutine( MoveButton( Button4, -9 ) );
+        StartCoroutine(MoveButton(Button5, -11));
     }
 
     private void ExtendMenu()
     {
         Debug.Log( "Extending Menu" );
-        StartCoroutine( MoveButton( Button1, 5 ) );
-        StartCoroutine( MoveButton( Button2, 10 ) );
-        StartCoroutine( MoveButton( Button3, 15 ) );
-        StartCoroutine( MoveButton( Button4, 20 ) );
+        StartCoroutine( MoveButton( Button1, 3 ) );
+        StartCoroutine( MoveButton( Button2, 5 ) );
+        StartCoroutine( MoveButton( Button3, 7 ) );
+        StartCoroutine( MoveButton( Button4, 9 ) );
+        StartCoroutine(MoveButton(Button5, 11));
     }
 
     /// <summary>

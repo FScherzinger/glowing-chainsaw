@@ -3,13 +3,10 @@ using System.Collections;
 
 public class AnnotateButton : MonoBehaviour {
 
-	// Use this for initialization
-	void Start () {
-	
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
-	}
+    public ButtonHandler Handler;
+
+    public void annotate()
+    {
+        Handler.setCurrent(ButtonHandler.SelectedButton.annotate);
+    }
 }

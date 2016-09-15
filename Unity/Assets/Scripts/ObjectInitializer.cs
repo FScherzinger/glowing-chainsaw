@@ -86,7 +86,7 @@ public class ObjectInitializer : MonoBehaviour
         GameObject go = Instantiate(temporaryGO);
         if (go.GetComponent<MetaData>() != null) { 
             go.GetComponent<MetaData>().id = id;
-            go.GetComponent<MetaData>().ObjType = RPCClient.client.getObjType(id);
+            //go.GetComponent<MetaData>().ObjType = RPCClient.client.getObjType(id);
     }
 		else{
 			Debug.LogError("No Meta\tdata attached");
