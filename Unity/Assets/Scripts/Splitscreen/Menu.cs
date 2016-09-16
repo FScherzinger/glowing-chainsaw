@@ -7,6 +7,8 @@ public class Menu : MonoBehaviour
 {
 
     public GameObject menu_panel;
+	public GameObject splitscreen;
+	public GameObject maincam;
 
     private bool menu_state = false;
     private bool locked = false;
@@ -61,6 +63,9 @@ public class Menu : MonoBehaviour
 
     public void StartSplitscreen()
     {
-        SceneManager.LoadScene( "Splitscreen" );
+		if(maincam!=null)
+			maincam.SetActive (false);
+		if(splitscreen!=null)
+			splitscreen.SetActive (true);
     }
 }
