@@ -262,7 +262,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
                                 (float)e.Position.Y,
                                 (float)e.Position.Z);
         Vector3 goalpos = SceneObjects[e.Id].transform.position;
-        baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition,goalpos);
+		if(baxterCommunicator!=null)
+        	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition,goalpos);
         //unlock gameobject
         LockedObjects.Remove( e.Id );
         return true;
