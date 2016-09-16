@@ -1,7 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
+using de.dfki.events;
 
 public class ButtonHandler : MonoBehaviour {
+
+    private int state;
+    private GameObject movefrom;
+    private Vector3 moveto;
 
     public enum SelectedButton
     {
@@ -29,8 +34,8 @@ public class ButtonHandler : MonoBehaviour {
                 Debug.Log("inpecting mode");
                 break;
             case SelectedButton.pickAndPlace:
-                Debug.Log("picking mode");
-                break;
+                PickPlace();
+                break; 
             case SelectedButton.point:
                 Debug.Log("pointing mode");
                 break;
@@ -43,5 +48,46 @@ public class ButtonHandler : MonoBehaviour {
     public void setCurrent(SelectedButton current)
     {
         currentButton = current;
+        state = 0;
+    }
+
+    private void PickPlace()
+    {
+        if (Input.GetMouseButtonDown(0))
+        {
+            RaycastHit hit;
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            if (Physics.Raycast(ray, out hit))
+            {
+                if (hit.collider != null)
+                {
+                    if (state == 0)
+                    {
+                        if (hit.collider.GetType() == typeof(MeshCollider))
+                        {
+                            Debug.Log("No valid object");
+                        }
+                        else
+                        {
+                            movefrom = hit.collider.gameObject;
+                            Debug.Log("GameObject at " + movefrom.transform.position + " selected");
+                            state++;
+                        }
+                    }
+                    else
+                   {
+                        moveto = hit.point;
+                        Debug.Log("Move" + movefrom.transform.position + "to" + moveto);
+                        int id=movefrom.gameObject.GetComponent<MetaData>().id;
+                        PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, new Position(moveto.x, moveto.y, moveto.z), id);
+                        state = 0;
+                    }
+                }
+            }
+            else
+            {
+                Debug.Log("Not clicked in valid area");
+            }
+        }
     }
 }
