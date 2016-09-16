@@ -16,6 +16,7 @@ public class MarkAndInspect : VRTK_InteractableObject
     public override void Grabbed(GameObject currentGrabbingObject)
     {
         int id = this.gameObject.GetComponent<MetaData>().id;
+        base.Grabbed(currentGrabbingObject);
         if (RPCClient.client.Can_Interact(id))
         {
             RPCClient.client.LockGameObject(id);
@@ -23,7 +24,8 @@ public class MarkAndInspect : VRTK_InteractableObject
             eCube.transform.position = transform.position;
             gameObject.GetComponent<ReceivedObject>().noUpdate = true;
         }
-        base.Grabbed(currentGrabbingObject);
+
+
     }
 
     public override void Ungrabbed(GameObject previousGrabbingObject)
