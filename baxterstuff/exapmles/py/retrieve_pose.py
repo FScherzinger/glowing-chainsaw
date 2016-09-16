@@ -36,7 +36,7 @@ from genpy.de.dfki.tecs.robot.baxter.ttypes import *
 
 # connect to server
 # PSFactory.createURI([ClientName], [ServerAddress], [ServerPort]);
-uri = PSFactory.createURI('python-sender', 'localhost', 9000)
+uri = PSFactory.createURI('python-sender', '192.168.1.101', 9000)
 client = PSFactory.createPSClient(uri)
 # subscribe before connecting
 client.subscribe("RetrievePoseEvent")
@@ -52,7 +52,7 @@ event.ori = Orientation()
 print ("Sending RetrievePoseEvent");
 # Send event to client "receiver"
 # client.send([ClientAddress], [Event = Struct Name], [Struct])
-client.send("baxter_dummy", "RetrievePoseEvent", event)
+client.send("receiver_right", "RetrievePoseEvent", event)
 
 # check if client is still connected to server
 while (client.isConnected()):
@@ -61,7 +61,7 @@ while (client.isConnected()):
 		# get received event
 		evt = client.recv()
 		# DEBUG output
-		print ("Received: %s from %s addressed to %s at %d" % (evt.header.etype ,evt.header.source, evt.header.target, evt.header.time));
+		print ("Received: %s from %s addressed to %s at %d" % (evt.getEtype() ,evt.getSource(), evt.getTarget(), evt.getTime()));
 		
 		# check which event was received
 		if (evt.is_a("RetrievePoseEvent")):
@@ -70,8 +70,8 @@ while (client.isConnected()):
 			evt.parseData(e)
 
 			# DEBUG output
-			print ("Message: X_left: %s, Y_left: %s, Z_left: %s ...\n" % (e.pos.X_left, e.pos.Y_left, e.pos.Z_left)) 
-
+			print ("Position: X %s, Y %s, Z %s ...\n" % (e.pos.X_right, e.pos.Y_right, e.pos.Z_right)) 
+			print("Orientation: Pitch %s, Yaw %s, Roll %s ...\n" % (e.ori.Pitch_right, e.ori.Yaw_right, e.ori.Roll_right))
 			# disconnect client and terminate
 			client.disconnect()
 			break

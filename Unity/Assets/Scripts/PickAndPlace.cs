@@ -86,7 +86,6 @@ class PickAndPlace
                         // MoveEvent succeeded, going on...
                         if( !init )
                         {
-                            
                             client.Send( "receiver_right", "PickAndPlaceEvent", pap_event );
                         }
                     }
