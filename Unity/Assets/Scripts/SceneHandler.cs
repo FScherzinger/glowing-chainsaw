@@ -40,14 +40,23 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         for( int i = 0; i < PositionUpdates.Count; ++i )
         {
             PositionEvent p = PositionUpdates.Dequeue();
+
+            Vector3 goalpos = new Vector3( (float) p.Position.X,
+                        (float) p.Position.Y,
+                        (float) p.Position.Z );
+
+            Vector3 curposition = SceneObjects[p.Id].transform.position;
+
+            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos );
+
             Vector3 position = new Vector3( (float) p.Position.X,
                                             (float) p.Position.Y,
                                             (float) p.Position.Z );
-            SceneObjects[p.Id].transform.position = position;
+            //SceneObjects[p.Id].transform.position = position;
         }
 
-        
-        for( int i = 0; i < DirectionUpdates.Count; ++i )
+
+        for( int i = 0; i < DirectionUpdates.Count; ++i )   
         {
             DirectionEvent d = DirectionUpdates.Dequeue();
             Quaternion direction = new Quaternion( (float) d.Direction.X,
@@ -258,11 +267,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         }
 
         PositionUpdates.Enqueue( e );
-        Vector3 curposition = new Vector3((float)e.Position.X,
-                                (float)e.Position.Y,
-                                (float)e.Position.Z);
-        Vector3 goalpos = SceneObjects[e.Id].transform.position;
-        baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition,goalpos);
+
         //unlock gameobject
         LockedObjects.Remove( e.Id );
         return true;

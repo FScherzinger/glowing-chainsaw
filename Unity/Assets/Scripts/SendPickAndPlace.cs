@@ -21,59 +21,6 @@ public class SendPickAndPlace : MonoBehaviour
     // Use this for initialization
     void Start()
     {
-        Vector3 pickrot = armAtFixedMarkerrotation;
-        pickrot = pickrot * Mathf.PI / 180;
-        Vector3 pickpos = armAtFixedMarkerposition;
-        pick_n_place = new PickAndPlace
-        {
-            serverAddress = "192.168.1.101",
-            serverPort = 9000,
-            pap_event = new PickAndPlaceEvent
-            {
-                Limb = Limb.RIGHT,
-
-                Initial_pos = new Position
-                {
-                    X_right = (pickpos.x).ToString().Replace(',', '.'),
-                    Y_right = pickpos.y.ToString().Replace(',', '.'),
-                    Z_right = pickpos.z.ToString().Replace(',', '.')
-                    
-                },
-
-                Final_pos = new Position
-                {
-                    X_right = (pickpos.x-0.2f).ToString().Replace(',', '.'),
-                    Y_right = pickpos.y.ToString().Replace(',', '.'),
-                    Z_right = pickpos.z.ToString().Replace(',', '.')
-                },
-
-                Initial_ori = new Orientation
-                {
-                    Yaw_right = pickrot.x.ToString().Replace(',', '.'),
-                    Pitch_right = pickrot.y.ToString().Replace(',', '.'),
-                    Roll_right = pickrot.z.ToString().Replace(',', '.')
-                },
-
-                Final_ori = new Orientation
-                {
-                    Yaw_right = pickrot.x.ToString().Replace(',', '.'),
-                    Pitch_right = pickrot.y.ToString().Replace(',', '.'),
-                    Roll_right = pickrot.z.ToString().Replace(',', '.')
-                },
-
-                Speed = new Speed
-                {
-                    Speed_right = "0.2"
-                },
-
-                Angls = new Angles(),
-                Mode = Reference_sys.ABSOLUTE,
-                Kin = Kinematics.INVERSE
-            }
-        };
-
-        thread = new Thread( pick_n_place.Send );
-        thread.Start();
         state = 0;
         pickandPlaceButtonClicked = false;
     }
@@ -83,6 +30,7 @@ public class SendPickAndPlace : MonoBehaviour
         if (!thread.IsAlive)
         {
             Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, armAtFixedMarkerposition.z);
+            // y-axis offset may be bullshit
             from = new Vector3(-from.z, from.x+0.025f, armAtFixedMarkerposition.z);
             Vector3 pickpos = from - markertoarm + armAtFixedMarkerposition;
             to = new Vector3(-to.z, to.x, armAtFixedMarkerposition.z);
@@ -92,7 +40,8 @@ public class SendPickAndPlace : MonoBehaviour
             pickrot = pickrot * Mathf.PI / 180;
             Vector3 placerot = armAtFixedMarkerrotation;
             placerot = placerot * Mathf.PI / 180;
-            Debug.Log(placerot);
+            Debug.Log( "pick " + pickpos );
+            Debug.Log("place " + placepos);
             pick_n_place = new PickAndPlace
             {
                 serverAddress = "192.168.1.101",
@@ -103,30 +52,30 @@ public class SendPickAndPlace : MonoBehaviour
 
                     Initial_pos = new Position
                     {
-                        X_right = pickpos.x.ToString(),
-                        Y_right = pickpos.y.ToString(),
-                        Z_right = pickpos.z.ToString()
+                        X_right = pickpos.x.ToString().Replace( ',', '.' ),
+                        Y_right = pickpos.y.ToString().Replace( ',', '.' ),
+                        Z_right = pickpos.z.ToString().Replace( ',', '.' )
                     },
 
                     Final_pos = new Position
                     {
-                        X_right = placepos.x.ToString(),
-                        Y_right = placepos.y.ToString(),
-                        Z_right = placepos.z.ToString()
+                        X_right = placepos.x.ToString().Replace( ',', '.' ),
+                        Y_right = placepos.y.ToString().Replace( ',', '.' ),
+                        Z_right = placepos.z.ToString().Replace( ',', '.' )
                     },
 
                     Initial_ori = new Orientation
                     {
-                        Yaw_right = pickrot.x.ToString(),
-                        Pitch_right = pickrot.y.ToString(),
-                        Roll_right = pickrot.z.ToString()
+                        Yaw_right = pickrot.x.ToString().Replace( ',', '.' ),
+                        Pitch_right = pickrot.y.ToString().Replace( ',', '.' ),
+                        Roll_right = pickrot.z.ToString().Replace( ',', '.' )
                     },
 
                     Final_ori = new Orientation
                     {
-                        Yaw_right = placerot.x.ToString(),
-                        Pitch_right = placerot.y.ToString(),
-                        Roll_right = placerot.z.ToString()
+                        Yaw_right = placerot.x.ToString().Replace( ',', '.' ),
+                        Pitch_right = placerot.y.ToString().Replace( ',', '.' ),
+                        Roll_right = placerot.z.ToString().Replace( ',', '.' )
                     },
 
                     Speed = new Speed
@@ -137,7 +86,8 @@ public class SendPickAndPlace : MonoBehaviour
                     Angls = new Angles(),
                     Mode = Reference_sys.ABSOLUTE,
                     Kin = Kinematics.INVERSE
-                }
+                },
+                init = false
             };
             thread = new Thread(pick_n_place.Send);
             thread.Start();
