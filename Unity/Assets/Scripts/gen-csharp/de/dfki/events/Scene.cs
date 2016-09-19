@@ -24,15 +24,25 @@ namespace de.dfki.events
       IAsyncResult Begin_Annotate(AsyncCallback callback, object state, Annotation an);
       bool End_Annotate(IAsyncResult asyncResult);
       #endif
-      List<Annotation> GetAnnotations(int objectID);
+      bool UpdateAnnotation(int objectId, Annotation an);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetAnnotations(AsyncCallback callback, object state, int objectID);
-      List<Annotation> End_GetAnnotations(IAsyncResult asyncResult);
+      IAsyncResult Begin_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an);
+      bool End_UpdateAnnotation(IAsyncResult asyncResult);
       #endif
-      Annotation GetAnnotationById(int id);
+      bool UpdateNote(Position pos, Annotation an);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetAnnotationById(AsyncCallback callback, object state, int id);
-      Annotation End_GetAnnotationById(IAsyncResult asyncResult);
+      IAsyncResult Begin_UpdateNote(AsyncCallback callback, object state, Position pos, Annotation an);
+      bool End_UpdateNote(IAsyncResult asyncResult);
+      #endif
+      bool DeleteAnnotation(int objectId, Annotation an);
+      #if SILVERLIGHT
+      IAsyncResult Begin_DeleteAnnotation(AsyncCallback callback, object state, int objectId, Annotation an);
+      bool End_DeleteAnnotation(IAsyncResult asyncResult);
+      #endif
+      bool DeleteNote(Position pos, Annotation an);
+      #if SILVERLIGHT
+      IAsyncResult Begin_DeleteNote(AsyncCallback callback, object state, Position pos, Annotation an);
+      bool End_DeleteNote(IAsyncResult asyncResult);
       #endif
       bool Can_Interact(int id);
       #if SILVERLIGHT
@@ -181,40 +191,41 @@ namespace de.dfki.events
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetAnnotations(AsyncCallback callback, object state, int objectID)
+      public IAsyncResult Begin_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
       {
-        return send_GetAnnotations(callback, state, objectID);
+        return send_UpdateAnnotation(callback, state, objectId, an);
       }
 
-      public List<Annotation> End_GetAnnotations(IAsyncResult asyncResult)
+      public bool End_UpdateAnnotation(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetAnnotations();
+        return recv_UpdateAnnotation();
       }
 
       #endif
 
-      public List<Annotation> GetAnnotations(int objectID)
+      public bool UpdateAnnotation(int objectId, Annotation an)
       {
         #if !SILVERLIGHT
-        send_GetAnnotations(objectID);
-        return recv_GetAnnotations();
+        send_UpdateAnnotation(objectId, an);
+        return recv_UpdateAnnotation();
 
         #else
-        var asyncResult = Begin_GetAnnotations(null, null, objectID);
-        return End_GetAnnotations(asyncResult);
+        var asyncResult = Begin_UpdateAnnotation(null, null, objectId, an);
+        return End_UpdateAnnotation(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetAnnotations(AsyncCallback callback, object state, int objectID)
+      public IAsyncResult send_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
       #else
-      public void send_GetAnnotations(int objectID)
+      public void send_UpdateAnnotation(int objectId, Annotation an)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetAnnotations", TMessageType.Call, seqid_));
-        GetAnnotations_args args = new GetAnnotations_args();
-        args.ObjectID = objectID;
+        oprot_.WriteMessageBegin(new TMessage("UpdateAnnotation", TMessageType.Call, seqid_));
+        UpdateAnnotation_args args = new UpdateAnnotation_args();
+        args.ObjectId = objectId;
+        args.An = an;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -224,7 +235,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public List<Annotation> recv_GetAnnotations()
+      public bool recv_UpdateAnnotation()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -232,51 +243,52 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetAnnotations_result result = new GetAnnotations_result();
+        UpdateAnnotation_result result = new UpdateAnnotation_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetAnnotations failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "UpdateAnnotation failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetAnnotationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult Begin_UpdateNote(AsyncCallback callback, object state, Position pos, Annotation an)
       {
-        return send_GetAnnotationById(callback, state, id);
+        return send_UpdateNote(callback, state, pos, an);
       }
 
-      public Annotation End_GetAnnotationById(IAsyncResult asyncResult)
+      public bool End_UpdateNote(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetAnnotationById();
+        return recv_UpdateNote();
       }
 
       #endif
 
-      public Annotation GetAnnotationById(int id)
+      public bool UpdateNote(Position pos, Annotation an)
       {
         #if !SILVERLIGHT
-        send_GetAnnotationById(id);
-        return recv_GetAnnotationById();
+        send_UpdateNote(pos, an);
+        return recv_UpdateNote();
 
         #else
-        var asyncResult = Begin_GetAnnotationById(null, null, id);
-        return End_GetAnnotationById(asyncResult);
+        var asyncResult = Begin_UpdateNote(null, null, pos, an);
+        return End_UpdateNote(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetAnnotationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult send_UpdateNote(AsyncCallback callback, object state, Position pos, Annotation an)
       #else
-      public void send_GetAnnotationById(int id)
+      public void send_UpdateNote(Position pos, Annotation an)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetAnnotationById", TMessageType.Call, seqid_));
-        GetAnnotationById_args args = new GetAnnotationById_args();
-        args.Id = id;
+        oprot_.WriteMessageBegin(new TMessage("UpdateNote", TMessageType.Call, seqid_));
+        UpdateNote_args args = new UpdateNote_args();
+        args.Pos = pos;
+        args.An = an;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -286,7 +298,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public Annotation recv_GetAnnotationById()
+      public bool recv_UpdateNote()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -294,13 +306,139 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetAnnotationById_result result = new GetAnnotationById_result();
+        UpdateNote_result result = new UpdateNote_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetAnnotationById failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "UpdateNote failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_DeleteAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
+      {
+        return send_DeleteAnnotation(callback, state, objectId, an);
+      }
+
+      public bool End_DeleteAnnotation(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_DeleteAnnotation();
+      }
+
+      #endif
+
+      public bool DeleteAnnotation(int objectId, Annotation an)
+      {
+        #if !SILVERLIGHT
+        send_DeleteAnnotation(objectId, an);
+        return recv_DeleteAnnotation();
+
+        #else
+        var asyncResult = Begin_DeleteAnnotation(null, null, objectId, an);
+        return End_DeleteAnnotation(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_DeleteAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
+      #else
+      public void send_DeleteAnnotation(int objectId, Annotation an)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("DeleteAnnotation", TMessageType.Call, seqid_));
+        DeleteAnnotation_args args = new DeleteAnnotation_args();
+        args.ObjectId = objectId;
+        args.An = an;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_DeleteAnnotation()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        DeleteAnnotation_result result = new DeleteAnnotation_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "DeleteAnnotation failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
+      public IAsyncResult Begin_DeleteNote(AsyncCallback callback, object state, Position pos, Annotation an)
+      {
+        return send_DeleteNote(callback, state, pos, an);
+      }
+
+      public bool End_DeleteNote(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_DeleteNote();
+      }
+
+      #endif
+
+      public bool DeleteNote(Position pos, Annotation an)
+      {
+        #if !SILVERLIGHT
+        send_DeleteNote(pos, an);
+        return recv_DeleteNote();
+
+        #else
+        var asyncResult = Begin_DeleteNote(null, null, pos, an);
+        return End_DeleteNote(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_DeleteNote(AsyncCallback callback, object state, Position pos, Annotation an)
+      #else
+      public void send_DeleteNote(Position pos, Annotation an)
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("DeleteNote", TMessageType.Call, seqid_));
+        DeleteNote_args args = new DeleteNote_args();
+        args.Pos = pos;
+        args.An = an;
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public bool recv_DeleteNote()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        DeleteNote_result result = new DeleteNote_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "DeleteNote failed: unknown result");
       }
 
       
@@ -620,8 +758,10 @@ namespace de.dfki.events
       {
         iface_ = iface;
         processMap_["Annotate"] = Annotate_Process;
-        processMap_["GetAnnotations"] = GetAnnotations_Process;
-        processMap_["GetAnnotationById"] = GetAnnotationById_Process;
+        processMap_["UpdateAnnotation"] = UpdateAnnotation_Process;
+        processMap_["UpdateNote"] = UpdateNote_Process;
+        processMap_["DeleteAnnotation"] = DeleteAnnotation_Process;
+        processMap_["DeleteNote"] = DeleteNote_Process;
         processMap_["Can_Interact"] = Can_Interact_Process;
         processMap_["LockGameObject"] = LockGameObject_Process;
         processMap_["Move"] = Move_Process;
@@ -672,27 +812,53 @@ namespace de.dfki.events
         oprot.Transport.Flush();
       }
 
-      public void GetAnnotations_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void UpdateAnnotation_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetAnnotations_args args = new GetAnnotations_args();
+        UpdateAnnotation_args args = new UpdateAnnotation_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetAnnotations_result result = new GetAnnotations_result();
-        result.Success = iface_.GetAnnotations(args.ObjectID);
-        oprot.WriteMessageBegin(new TMessage("GetAnnotations", TMessageType.Reply, seqid)); 
+        UpdateAnnotation_result result = new UpdateAnnotation_result();
+        result.Success = iface_.UpdateAnnotation(args.ObjectId, args.An);
+        oprot.WriteMessageBegin(new TMessage("UpdateAnnotation", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void GetAnnotationById_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void UpdateNote_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetAnnotationById_args args = new GetAnnotationById_args();
+        UpdateNote_args args = new UpdateNote_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetAnnotationById_result result = new GetAnnotationById_result();
-        result.Success = iface_.GetAnnotationById(args.Id);
-        oprot.WriteMessageBegin(new TMessage("GetAnnotationById", TMessageType.Reply, seqid)); 
+        UpdateNote_result result = new UpdateNote_result();
+        result.Success = iface_.UpdateNote(args.Pos, args.An);
+        oprot.WriteMessageBegin(new TMessage("UpdateNote", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void DeleteAnnotation_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        DeleteAnnotation_args args = new DeleteAnnotation_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        DeleteAnnotation_result result = new DeleteAnnotation_result();
+        result.Success = iface_.DeleteAnnotation(args.ObjectId, args.An);
+        oprot.WriteMessageBegin(new TMessage("DeleteAnnotation", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void DeleteNote_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        DeleteNote_args args = new DeleteNote_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        DeleteNote_result result = new DeleteNote_result();
+        result.Success = iface_.DeleteNote(args.Pos, args.An);
+        oprot.WriteMessageBegin(new TMessage("DeleteNote", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -987,20 +1153,34 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetAnnotations_args : TBase
+    public partial class UpdateAnnotation_args : TBase
     {
-      private int _objectID;
+      private int _objectId;
+      private Annotation _an;
 
-      public int ObjectID
+      public int ObjectId
       {
         get
         {
-          return _objectID;
+          return _objectId;
         }
         set
         {
-          __isset.objectID = true;
-          this._objectID = value;
+          __isset.objectId = true;
+          this._objectId = value;
+        }
+      }
+
+      public Annotation An
+      {
+        get
+        {
+          return _an;
+        }
+        set
+        {
+          __isset.an = true;
+          this._an = value;
         }
       }
 
@@ -1010,10 +1190,11 @@ namespace de.dfki.events
       [Serializable]
       #endif
       public struct Isset {
-        public bool objectID;
+        public bool objectId;
+        public bool an;
       }
 
-      public GetAnnotations_args() {
+      public UpdateAnnotation_args() {
       }
 
       public void Read (TProtocol iprot)
@@ -1033,7 +1214,15 @@ namespace de.dfki.events
             {
               case 1:
                 if (field.Type == TType.I32) {
-                  ObjectID = iprot.ReadI32();
+                  ObjectId = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  An = new Annotation();
+                  An.Read(iprot);
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -1056,15 +1245,23 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetAnnotations_args");
+          TStruct struc = new TStruct("UpdateAnnotation_args");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
-          if (__isset.objectID) {
-            field.Name = "objectID";
+          if (__isset.objectId) {
+            field.Name = "objectId";
             field.Type = TType.I32;
             field.ID = 1;
             oprot.WriteFieldBegin(field);
-            oprot.WriteI32(ObjectID);
+            oprot.WriteI32(ObjectId);
+            oprot.WriteFieldEnd();
+          }
+          if (An != null && __isset.an) {
+            field.Name = "an";
+            field.Type = TType.Struct;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            An.Write(oprot);
             oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
@@ -1077,13 +1274,19 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotations_args(");
+        StringBuilder __sb = new StringBuilder("UpdateAnnotation_args(");
         bool __first = true;
-        if (__isset.objectID) {
+        if (__isset.objectId) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("ObjectID: ");
-          __sb.Append(ObjectID);
+          __sb.Append("ObjectId: ");
+          __sb.Append(ObjectId);
+        }
+        if (An != null && __isset.an) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("An: ");
+          __sb.Append(An);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -1095,11 +1298,11 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetAnnotations_result : TBase
+    public partial class UpdateAnnotation_result : TBase
     {
-      private List<Annotation> _success;
+      private bool _success;
 
-      public List<Annotation> Success
+      public bool Success
       {
         get
         {
@@ -1121,7 +1324,7 @@ namespace de.dfki.events
         public bool success;
       }
 
-      public GetAnnotations_result() {
+      public UpdateAnnotation_result() {
       }
 
       public void Read (TProtocol iprot)
@@ -1140,19 +1343,8 @@ namespace de.dfki.events
             switch (field.ID)
             {
               case 0:
-                if (field.Type == TType.List) {
-                  {
-                    Success = new List<Annotation>();
-                    TList _list0 = iprot.ReadListBegin();
-                    for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
-                    {
-                      Annotation _elem2;
-                      _elem2 = new Annotation();
-                      _elem2.Read(iprot);
-                      Success.Add(_elem2);
-                    }
-                    iprot.ReadListEnd();
-                  }
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -1175,26 +1367,17 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetAnnotations_result");
+          TStruct struc = new TStruct("UpdateAnnotation_result");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
 
           if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.List;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              {
-                oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (Annotation _iter3 in Success)
-                {
-                  _iter3.Write(oprot);
-                }
-                oprot.WriteListEnd();
-              }
-              oprot.WriteFieldEnd();
-            }
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
           oprot.WriteStructEnd();
@@ -1206,9 +1389,9 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotations_result(");
+        StringBuilder __sb = new StringBuilder("UpdateAnnotation_result(");
         bool __first = true;
-        if (Success != null && __isset.success) {
+        if (__isset.success) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
           __sb.Append("Success: ");
@@ -1224,20 +1407,34 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetAnnotationById_args : TBase
+    public partial class UpdateNote_args : TBase
     {
-      private int _id;
+      private Position _pos;
+      private Annotation _an;
 
-      public int Id
+      public Position Pos
       {
         get
         {
-          return _id;
+          return _pos;
         }
         set
         {
-          __isset.id = true;
-          this._id = value;
+          __isset.pos = true;
+          this._pos = value;
+        }
+      }
+
+      public Annotation An
+      {
+        get
+        {
+          return _an;
+        }
+        set
+        {
+          __isset.an = true;
+          this._an = value;
         }
       }
 
@@ -1247,10 +1444,11 @@ namespace de.dfki.events
       [Serializable]
       #endif
       public struct Isset {
-        public bool id;
+        public bool pos;
+        public bool an;
       }
 
-      public GetAnnotationById_args() {
+      public UpdateNote_args() {
       }
 
       public void Read (TProtocol iprot)
@@ -1269,8 +1467,17 @@ namespace de.dfki.events
             switch (field.ID)
             {
               case 1:
-                if (field.Type == TType.I32) {
-                  Id = iprot.ReadI32();
+                if (field.Type == TType.Struct) {
+                  Pos = new Position();
+                  Pos.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  An = new Annotation();
+                  An.Read(iprot);
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -1293,15 +1500,23 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetAnnotationById_args");
+          TStruct struc = new TStruct("UpdateNote_args");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
-          if (__isset.id) {
-            field.Name = "id";
-            field.Type = TType.I32;
+          if (Pos != null && __isset.pos) {
+            field.Name = "pos";
+            field.Type = TType.Struct;
             field.ID = 1;
             oprot.WriteFieldBegin(field);
-            oprot.WriteI32(Id);
+            Pos.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          if (An != null && __isset.an) {
+            field.Name = "an";
+            field.Type = TType.Struct;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            An.Write(oprot);
             oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
@@ -1314,13 +1529,19 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotationById_args(");
+        StringBuilder __sb = new StringBuilder("UpdateNote_args(");
         bool __first = true;
-        if (__isset.id) {
+        if (Pos != null && __isset.pos) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("Id: ");
-          __sb.Append(Id);
+          __sb.Append("Pos: ");
+          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
+        }
+        if (An != null && __isset.an) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("An: ");
+          __sb.Append(An);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -1332,11 +1553,11 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetAnnotationById_result : TBase
+    public partial class UpdateNote_result : TBase
     {
-      private Annotation _success;
+      private bool _success;
 
-      public Annotation Success
+      public bool Success
       {
         get
         {
@@ -1358,7 +1579,7 @@ namespace de.dfki.events
         public bool success;
       }
 
-      public GetAnnotationById_result() {
+      public UpdateNote_result() {
       }
 
       public void Read (TProtocol iprot)
@@ -1377,9 +1598,8 @@ namespace de.dfki.events
             switch (field.ID)
             {
               case 0:
-                if (field.Type == TType.Struct) {
-                  Success = new Annotation();
-                  Success.Read(iprot);
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -1402,19 +1622,17 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetAnnotationById_result");
+          TStruct struc = new TStruct("UpdateNote_result");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
 
           if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.Struct;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              Success.Write(oprot);
-              oprot.WriteFieldEnd();
-            }
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
           oprot.WriteStructEnd();
@@ -1426,9 +1644,518 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotationById_result(");
+        StringBuilder __sb = new StringBuilder("UpdateNote_result(");
         bool __first = true;
-        if (Success != null && __isset.success) {
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteAnnotation_args : TBase
+    {
+      private int _objectId;
+      private Annotation _an;
+
+      public int ObjectId
+      {
+        get
+        {
+          return _objectId;
+        }
+        set
+        {
+          __isset.objectId = true;
+          this._objectId = value;
+        }
+      }
+
+      public Annotation An
+      {
+        get
+        {
+          return _an;
+        }
+        set
+        {
+          __isset.an = true;
+          this._an = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool objectId;
+        public bool an;
+      }
+
+      public DeleteAnnotation_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.I32) {
+                  ObjectId = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  An = new Annotation();
+                  An.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteAnnotation_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (__isset.objectId) {
+            field.Name = "objectId";
+            field.Type = TType.I32;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(ObjectId);
+            oprot.WriteFieldEnd();
+          }
+          if (An != null && __isset.an) {
+            field.Name = "an";
+            field.Type = TType.Struct;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            An.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteAnnotation_args(");
+        bool __first = true;
+        if (__isset.objectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ObjectId: ");
+          __sb.Append(ObjectId);
+        }
+        if (An != null && __isset.an) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("An: ");
+          __sb.Append(An);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteAnnotation_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public DeleteAnnotation_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteAnnotation_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteAnnotation_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteNote_args : TBase
+    {
+      private Position _pos;
+      private Annotation _an;
+
+      public Position Pos
+      {
+        get
+        {
+          return _pos;
+        }
+        set
+        {
+          __isset.pos = true;
+          this._pos = value;
+        }
+      }
+
+      public Annotation An
+      {
+        get
+        {
+          return _an;
+        }
+        set
+        {
+          __isset.an = true;
+          this._an = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool pos;
+        public bool an;
+      }
+
+      public DeleteNote_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.Struct) {
+                  Pos = new Position();
+                  Pos.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  An = new Annotation();
+                  An.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteNote_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (Pos != null && __isset.pos) {
+            field.Name = "pos";
+            field.Type = TType.Struct;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            Pos.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          if (An != null && __isset.an) {
+            field.Name = "an";
+            field.Type = TType.Struct;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            An.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteNote_args(");
+        bool __first = true;
+        if (Pos != null && __isset.pos) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Pos: ");
+          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
+        }
+        if (An != null && __isset.an) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("An: ");
+          __sb.Append(An);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteNote_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public DeleteNote_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteNote_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteNote_result(");
+        bool __first = true;
+        if (__isset.success) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
           __sb.Append("Success: ");
