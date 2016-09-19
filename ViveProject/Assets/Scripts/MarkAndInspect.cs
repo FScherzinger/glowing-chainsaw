@@ -9,6 +9,7 @@ public class MarkAndInspect : VRTK_InteractableObject
     public bool mark=false;
     public bool ismarked = false;
     public bool inspect = false;
+    private GameObject grabcontroller;
     private GameObject infoObj;
     public GameObject emptyCube;
     private GameObject eCube;
@@ -17,12 +18,14 @@ public class MarkAndInspect : VRTK_InteractableObject
     {
         int id = this.gameObject.GetComponent<MetaData>().id;
         base.Grabbed(currentGrabbingObject);
+        grabcontroller=base.GetGrabbingObject();
         if (RPCClient.client.Can_Interact(id))
         {
             RPCClient.client.LockGameObject(id);
             eCube = Instantiate(emptyCube);
             eCube.transform.position = transform.position;
             gameObject.GetComponent<ReceivedObject>().noUpdate = true;
+            Debug.Log(base.GetGrabbingObject());
         }
 
 

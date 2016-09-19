@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 1000010535058262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.4, y: -0.136, z: 2.847}
-  m_LocalScale: {x: 0.15, y: 0.15, z: 0.15}
+  m_LocalScale: {x: 0.05, y: 0.03, z: 0.08}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000014269267216}
@@ -179,10 +179,10 @@ TextMesh:
   m_Text: 'Test
 
 '
-  m_OffsetZ: -3
+  m_OffsetZ: 0
   m_CharacterSize: 1
   m_LineSpacing: 1
-  m_Anchor: 0
+  m_Anchor: 1
   m_Alignment: 0
   m_TabSize: 4
   m_FontSize: 0
