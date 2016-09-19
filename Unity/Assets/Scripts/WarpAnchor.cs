@@ -10,13 +10,13 @@ public class WarpAnchor : MonoBehaviour {
 
 	private void OnEnable()
 	{
-		vRInput.OnClick += HandleClick;
+		vRInput.OnDoubleClick += HandleClick;
 	}
 
 
 	private void OnDisable()
 	{
-		vRInput.OnClick -= HandleClick;
+		vRInput.OnDoubleClick -= HandleClick;
 	}
 
 	private void HandleClick(){

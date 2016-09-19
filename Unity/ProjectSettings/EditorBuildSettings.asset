@@ -17,11 +17,11 @@ EditorBuildSettings:
     path: Assets/VRSampleScenes/Scenes/Shooter360.unity
   - enabled: 0
     path: Assets/VRSampleScenes/Scenes/Shooter180.unity
-  - enabled: 0
+  - enabled: 1
     path: Assets/Scenes/GearVRScene.unity
   - enabled: 0
     path: Assets/Scenes/ViveScene.unity
   - enabled: 0
     path: Assets/Scenes/TangoScene.unity
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/TestServerScene.unity

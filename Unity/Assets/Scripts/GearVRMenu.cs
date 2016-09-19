@@ -31,12 +31,14 @@ public class GearVRMenu: MonoBehaviour
 	private void OnEnable()
 	{
 		vRInput.OnSwipe += HandleSwipe;
+		//vRInput.OnDoubleClick += HandleDoubleClick;
 	}
 
 
 	private void OnDisable()
 	{
 		vRInput.OnSwipe -= HandleSwipe;
+		//vRInput.OnDoubleClick -= HandleDoubleClick;
 	}
 
 	private void HandleSwipe(VRInput.SwipeDirection swipeDirection)
@@ -98,6 +100,32 @@ public class GearVRMenu: MonoBehaviour
 					currentTool = Tool.WARP;
 					break;
 			}
+			break;
+		}
+	}
+
+	private void HandleDoubleClick(){
+		switch(currentTool)
+		{
+		case Tool.ANNOTATE:
+			image.texture = dragNDropTool;
+			this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
+			currentTool = Tool.DRAGNDROP;
+			break;
+		case Tool.DRAGNDROP:
+			image.texture = rotationTool;
+			this.gameObject.GetComponentInChildren<Text>().text = "ROTATE";
+			currentTool = Tool.ROTATE;
+			break;
+		case Tool.ROTATE:
+			image.texture = warpTool;					
+			this.gameObject.GetComponentInChildren<Text>().text = "WARP";
+			currentTool = Tool.WARP;
+			break;
+		case Tool.WARP:
+			image.texture = annotationTool;
+			this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
+			currentTool = Tool.ANNOTATE;
 			break;
 		}
 	}
