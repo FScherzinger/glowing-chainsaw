@@ -11,6 +11,7 @@ public class MarkAndInspect : VRTK_InteractableObject
     public bool inspect = false;
     private Vector2 touchAxis;
     private bool turnable;
+    private bool turned;
 
     private GameObject grabcontroller;
     private GameObject infoObj;
@@ -40,9 +41,22 @@ public class MarkAndInspect : VRTK_InteractableObject
     {
         int id = this.gameObject.GetComponent<MetaData>().id;
         Vector3 pos = transform.position;
+        Quaternion rot = transform.rotation;
+        grabcontroller.transform.Find("RadialMenu").gameObject.SetActive(true);
+        turnable = false;
         PositionEvent posEvent = new PositionEvent(Device.VIVE, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
-        if (!RPCClient.client.Move(posEvent))
-            Debug.Log("Could not move cube");
+        if (turned)
+        {
+            DirectionEvent dirEvent = new DirectionEvent(Device.VIVE, ObjType.CUBE, new Direction(rot.x, rot.y, rot.z, rot.w), id);
+            if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                Debug.Log("Could not move cube");
+            turned = false;
+        }else
+        {
+            if (!RPCClient.client.Move(posEvent))
+                Debug.Log("Could not move cube");
+        }
+
         Destroy(eCube);
         gameObject.GetComponent<ReceivedObject>().noUpdate = false;
         base.Ungrabbed(previousGrabbingObject);
@@ -102,6 +116,7 @@ public class MarkAndInspect : VRTK_InteractableObject
         if (turnable)
         {
             touchAxis = e.touchpadAxis;
+            turned = true;
         }
     }
 
