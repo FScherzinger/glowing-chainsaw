@@ -77,7 +77,7 @@ public class InputHandler : MonoBehaviour
 				}
 			}
 		}else if(GearVRMenu.currentTool == GearVRMenu.Tool.ANNOTATE && interactiveItem.IsOver){
-			RPCClient.client.Annotate(new Annotation(id, Device.GEARVR));
+			RPCClient.client.Annotate(new Annotation(Device.GEARVR,id));
 		}
 	}
 
