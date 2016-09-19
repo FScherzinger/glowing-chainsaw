@@ -2,11 +2,8 @@
 using System.Collections;
 using de.dfki.events;
 
-public class ButtonHandler : MonoBehaviour {
-
-    private int state;
-    private GameObject movefrom;
-    private Vector3 moveto;
+public class ButtonHandler : MonoBehaviour
+{
 
     public enum SelectedButton
     {
@@ -18,15 +15,35 @@ public class ButtonHandler : MonoBehaviour {
         none
     };
 
-    SelectedButton currentButton=SelectedButton.none;
+    private bool cubeSelected;
+
+    //GameObject for pick and place
+    private GameObject go;
+    private GameObject goCopy;
+    private int id = 0;
+
+    //position Cube should be moved to
+    private Vector3 moveto;
+
+    RaycastHit hit;
+
+    SelectedButton currentButton = SelectedButton.none;
 
     // Use this for initialization
-    void Start () {
-	}
-	
-	// Update is called once per frame
-	void Update () {
-        switch (currentButton) {
+    void Start()
+    {
+    }
+
+    public void setCurrent(SelectedButton current)
+    {
+        currentButton = current;
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        switch (currentButton)
+        {
             case SelectedButton.annotate:
                 Debug.Log("annotating mode");
                 break;
@@ -34,53 +51,71 @@ public class ButtonHandler : MonoBehaviour {
                 Debug.Log("inpecting mode");
                 break;
             case SelectedButton.pickAndPlace:
-                PickPlace();
-                break; 
+                Debug.Log("picking mode");
+                pickAndPlace();
+                break;
             case SelectedButton.point:
                 Debug.Log("pointing mode");
                 break;
             case SelectedButton.rotate:
                 Debug.Log("rotating mode");
+                rotate();
                 break;
-            }
-	}
-
-    public void setCurrent(SelectedButton current)
-    {
-        currentButton = current;
-        state = 0;
+        }
     }
 
-    private void PickPlace()
+    private void pickAndPlace()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (cubeSelected)
         {
-            RaycastHit hit;
+            moveto = hit.point;
+            Debug.Log("Move" + goCopy.transform.position + "to" + go);
+            PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, new Position(moveto.x, moveto.y, moveto.z), id);
+            if (!RPCClient.client.Move(posEvent))
+                Debug.Log("Could not move cube");
+            Destroy(goCopy);
+            goCopy = null;
+            cubeSelected = false;
+        }
+        else
+        {
+            select();
+        }
+    }
+
+    private void rotate()
+    {
+
+    }
+
+    private void select()
+    {
+        if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click
+        {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             if (Physics.Raycast(ray, out hit))
             {
                 if (hit.collider != null)
                 {
-                    if (state == 0)
+                    if (hit.collider.gameObject != null
+                        && hit.collider.gameObject.GetComponent<MetaData>() != null
+                        && hit.collider.gameObject.GetType() != typeof(MeshCollider)
+                        && hit.collider.gameObject.GetComponent<MetaData>().ObjType == ObjType.CUBE)
                     {
-                        if (hit.collider.GetType() == typeof(MeshCollider))
+                        go = hit.collider.gameObject;
+                        id = go.GetComponent<MetaData>().id;
+                        if (RPCClient.client.Can_Interact(id))
                         {
-                            Debug.Log("No valid object");
-                        }
-                        else
-                        {
-                            movefrom = hit.collider.gameObject;
-                            Debug.Log("GameObject at " + movefrom.transform.position + " selected");
-                            state++;
+                            RPCClient.client.LockGameObject(id);
+                            goCopy = Instantiate(go);
+                            goCopy.SetActive(true);
+                            Debug.Log("GameObject at " + goCopy.transform.position + " selected");
+                            cubeSelected = true;
                         }
                     }
                     else
-                   {
-                        moveto = hit.point;
-                        Debug.Log("Move" + movefrom.transform.position + "to" + moveto);
-                        int id=movefrom.gameObject.GetComponent<MetaData>().id;
-                        PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, new Position(moveto.x, moveto.y, moveto.z), id);
-                        state = 0;
+                    {
+                        Debug.Log("No valid object or no metadata attached to cube");
                     }
                 }
             }
