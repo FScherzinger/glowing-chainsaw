@@ -9,6 +9,9 @@ public class MarkAndInspect : VRTK_InteractableObject
     public bool mark=false;
     public bool ismarked = false;
     public bool inspect = false;
+    private Vector2 touchAxis;
+    private bool turnable;
+
     private GameObject grabcontroller;
     private GameObject infoObj;
     public GameObject emptyCube;
@@ -19,6 +22,8 @@ public class MarkAndInspect : VRTK_InteractableObject
         int id = this.gameObject.GetComponent<MetaData>().id;
         base.Grabbed(currentGrabbingObject);
         grabcontroller=base.GetGrabbingObject();
+        grabcontroller.transform.Find("RadialMenu").gameObject.SetActive(false);
+        turnable = true;
         if (RPCClient.client.Can_Interact(id))
         {
             RPCClient.client.LockGameObject(id);
@@ -79,15 +84,28 @@ public class MarkAndInspect : VRTK_InteractableObject
     {
         base.Start();
         infoObj = transform.Find("Information").gameObject;
+        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
 
     }
 
     // Update is called once per frame
     protected override void Update() {
-
+        if (turnable)
+        {
+            float angle =Vector2.Angle(Vector2.up,touchAxis);
+            transform.eulerAngles= new Vector3(0f, angle, 0f);
+        }
     }
 
-    public void Inspect(bool ins)
+    private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+    {
+        if (turnable)
+        {
+            touchAxis = e.touchpadAxis;
+        }
+    }
+
+public void Inspect(bool ins)
     {
         inspect = ins;
     }
