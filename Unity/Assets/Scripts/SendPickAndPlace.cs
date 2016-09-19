@@ -27,74 +27,86 @@ public class SendPickAndPlace : MonoBehaviour
 
     public void SendPAP(Vector3 from, Vector3 to)
     {
-        if (!thread.IsAlive)
+        SendPAP(from,to, Vector3.zero, Vector3.zero);
+    }
+
+
+    public void SendPAP(Vector3 from, Vector3 to, Vector3 fromrot, Vector3 torot)
+    {
+        bool waiting = true;
+        while (waiting)
         {
-            Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, armAtFixedMarkerposition.z);
-            // y-axis offset may be bullshit
-            from = new Vector3(-from.z, from.x+0.025f, armAtFixedMarkerposition.z);
-            Vector3 pickpos = from - markertoarm + armAtFixedMarkerposition;
-            to = new Vector3(-to.z, to.x, armAtFixedMarkerposition.z);
-            Vector3 placepos = to - markertoarm + armAtFixedMarkerposition;
-            //Rotation currently only Armposition of Baxter when picking one Object. Is this even always the same for same Objectrotation???
-            Vector3 pickrot = armAtFixedMarkerrotation;
-            pickrot = pickrot * Mathf.PI / 180;
-            Vector3 placerot = armAtFixedMarkerrotation;
-            placerot = placerot * Mathf.PI / 180;
-            Debug.Log( "pick " + pickpos );
-            Debug.Log("place " + placepos);
-            pick_n_place = new PickAndPlace
+            if (thread == null || !thread.IsAlive)
             {
-                serverAddress = "192.168.1.101",
-                serverPort = 9000,
-                pap_event = new PickAndPlaceEvent
+                waiting = false;
+                Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, armAtFixedMarkerposition.z);
+                from = new Vector3(-from.z, from.x, armAtFixedMarkerposition.z);
+                Vector3 pickpos = from - markertoarm + armAtFixedMarkerposition;
+                to = new Vector3(-to.z, to.x, armAtFixedMarkerposition.z);
+                Vector3 placepos = to - markertoarm + armAtFixedMarkerposition;
+                //Has to be changed if more rotations than around y axis possible;
+                Vector3 pickrot = armAtFixedMarkerrotation;
+                pickrot.x = pickrot.x + fromrot.y;
+                pickrot = pickrot * Mathf.PI / 180;
+                Vector3 placerot = armAtFixedMarkerrotation;
+                placerot.x = placerot.x + torot.y;
+                placerot = placerot * Mathf.PI / 180;
+                Debug.Log("pick " + pickpos);
+                Debug.Log("place " + placepos);
+                pick_n_place = new PickAndPlace
                 {
-                    Limb = Limb.RIGHT,
-
-                    Initial_pos = new Position
+                    serverAddress = "192.168.1.101",
+                    serverPort = 9000,
+                    pap_event = new PickAndPlaceEvent
                     {
-                        X_right = pickpos.x.ToString().Replace( ',', '.' ),
-                        Y_right = pickpos.y.ToString().Replace( ',', '.' ),
-                        Z_right = pickpos.z.ToString().Replace( ',', '.' )
-                    },
+                        Limb = Limb.RIGHT,
 
-                    Final_pos = new Position
-                    {
-                        X_right = placepos.x.ToString().Replace( ',', '.' ),
-                        Y_right = placepos.y.ToString().Replace( ',', '.' ),
-                        Z_right = placepos.z.ToString().Replace( ',', '.' )
-                    },
+                        Initial_pos = new Position
+                        {
+                            X_right = pickpos.x.ToString().Replace(',', '.'),
+                            Y_right = pickpos.y.ToString().Replace(',', '.'),
+                            Z_right = pickpos.z.ToString().Replace(',', '.')
+                        },
 
-                    Initial_ori = new Orientation
-                    {
-                        Yaw_right = pickrot.x.ToString().Replace( ',', '.' ),
-                        Pitch_right = pickrot.y.ToString().Replace( ',', '.' ),
-                        Roll_right = pickrot.z.ToString().Replace( ',', '.' )
-                    },
+                        Final_pos = new Position
+                        {
+                            X_right = placepos.x.ToString().Replace(',', '.'),
+                            Y_right = placepos.y.ToString().Replace(',', '.'),
+                            Z_right = placepos.z.ToString().Replace(',', '.')
+                        },
 
-                    Final_ori = new Orientation
-                    {
-                        Yaw_right = placerot.x.ToString().Replace( ',', '.' ),
-                        Pitch_right = placerot.y.ToString().Replace( ',', '.' ),
-                        Roll_right = placerot.z.ToString().Replace( ',', '.' )
-                    },
+                        Initial_ori = new Orientation
+                        {
+                            Yaw_right = pickrot.x.ToString().Replace(',', '.'),
+                            Pitch_right = pickrot.y.ToString().Replace(',', '.'),
+                            Roll_right = pickrot.z.ToString().Replace(',', '.')
+                        },
 
-                    Speed = new Speed
-                    {
-                        Speed_right = "0.2"
-                    },
+                        Final_ori = new Orientation
+                        {
+                            Yaw_right = placerot.x.ToString().Replace(',', '.'),
+                            Pitch_right = placerot.y.ToString().Replace(',', '.'),
+                            Roll_right = placerot.z.ToString().Replace(',', '.')
+                        },
 
-                    Angls = new Angles(),
-                    Mode = Reference_sys.ABSOLUTE,
-                    Kin = Kinematics.INVERSE
-                },
-                init = false
-            };
-            thread = new Thread(pick_n_place.Send);
-            thread.Start();
-        }
-        else
-        {
-            Debug.Log("Pick and Place not Send, old thread still running");
+                        Speed = new Speed
+                        {
+                            Speed_right = "0.2"
+                        },
+
+                        Angls = new Angles(),
+                        Mode = Reference_sys.ABSOLUTE,
+                        Kin = Kinematics.INVERSE
+                    },
+                    init = false
+                };
+                thread = new Thread(pick_n_place.Send);
+                thread.Start();
+            }
+            else
+            {
+                Debug.Log("Pick and Place not Send, old thread still running");
+            }
         }
         state = 0;
         pickandPlaceButtonClicked = false;

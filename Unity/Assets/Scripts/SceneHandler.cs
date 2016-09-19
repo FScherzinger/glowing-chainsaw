@@ -45,8 +45,9 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
                         (float) p.Position.Z );
 
             Vector3 curposition = SceneObjects[p.Id].transform.position;
+            Vector3 currotation = SceneObjects[p.Id].transform.eulerAngles;
 
-            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos );
+            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos,currotation,currotation);
 
             Vector3 position = new Vector3( (float) p.Position.X,
                                             (float) p.Position.Y,
@@ -62,7 +63,11 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
                                                    (float) d.Direction.Y,
                                                    (float) d.Direction.Z,
                                                    (float) d.Direction.W );
-            SceneObjects[d.Id].transform.rotation = direction;
+            Vector3 curposition = SceneObjects[d.Id].transform.position;
+            Vector3 currotation = SceneObjects[d.Id].transform.eulerAngles;
+
+            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, curposition, currotation, direction.eulerAngles);
+            //SceneObjects[d.Id].transform.rotation = direction;
         }
 
         if( ps_publisher == null )
