@@ -219,6 +219,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		if(!Annotations.ContainsKey(objectId))
 			return false;
 		int removes = Annotations [objectId].RemoveAll (x => x.Id == id);
+		annotation_ids.Remove (id);
 		if (removes == 1)
 			return true;
 		return false;
@@ -230,6 +231,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		if (!Notes.ContainsKey (pos))
 			return false;
 		int removes = Notes [pos].RemoveAll (x => x.Id == id);
+		note_ids.Remove (id);
 		if (removes == 1)
 			return true;
 		return false;
