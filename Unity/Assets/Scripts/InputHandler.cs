@@ -76,6 +76,8 @@ public class InputHandler : MonoBehaviour
 					movingCube.SetActive(true);
 				}
 			}
+		}else if(GearVRMenu.currentTool == GearVRMenu.Tool.ANNOTATE && interactiveItem.IsOver){
+			RPCClient.client.Annotate(new Annotation(id, Device.GEARVR));
 		}
 	}
 
