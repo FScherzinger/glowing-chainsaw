@@ -13,7 +13,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     private volatile List<int> LockedObjects; //includes id of locked gameobjects
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
-    private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
+	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
+	private volatile Dictionary<Position,List<Annotation>> Notes; //mapping: position -> list<annotation>
 
     private volatile Queue<PositionEvent> PositionUpdates;
     private volatile Queue<DirectionEvent> DirectionUpdates;
@@ -29,6 +30,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         SceneObjects = new Dictionary<int, GameObject>();
         LockedObjects = new List<int>();
         Annotations = new Dictionary<int, List<Annotation>>();
+		Notes = new Dictionary<Position, List<Annotation>>();
         PositionUpdates = new Queue<PositionEvent>();
         DirectionUpdates = new Queue<DirectionEvent>();
     }
@@ -93,73 +95,125 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         return id;
     }
 
-    private bool addToAnnotations( Annotation an )
+    private bool addAnnotationToObject( Annotation an )
     {
-
-		if (an.ObjectId > 0) {
-			if( SceneObjects.ContainsKey( an.ObjectId ) )
+		if (an.ObjectId < 1)
+			throw new Exception("annotation id is not valid");
+		if( SceneObjects.ContainsKey( an.ObjectId ) )
+		{
+			List<Annotation> obj_annotations;
+			//check if an annoation is already assigned to the gameobj
+			if( Annotations.ContainsKey( an.ObjectId ) )
 			{
-				List<Annotation> obj_annotations;
-				//check if an annoation is already assigned to the gameobj
-				if( Annotations.ContainsKey( an.ObjectId ) )
-				{
-					obj_annotations = Annotations[an.ObjectId];
-				}
-				else
-				{
-					obj_annotations = new List<Annotation>();
-				}
-				//push the new annotation
-				obj_annotations.Add( an );
-				Annotations[an.ObjectId] = obj_annotations;
-				return true;
+				obj_annotations = Annotations[an.ObjectId];
 			}
+			else
+			{
+				obj_annotations = new List<Annotation>();
+			}
+			//push the new annotation
+			obj_annotations.Add( an );
+			Annotations[an.ObjectId] = obj_annotations;
+			return true;
 		}
-		if (an.Position != null)
-			throw new System.NotImplementedException ();
-
         //return false if gameobject id is invalid
         return false;
     }
 
+	private bool addNoteToPosition( Annotation an ){
+		List<Annotation> pos_notes;
+		//normalize position to integers
+		Position normalized_pos = NormalizePosition(an.Position);
+		if (Notes.ContainsKey (normalized_pos))
+			pos_notes = Notes [normalized_pos];
+		else
+			pos_notes = new List<Annotation> ();
+		//push the new annotation
+		pos_notes.Add(an);
+		Notes [normalized_pos] = pos_notes;
+
+		return false;
+	}
+
+	private Position NormalizePosition(Position pos){
+		double x = Math.Round(pos.X);
+		double y = Math.Round(pos.Y);
+		double z = Math.Round(pos.Z);
+		return new Position (x, y, z);
+
+	}
 
     #region Iface implementation
     public bool Annotate( Annotation an )
     {
-        return addToAnnotations( an );
+		if (an.Position != null)
+			return addNoteToPosition (an);
+		else
+			return addAnnotationToObject (an);
     }
 
-    public List<Annotation> GetAnnotations( int objectId )
-    {
-        if( Annotations.ContainsKey( objectId ) )
-        {
-            if( Annotations[objectId] != null )
-            {
-                List<Annotation> obj_annotations = Annotations[objectId];
-                return obj_annotations;
-            }
-            throw new Exception( "Gameobject has no annotations attached" );
-        }
-        throw new Exception( "The Gameobject id is invalid" );
+
+	public bool UpdateAnnotation (int objectId, Annotation an)
+	{
+		if (!Annotations.ContainsKey (objectId))
+			return false;
+		//search if list contains an annotation with the id of an
+		Annotation old_annotation = null;
+		foreach (Annotation annotation in Annotations[objectId]){
+			if (annotation.Id == an.Id)
+				old_annotation = annotation;
+		}
+		if (old_annotation == null)
+			return false;
+		//delete old annotation
+		if (DeleteAnnotation (objectId, old_annotation))
+			return addAnnotationToObject (an);
+		return false;
+		
+	}
+	public bool UpdateNote (Position pos, Annotation an)
+	{
+		pos = NormalizePosition(pos);
+		an.Position = NormalizePosition (an.Position);
+		if (!Notes.ContainsKey (pos))
+			return false;
+		//search if list contains an note with the id of an
+		Annotation old_note = null;
+		foreach (Annotation note in Notes[pos]){
+			if (note.Id == an.Id)
+				old_note = note;
+		}
+		if (old_note == null)
+			return false;
+		//delete old note
+		if (DeleteNote (pos, old_note))
+			return addNoteToPosition ( an);
+		return false;
 
 
-    }
+	}
 
-    public Annotation GetAnnotationById( int _id )
-    {
-        foreach( int id in Annotations.Keys )
-        {
-            List<Annotation> annotationList = Annotations[id];
-            foreach( Annotation anno in annotationList )
-            {
-                if( anno.Id == _id )
-                    return anno;
-            }
-        }
-        throw new Exception( "No annotation with given id found." );
-    }
+	public bool DeleteAnnotation (int objectId, Annotation an){
+		if(!Annotations.ContainsKey(objectId))
+			return false;
+		int removes = Annotations [objectId].RemoveAll (x => x.Id == an.Id);
+		if (removes == 1)
+			return true;
+		return false;
+	}
 
- 
+
+	public bool DeleteNote (Position pos, Annotation an){
+		pos = NormalizePosition(pos);
+		if (!Notes.ContainsKey (pos))
+			return false;
+		int removes = Notes [pos].RemoveAll (x => x.Id == an.Id);
+		if (removes == 1)
+			return true;
+		return false;
+	}
+
+
     public ObjType getObjType( int id )
     {
         if( SceneObjects[id].GetComponent<MetaData>().ObjType == (ObjType.CUBE) )

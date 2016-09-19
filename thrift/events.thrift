@@ -62,8 +62,10 @@ struct PointerEvent{
 service Scene{
 
 		bool Annotate(1:Annotation an),
-		list<Annotation> GetAnnotations(1:i32 objectID),
-		Annotation GetAnnotationById(1:i32 id),
+		bool UpdateAnnotation(1:i32 objectId,2:Annotation an),
+		bool UpdateNote(1:Position pos,2:Annotation an),
+		bool DeleteAnnotation(1:i32 objectId,2:Annotation an),
+		bool DeleteNote(1:Position pos,2:Annotation an),
 
 		bool Can_Interact(1:i32 id),
 		bool LockGameObject(1:i32 id),
