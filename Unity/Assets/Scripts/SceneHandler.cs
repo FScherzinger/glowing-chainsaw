@@ -14,7 +14,6 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     private volatile List<int> LockedObjects; //includes id of locked gameobjects
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
     private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
-    private volatile Dictionary<Position,List<Node>> Nodes; //mapping: position -> list<nodes>
 
     private volatile Queue<PositionEvent> PositionUpdates;
     private volatile Queue<DirectionEvent> DirectionUpdates;
@@ -70,8 +69,9 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             return;
         foreach( int id in SceneObjects.Keys )
         {
-            ps_publisher.SendPosition( id, SceneObjects[id] );
-            ps_publisher.SendRotation( id, SceneObjects[id] );
+			//TODO: determinate objtype
+			ps_publisher.SendPosition( id, ObjType.CUBE, SceneObjects[id] );
+			ps_publisher.SendRotation( id, ObjType.CUBE, SceneObjects[id] );
         }
 
     }
@@ -90,69 +90,33 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     private bool addToAnnotations( Annotation an )
     {
-        if( SceneObjects.ContainsKey( an.ObjectID ) )
-        {
-            List<Annotation> obj_annotations;
-            //check if an annoation is already assigned to the gameobj
-            if( Annotations.ContainsKey( an.ObjectID ) )
-            {
-                obj_annotations = Annotations[an.ObjectID];
-            }
-            else
-            {
-                obj_annotations = new List<Annotation>();
-            }
-            //push the new annotation
-            obj_annotations.Add( an );
-            Annotations[an.ObjectID] = obj_annotations;
-            return true;
-        }
+
+		if (an.ObjectId > 0) {
+			if( SceneObjects.ContainsKey( an.ObjectId ) )
+			{
+				List<Annotation> obj_annotations;
+				//check if an annoation is already assigned to the gameobj
+				if( Annotations.ContainsKey( an.ObjectId ) )
+				{
+					obj_annotations = Annotations[an.ObjectId];
+				}
+				else
+				{
+					obj_annotations = new List<Annotation>();
+				}
+				//push the new annotation
+				obj_annotations.Add( an );
+				Annotations[an.ObjectId] = obj_annotations;
+				return true;
+			}
+		}
+		if (an.Position != null)
+			throw new System.NotImplementedException ();
+
         //return false if gameobject id is invalid
         return false;
     }
 
-    private bool addToNodes( Node node )
-    {
-        if( SceneObjects.ContainsKey( node.Id ) )
-        {
-            List<Node> obj_nodes;
-
-            if( Nodes.ContainsKey( node.Position ) )
-            {
-                obj_nodes = Nodes[node.Position];
-            }
-            else
-            {
-                obj_nodes = new List<Node>();
-            }
-            obj_nodes.Add( node );
-            Nodes[node.Position] = obj_nodes;
-            return true;
-        }
-        return false;
-    }
-
-    public bool DeleteNodeBy( int id )
-    {
-        foreach( Position pos in Nodes.Keys )
-        {
-            List<Node> nodeList = Nodes[pos];
-            foreach( Node node in nodeList )
-            {
-                if( node.Id == id )
-                {
-                    nodeList.Remove( node );
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public bool DeleteAnnotationById( int _id )
-    {
-        return Annotations.Remove( _id );
-    }
 
     #region Iface implementation
     public bool Annotate( Annotation an )
@@ -190,45 +154,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         throw new Exception( "No annotation with given id found." );
     }
 
-    public Information GetInformation( Position pos )
-    {
-        throw new NotImplementedException();
-    }
-
-    public Information GetInformationById( int id )
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public bool Informate( Information info )
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public List<Node> GetNodes( Position _pos )
-    {
-        foreach( Position pos in Nodes.Keys )
-        {
-            if( pos == _pos )
-                return Nodes[_pos];
-        }
-        throw new Exception( "No nodes at given position." );
-    }
-
-    public Node GetNodeById( int id )
-    {
-        foreach( Position pos in Nodes.Keys )
-        {
-            List<Node> nodeList = Nodes[pos];
-            foreach( Node node in nodeList )
-            {
-                if( node.Id == id )
-                    return node;
-            }
-        }
-        throw new Exception( "No Node with given id found." );
-    }
-
+ 
     public ObjType getObjType( int id )
     {
         if( SceneObjects[id].GetComponent<MetaData>().ObjType == (ObjType.CUBE) )
@@ -241,10 +167,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         }
     }
 
-    public bool Node( Node node )
-    {
-        return addToNodes( node );
-    }
+
     /// <summary>
     /// Checks whenever a client can interact with an gameobject
     /// </summary>

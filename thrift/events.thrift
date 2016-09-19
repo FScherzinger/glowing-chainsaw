@@ -65,14 +65,6 @@ service Scene{
 		list<Annotation> GetAnnotations(1:i32 objectID),
 		Annotation GetAnnotationById(1:i32 id),
 
-		Information GetInformation(1:Position pos),
-		Information GetInformationById(1:i32 id),
-		bool Informate(1:Information info),
-
-		list<Node> GetNodes(1:Position pos),
-		Node GetNodeById(1:i32 id),
-		bool Node(1:Node node),
-
 		bool Can_Interact(1:i32 id),
 		bool LockGameObject(1:i32 id),
 		bool Move(1:PositionEvent e),
@@ -81,24 +73,10 @@ service Scene{
 
 }
 
-
-struct Information{
-	1:required Device type;
-	2:required Position inspect_pos;
-	3:required i32 Id;
-	4:string informtion;
-}
-
 struct Annotation{
-	1:required Device type;
-	2:required i32 ObjectID;
-	4:required i32 Id;
-	3:required string information;
-}
-
-struct Node{
-	1:required Device type;
-	2:required Position position;
-	3:required i32 Id;
-	4:required string information;
+	1:required i32 Id;
+	2:required Device type;
+	3:Position position;
+	4:i32 objectId;
+	5:string information;
 }

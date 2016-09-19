@@ -28,7 +28,7 @@ public class Publisher
         Debug.Log( "conneted as " + connection_id );
     }
 
-	public void SendRotation(int id, GameObject go )
+	public void SendRotation(int id,ObjType type, GameObject go )
     {
         if( go == null || publish_client == null )
             return;
@@ -43,7 +43,7 @@ public class Publisher
         }
     }
 
-    public void SendPosition(int id, GameObject go)
+	public void SendPosition(int id,ObjType type, GameObject go)
     {
         if (go == null || publish_client == null)
             return;
@@ -53,18 +53,8 @@ public class Publisher
             float y = go.transform.position.y;
             float z = go.transform.position.z;
 
-            PositionEvent pe;
-       //     if (RPCClient.client.getObjType(id) == (ObjType.CUBE))
-       //     {
-                pe = new PositionEvent(device, ObjType.CUBE, new Position(x, y, z), id);
-	                publish_client.Send(".*", "PositionEvent", pe);
-//            }
-//            else
-//            {
-//                    pe = new PositionEvent(device, ObjType.CAMERA, new Position(x, y, z), id);
-//                    publish_client.Send(".*", "PositionEvent", pe);
-//
-//            }
+			PositionEvent pe = new PositionEvent(device, type, new Position(x, y, z), id);
+	        publish_client.Send(".*", "PositionEvent", pe);
         }
     }
 
