@@ -9,6 +9,7 @@ public class PickButton : MonoBehaviour {
 
     public void pick()
     {
+        Debug.Log("picking mode");
         Handler.setCurrent(ButtonHandler.SelectedButton.pickAndPlace);
         Menu.CollapseMenu();
     }
