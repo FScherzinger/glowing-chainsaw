@@ -84,7 +84,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     }
 
 	public void publishPositionRotation(){
-		if( ps_publisher == null )
+		if( ps_publisher == null || PositionUpdates.Count > 0 || DirectionUpdates.Count > 0 )
 			return;
 		foreach( int id in SceneObjects.Keys )
 		{
