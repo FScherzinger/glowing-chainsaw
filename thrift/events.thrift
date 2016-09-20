@@ -68,6 +68,7 @@ service Scene{
 		bool DeleteAnnotation(1:i32 objectId,2:i32 id),
 		bool DeleteNote(1:Position pos,2:i32 id),
 
+		i32 getUniqueCameraId();
 		bool Can_Interact(1:i32 id),
 		bool LockGameObject(1:i32 id),
 		bool Move(1:PositionEvent e),

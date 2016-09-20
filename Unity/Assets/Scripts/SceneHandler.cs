@@ -15,6 +15,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
 	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
+	private volatile List<int> cam_ids; 
 	private volatile List<int> note_ids; 
 	private volatile List<int> annotation_ids; 
 	private bool appliationQuit = false;
@@ -34,6 +35,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         Annotations = new Dictionary<int, List<Annotation>>();
 		Notes = new Dictionary<Position, List<Note>>();
 		Updates = new Queue<Tuple<PositionEvent,DirectionEvent>>();
+		cam_ids = new List<int>();
 		note_ids = new List<int>();
 		annotation_ids = new List<int>();
 		//invoke publishers
@@ -183,6 +185,17 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 	}
 
     #region Iface implementation
+
+	public int getUniqueCameraId ()
+	{
+		int id = rnd.Next ();
+		while(cam_ids.Contains(id))
+			id = rnd.Next ();
+
+		return id;
+		
+	}
+
     public bool Annotate( Annotation an )
     {
 		//generate IDs for new Annotations
