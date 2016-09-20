@@ -35,6 +35,9 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		Notes = new Dictionary<Position, List<Note>>();
         PositionUpdates = new Queue<PositionEvent>();
         DirectionUpdates = new Queue<DirectionEvent>();
+		//invoke publishers
+		InvokeRepeating("publishPositionRotation", 3, 0.1F);
+		InvokeRepeating("publishAnnotationsNotes", 3, 2F);
     }
 
 
@@ -76,16 +79,35 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             //SceneObjects[d.Id].transform.rotation = direction;
         }
 
-        if( ps_publisher == null )
-            return;
-        foreach( int id in SceneObjects.Keys )
-        {
+      
+
+    }
+
+	public void publishPositionRotation(){
+		if( ps_publisher == null )
+			return;
+		foreach( int id in SceneObjects.Keys )
+		{
 			//TODO: determinate objtype
 			ps_publisher.SendPosition( id, ObjType.CUBE, SceneObjects[id] );
 			ps_publisher.SendRotation( id, ObjType.CUBE, SceneObjects[id] );
-        }
+		}
+	}
 
-    }
+	public void publishAnnotationsNotes(){
+		if( ps_publisher == null )
+			return;
+		foreach( int objectid in Annotations.Keys )
+		{
+			foreach (Annotation an in Annotations[objectid])
+				ps_publisher.SendAnnotation (an);
+		}
+		foreach( Position pos in Notes.Keys )
+		{
+			foreach (Note n in Notes[pos])
+				ps_publisher.SendNote (n);
+		}
+	}
 
     public int addToSceneObjects( GameObject go )
     {
