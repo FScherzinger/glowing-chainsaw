@@ -35,6 +35,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		Notes = new Dictionary<Position, List<Note>>();
         PositionUpdates = new Queue<PositionEvent>();
         DirectionUpdates = new Queue<DirectionEvent>();
+		note_ids = new List<int>();
+		annotation_ids = new List<int>();
 		//invoke publishers
 		InvokeRepeating("publishPositionRotation", 3, 0.1F);
 		InvokeRepeating("publishAnnotationsNotes", 3, 2F);
