@@ -49,6 +49,11 @@ namespace de.dfki.events
       IAsyncResult Begin_DeleteNote(AsyncCallback callback, object state, Position pos, int id);
       bool End_DeleteNote(IAsyncResult asyncResult);
       #endif
+      int getUniqueCameraId();
+      #if SILVERLIGHT
+      IAsyncResult Begin_getUniqueCameraId(AsyncCallback callback, object state);
+      int End_getUniqueCameraId(IAsyncResult asyncResult);
+      #endif
       bool Can_Interact(int id);
       #if SILVERLIGHT
       IAsyncResult Begin_Can_Interact(AsyncCallback callback, object state, int id);
@@ -510,6 +515,67 @@ namespace de.dfki.events
 
       
       #if SILVERLIGHT
+      public IAsyncResult Begin_getUniqueCameraId(AsyncCallback callback, object state)
+      {
+        return send_getUniqueCameraId(callback, state);
+      }
+
+      public int End_getUniqueCameraId(IAsyncResult asyncResult)
+      {
+        oprot_.Transport.EndFlush(asyncResult);
+        return recv_getUniqueCameraId();
+      }
+
+      #endif
+
+      public int getUniqueCameraId()
+      {
+        #if !SILVERLIGHT
+        send_getUniqueCameraId();
+        return recv_getUniqueCameraId();
+
+        #else
+        var asyncResult = Begin_getUniqueCameraId(null, null);
+        return End_getUniqueCameraId(asyncResult);
+
+        #endif
+      }
+      #if SILVERLIGHT
+      public IAsyncResult send_getUniqueCameraId(AsyncCallback callback, object state)
+      #else
+      public void send_getUniqueCameraId()
+      #endif
+      {
+        oprot_.WriteMessageBegin(new TMessage("getUniqueCameraId", TMessageType.Call, seqid_));
+        getUniqueCameraId_args args = new getUniqueCameraId_args();
+        args.Write(oprot_);
+        oprot_.WriteMessageEnd();
+        #if SILVERLIGHT
+        return oprot_.Transport.BeginFlush(callback, state);
+        #else
+        oprot_.Transport.Flush();
+        #endif
+      }
+
+      public int recv_getUniqueCameraId()
+      {
+        TMessage msg = iprot_.ReadMessageBegin();
+        if (msg.Type == TMessageType.Exception) {
+          TApplicationException x = TApplicationException.Read(iprot_);
+          iprot_.ReadMessageEnd();
+          throw x;
+        }
+        getUniqueCameraId_result result = new getUniqueCameraId_result();
+        result.Read(iprot_);
+        iprot_.ReadMessageEnd();
+        if (result.__isset.success) {
+          return result.Success;
+        }
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getUniqueCameraId failed: unknown result");
+      }
+
+      
+      #if SILVERLIGHT
       public IAsyncResult Begin_Can_Interact(AsyncCallback callback, object state, int id)
       {
         return send_Can_Interact(callback, state, id);
@@ -830,6 +896,7 @@ namespace de.dfki.events
         processMap_["UpdateNote"] = UpdateNote_Process;
         processMap_["DeleteAnnotation"] = DeleteAnnotation_Process;
         processMap_["DeleteNote"] = DeleteNote_Process;
+        processMap_["getUniqueCameraId"] = getUniqueCameraId_Process;
         processMap_["Can_Interact"] = Can_Interact_Process;
         processMap_["LockGameObject"] = LockGameObject_Process;
         processMap_["Move"] = Move_Process;
@@ -940,6 +1007,19 @@ namespace de.dfki.events
         DeleteNote_result result = new DeleteNote_result();
         result.Success = iface_.DeleteNote(args.Pos, args.Id);
         oprot.WriteMessageBegin(new TMessage("DeleteNote", TMessageType.Reply, seqid)); 
+        result.Write(oprot);
+        oprot.WriteMessageEnd();
+        oprot.Transport.Flush();
+      }
+
+      public void getUniqueCameraId_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      {
+        getUniqueCameraId_args args = new getUniqueCameraId_args();
+        args.Read(iprot);
+        iprot.ReadMessageEnd();
+        getUniqueCameraId_result result = new getUniqueCameraId_result();
+        result.Success = iface_.getUniqueCameraId();
+        oprot.WriteMessageBegin(new TMessage("getUniqueCameraId", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -2451,6 +2531,177 @@ namespace de.dfki.events
 
       public override string ToString() {
         StringBuilder __sb = new StringBuilder("DeleteNote_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getUniqueCameraId_args : TBase
+    {
+
+      public getUniqueCameraId_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getUniqueCameraId_args");
+          oprot.WriteStructBegin(struc);
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getUniqueCameraId_args(");
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getUniqueCameraId_result : TBase
+    {
+      private int _success;
+
+      public int Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public getUniqueCameraId_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.I32) {
+                  Success = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getUniqueCameraId_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.I32;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getUniqueCameraId_result(");
         bool __first = true;
         if (__isset.success) {
           if(!__first) { __sb.Append(", "); }

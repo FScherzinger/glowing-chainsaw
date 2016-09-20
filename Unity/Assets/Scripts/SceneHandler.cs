@@ -15,11 +15,13 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
 	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
+	private volatile List<int> cam_ids; 
 	private volatile List<int> note_ids; 
 	private volatile List<int> annotation_ids; 
-
+	private bool appliationQuit = false;
 	private volatile Queue<Tuple<PositionEvent,DirectionEvent>> Updates;
 
+	private IEnumerator publish_posrot;
     private System.Random rnd;
     public Publisher ps_publisher { get; set; }
     public GameObject baxterCommunicator;
@@ -33,11 +35,13 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         Annotations = new Dictionary<int, List<Annotation>>();
 		Notes = new Dictionary<Position, List<Note>>();
 		Updates = new Queue<Tuple<PositionEvent,DirectionEvent>>();
+		cam_ids = new List<int>();
 		note_ids = new List<int>();
 		annotation_ids = new List<int>();
 		//invoke publishers
-		InvokeRepeating("publishPositionRotation", 3, 0.1F);
-		InvokeRepeating("publishAnnotationsNotes", 3, 2F);
+		publish_posrot = publishPositionRotation(0.1f);
+		StartCoroutine(publish_posrot);
+//		StartCoroutine(publishAnnotationsNotes(2f));
     }
 
 
@@ -48,7 +52,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		Quaternion direction = new Quaternion();
 		Vector3 destination = new Vector3(); 
 
-		if (Updates.Count < 0) {
+		if (Updates.Count > 0) {
 
 			Tuple<PositionEvent,DirectionEvent> t = Updates.Dequeue ();
 
@@ -58,55 +62,69 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 				currotation = SceneObjects [pe.Id].transform.eulerAngles;
 				destination = new Vector3 ((float)pe.Position.X, (float)pe.Position.Y, (float)pe.Position.Z);
 
-			} else {
+			} else 
 				return;
-			}
+			
 			if (t.Second != null) {
 				DirectionEvent de = t.Second;
 				curposition = SceneObjects [de.Id].transform.position;
 				currotation = SceneObjects [de.Id].transform.eulerAngles;
 				direction = new Quaternion ((float)de.Direction.X,(float)de.Direction.Y,(float)de.Direction.Z,(float)de.Direction.W);
 			}
-			if (baxterCommunicator != null) {
-				if (t.Second == null )
-					baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
-				else
-					baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
-			}
-				
-				
+				if (t.Second == null) {
+					SceneObjects [t.First.Id].transform.position = destination;
+					if (baxterCommunicator != null)
+						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
+				} else {
+					SceneObjects [t.First.Id].transform.position = destination;
+					SceneObjects [t.Second.Id].transform.rotation = direction;
+					if (baxterCommunicator != null)
+						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
+				}
+					
 		}
+				
+				
+	}
 			
-		
+	IEnumerator publishPositionRotation(float intervall){
+		for (;;) {
+
+			UpdatePositionsRotations ();
+			if (ps_publisher == null)
+				yield return null;
+			foreach( int id in SceneObjects.Keys )
+			{
+				//TODO: determinate objtype
+				ps_publisher.SendPosition( id, ObjType.CUBE, SceneObjects[id] );
+				ps_publisher.SendRotation( id, ObjType.CUBE, SceneObjects[id] );
+			}
+			yield return new WaitForSeconds (intervall);
+		}
+
+
 	}
 
-
-
-    public void publishPositionRotation(){
-		UpdatePositionsRotations ();
-		if( ps_publisher == null )
-			return;
-		foreach( int id in SceneObjects.Keys )
-		{
-			//TODO: determinate objtype
-			ps_publisher.SendPosition( id, ObjType.CUBE, SceneObjects[id] );
-			ps_publisher.SendRotation( id, ObjType.CUBE, SceneObjects[id] );
+	IEnumerator publishAnnotationsNotes(float intervall){
+		for (;;) {
+			if( ps_publisher == null )
+					yield return null;
+			foreach( int objectid in Annotations.Keys )
+			{
+				foreach (Annotation an in Annotations[objectid])
+					ps_publisher.SendAnnotation (an);
+			}
+			foreach( Position pos in Notes.Keys )
+			{
+				foreach (Note n in Notes[pos])
+					ps_publisher.SendNote (n);
+			}
+			yield return new WaitForSeconds (intervall);
 		}
 	}
 
-	public void publishAnnotationsNotes(){
-		if( ps_publisher == null )
-			return;
-		foreach( int objectid in Annotations.Keys )
-		{
-			foreach (Annotation an in Annotations[objectid])
-				ps_publisher.SendAnnotation (an);
-		}
-		foreach( Position pos in Notes.Keys )
-		{
-			foreach (Note n in Notes[pos])
-				ps_publisher.SendNote (n);
-		}
+	void OnApplicationQuit(){
+		StopCoroutine (publish_posrot);
 	}
 
     public int addToSceneObjects( GameObject go )
@@ -167,6 +185,17 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 	}
 
     #region Iface implementation
+
+	public int getUniqueCameraId ()
+	{
+		int id = rnd.Next ();
+		while(cam_ids.Contains(id))
+			id = rnd.Next ();
+
+		return id;
+		
+	}
+
     public bool Annotate( Annotation an )
     {
 		//generate IDs for new Annotations
