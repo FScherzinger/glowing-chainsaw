@@ -9,9 +9,8 @@ public class MenuButton : MonoBehaviour
     public Button Button2;
     public Button Button3;
     public Button Button4;
-    public Button Button5;
 
-    private bool MenuState = false; // collapsed = true, extended = false
+    private bool MenuState = false; // collapsed = false, extended = true
 
     // instead of a boolean we use an unsigned integer as lock.
     // with that we have more inside on how many coroutines are still running
@@ -33,14 +32,14 @@ public class MenuButton : MonoBehaviour
         MenuState = !MenuState;
     }
 
-    private void CollapseMenu()
+    public void CollapseMenu()
     {
         Debug.Log( "Collapsing Menu" );
         StartCoroutine( MoveButton( Button1, -3 ) );
         StartCoroutine( MoveButton( Button2, -5 ) );
         StartCoroutine( MoveButton( Button3, -7 ) );
         StartCoroutine( MoveButton( Button4, -9 ) );
-        StartCoroutine(MoveButton(Button5, -11));
+        MenuState = false;
     }
 
     private void ExtendMenu()
@@ -50,7 +49,7 @@ public class MenuButton : MonoBehaviour
         StartCoroutine( MoveButton( Button2, 5 ) );
         StartCoroutine( MoveButton( Button3, 7 ) );
         StartCoroutine( MoveButton( Button4, 9 ) );
-        StartCoroutine(MoveButton(Button5, 11));
+        MenuState = true;
     }
 
     /// <summary>
