@@ -15,6 +15,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
 	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
+	private volatile Dictionary<int, ObjType> ObjTypes; //mapping: gameobject_id -> ObjType
 	private volatile List<int> cam_ids; 
 	private volatile List<int> note_ids; 
 	private volatile List<int> annotation_ids; 
@@ -38,6 +39,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		cam_ids = new List<int>();
 		note_ids = new List<int>();
 		annotation_ids = new List<int>();
+		ObjTypes = new Dictionary<int, ObjType>();
 		//invoke publishers
 		publish_posrot = publishPositionRotation(0.1f);
 		StartCoroutine(publish_posrot);
@@ -291,14 +293,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     public ObjType getObjType( int id )
     {
-        if( SceneObjects[id].GetComponent<MetaData>().ObjType == (ObjType.CUBE) )
-        {
-            return ObjType.CUBE;
-        }
-        else
-        {
-            return ObjType.CAMERA;
-        }
+		return ObjTypes[id];
     }
 
 
@@ -371,7 +366,5 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     }
 
     #endregion
-
-
 
 }

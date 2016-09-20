@@ -35,7 +35,7 @@ public class ObjectInitializer : MonoBehaviour
 				PositionEvent pe = pos_events.Dequeue ();
 				if(pe == null)
 					continue;
-				ReceivedObject obj = getObjectReceiver (pe.Id);
+				ReceivedObject obj = getObjectReceiver (pe.Id, pe.Objtype);
 				if(obj != null)
 					obj.updatePosition (pe);
 			}
@@ -46,7 +46,7 @@ public class ObjectInitializer : MonoBehaviour
 				DirectionEvent de = dir_events.Dequeue ();
 				if(de == null)
 					continue;
-				ReceivedObject obj = getObjectReceiver (de.Id);
+				ReceivedObject obj = getObjectReceiver (de.Id, de.Objtype);
 				if(obj != null)
 					obj.updateDirection (de);
 			}
@@ -64,14 +64,14 @@ public class ObjectInitializer : MonoBehaviour
 
 	}
 
-	public ReceivedObject getObjectReceiver(int id){
+	public ReceivedObject getObjectReceiver(int id, ObjType objTyp){
 		if (ObjReceivers == null)
 			throw new Exception ("ObjReceivers not yet initialized");
 		if (ObjReceivers.ContainsKey (id))
 			return ObjReceivers [id];
 		else {
 			if(id != ownCam.camID){
-				GameObject go = initGameObject (id);
+				GameObject go = initGameObject (id, objTyp);
 				if(go != null){
 					go.SetActive(true);
 					ReceivedObject objr = go.GetComponent<ReceivedObject> ();
@@ -90,15 +90,15 @@ public class ObjectInitializer : MonoBehaviour
 		}
 	}
 
-    public GameObject initGameObject(int id) {
+	public GameObject initGameObject(int id, ObjType objType) {
         //TODO: Implement using RPC-Call: Get ObjectType from Server and instantiate correct prefab
 		GameObject go = null;
-		switch(RPCClient.client.getObjType(id)){
+		switch(objType){
 			case ObjType.CUBE:
 				go = Instantiate(cubeModel);
 				if (go.GetComponent<MetaData>() != null) { 
 					go.GetComponent<MetaData>().id = id;
-					//go.GetComponent<MetaData>().ObjType = RPCClient.client.getObjType(id);
+					go.GetComponent<MetaData>().ObjType = objType;
 				}
 				else{
 					Debug.LogError("No Meta\tdata attached");
@@ -107,8 +107,10 @@ public class ObjectInitializer : MonoBehaviour
 				break;
 			case ObjType.CAMERA:
 				go = Instantiate(camModel);
-				if(go.GetComponent<MetaData>() != null)
+				if(go.GetComponent<MetaData>() != null) {
 					go.GetComponent<MetaData>().id = id;
+					go.GetComponent<MetaData>().ObjType = objType;
+				}
 				else{
 					Debug.LogError("No Meta\tdata attached");
 					Debug.Break();
