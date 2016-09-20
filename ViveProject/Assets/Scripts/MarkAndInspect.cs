@@ -9,7 +9,7 @@ public class MarkAndInspect : VRTK_InteractableObject
     public bool mark=false;
     public bool ismarked = false;
     public bool inspect = false;
-    private Vector2 touchAxis;
+    private float touchAngle;
     private bool turnable;
     private bool turned;
 
@@ -98,24 +98,23 @@ public class MarkAndInspect : VRTK_InteractableObject
     {
         base.Start();
         infoObj = transform.Find("Information").gameObject;
-        GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTouchpadAxisChanged);
 
     }
 
     // Update is called once per frame
     protected override void Update() {
-        if (turnable)
+        if (turnable&& turned)
         {
-            float angle =Vector2.Angle(Vector2.up,touchAxis);
+            float angle = touchAngle - 90;
             transform.eulerAngles= new Vector3(0f, angle, 0f);
         }
     }
 
-    private void DoTouchpadAxisChanged(object sender, ControllerInteractionEventArgs e)
+    public void DoTouchpadAxisChanged(float angle)
     {
         if (turnable)
         {
-            touchAxis = e.touchpadAxis;
+            touchAngle = angle;
             turned = true;
         }
     }

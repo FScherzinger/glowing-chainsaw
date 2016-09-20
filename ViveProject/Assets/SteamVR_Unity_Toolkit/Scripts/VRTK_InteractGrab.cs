@@ -13,6 +13,7 @@
 //====================================================================================
 namespace VRTK
 {
+    using System;
     using UnityEngine;
 
     [RequireComponent(typeof(VRTK_InteractTouch)), RequireComponent(typeof(VRTK_ControllerEvents))]
@@ -92,6 +93,11 @@ namespace VRTK
             controllerEvents = GetComponent<VRTK_ControllerEvents>();
         }
 
+        private void Start()
+        {
+            GetComponent<VRTK_ControllerEvents>().TouchpadAxisChanged += new ControllerInteractionEventHandler(DoTriggerAxisChanged);
+        }
+
         private void OnEnable()
         {
             if (GetComponent<VRTK_ControllerEvents>() == null)
@@ -102,8 +108,15 @@ namespace VRTK
 
             GetComponent<VRTK_ControllerEvents>().AliasGrabOn += new ControllerInteractionEventHandler(DoGrabObject);
             GetComponent<VRTK_ControllerEvents>().AliasGrabOff += new ControllerInteractionEventHandler(DoReleaseObject);
-
             SetControllerAttachPoint();
+        }
+
+        private void DoTriggerAxisChanged(object sender, ControllerInteractionEventArgs e)
+        {;
+            if (grabbedObject != null)
+            {
+                grabbedObject.GetComponent<MarkAndInspect>().DoTouchpadAxisChanged(e.touchpadAngle);
+            }
         }
 
         private void OnDisable()
