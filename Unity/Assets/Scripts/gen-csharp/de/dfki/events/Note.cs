@@ -21,7 +21,7 @@ namespace de.dfki.events
   #if !SILVERLIGHT
   [Serializable]
   #endif
-  public partial class Annotation : TBase
+  public partial class Note : TBase
   {
     private int _Id;
     private string _information;
@@ -45,7 +45,7 @@ namespace de.dfki.events
     /// </summary>
     public Device Device { get; set; }
 
-    public int ObjectId { get; set; }
+    public Position Position { get; set; }
 
     public string Information
     {
@@ -70,12 +70,12 @@ namespace de.dfki.events
       public bool information;
     }
 
-    public Annotation() {
+    public Note() {
     }
 
-    public Annotation(Device device, int ObjectId) : this() {
+    public Note(Device device, Position position) : this() {
       this.Device = device;
-      this.ObjectId = ObjectId;
+      this.Position = position;
     }
 
     public void Read (TProtocol iprot)
@@ -84,7 +84,7 @@ namespace de.dfki.events
       try
       {
         bool isset_device = false;
-        bool isset_ObjectId = false;
+        bool isset_position = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -111,9 +111,10 @@ namespace de.dfki.events
               }
               break;
             case 3:
-              if (field.Type == TType.I32) {
-                ObjectId = iprot.ReadI32();
-                isset_ObjectId = true;
+              if (field.Type == TType.Struct) {
+                Position = new Position();
+                Position.Read(iprot);
+                isset_position = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -134,7 +135,7 @@ namespace de.dfki.events
         iprot.ReadStructEnd();
         if (!isset_device)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_ObjectId)
+        if (!isset_position)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
       }
       finally
@@ -147,7 +148,7 @@ namespace de.dfki.events
       oprot.IncrementRecursionDepth();
       try
       {
-        TStruct struc = new TStruct("Annotation");
+        TStruct struc = new TStruct("Note");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
         if (__isset.Id) {
@@ -164,11 +165,11 @@ namespace de.dfki.events
         oprot.WriteFieldBegin(field);
         oprot.WriteI32((int)Device);
         oprot.WriteFieldEnd();
-        field.Name = "ObjectId";
-        field.Type = TType.I32;
+        field.Name = "position";
+        field.Type = TType.Struct;
         field.ID = 3;
         oprot.WriteFieldBegin(field);
-        oprot.WriteI32(ObjectId);
+        Position.Write(oprot);
         oprot.WriteFieldEnd();
         if (Information != null && __isset.information) {
           field.Name = "information";
@@ -188,7 +189,7 @@ namespace de.dfki.events
     }
 
     public override string ToString() {
-      StringBuilder __sb = new StringBuilder("Annotation(");
+      StringBuilder __sb = new StringBuilder("Note(");
       bool __first = true;
       if (__isset.Id) {
         if(!__first) { __sb.Append(", "); }
@@ -199,8 +200,8 @@ namespace de.dfki.events
       if(!__first) { __sb.Append(", "); }
       __sb.Append("Device: ");
       __sb.Append(Device);
-      __sb.Append(", ObjectId: ");
-      __sb.Append(ObjectId);
+      __sb.Append(", Position: ");
+      __sb.Append(Position== null ? "<null>" : Position.ToString());
       if (Information != null && __isset.information) {
         __sb.Append(", Information: ");
         __sb.Append(Information);

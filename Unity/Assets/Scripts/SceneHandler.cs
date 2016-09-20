@@ -14,7 +14,9 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     private volatile List<int> LockedObjects; //includes id of locked gameobjects
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
-	private volatile Dictionary<Position,List<Annotation>> Notes; //mapping: position -> list<annotation>
+	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
+	private volatile List<int> note_ids; 
+	private volatile List<int> annotation_ids; 
 
     private volatile Queue<PositionEvent> PositionUpdates;
     private volatile Queue<DirectionEvent> DirectionUpdates;
@@ -30,7 +32,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         SceneObjects = new Dictionary<int, GameObject>();
         LockedObjects = new List<int>();
         Annotations = new Dictionary<int, List<Annotation>>();
-		Notes = new Dictionary<Position, List<Annotation>>();
+		Notes = new Dictionary<Position, List<Note>>();
         PositionUpdates = new Queue<PositionEvent>();
         DirectionUpdates = new Queue<DirectionEvent>();
     }
@@ -49,7 +51,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             Vector3 curposition = SceneObjects[p.Id].transform.position;
             Vector3 currotation = SceneObjects[p.Id].transform.eulerAngles;
 
-            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos,currotation,currotation);
+			if(baxterCommunicator!=null)
+            	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos,currotation,currotation);
 
             Vector3 position = new Vector3( (float) p.Position.X,
                                             (float) p.Position.Y,
@@ -68,7 +71,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             Vector3 curposition = SceneObjects[d.Id].transform.position;
             Vector3 currotation = SceneObjects[d.Id].transform.eulerAngles;
 
-            baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, curposition, currotation, direction.eulerAngles);
+			if(baxterCommunicator!=null)
+            	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, curposition, currotation, direction.eulerAngles);
             //SceneObjects[d.Id].transform.rotation = direction;
         }
 
@@ -97,8 +101,6 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     private bool addAnnotationToObject( Annotation an )
     {
-		if (an.ObjectId < 1)
-			throw new Exception("annotation id is not valid");
 		if( SceneObjects.ContainsKey( an.ObjectId ) )
 		{
 			List<Annotation> obj_annotations;
@@ -120,25 +122,24 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         return false;
     }
 
-	private bool addNoteToPosition( Annotation an ){
-		List<Annotation> pos_notes;
+	private bool addNoteToPosition( Note n ){
+		List<Note> pos_notes;
 		//normalize position to integers
-		Position normalized_pos = NormalizePosition(an.Position);
+		Position normalized_pos = NormalizePosition(n.Position);
 		if (Notes.ContainsKey (normalized_pos))
 			pos_notes = Notes [normalized_pos];
 		else
-			pos_notes = new List<Annotation> ();
-		//push the new annotation
-		pos_notes.Add(an);
+			pos_notes = new List<Note> ();
+		//push the new note
+		pos_notes.Add(n);
 		Notes [normalized_pos] = pos_notes;
-
-		return false;
+		return true;
 	}
 
 	private Position NormalizePosition(Position pos){
-		double x = Math.Round(pos.X);
-		double y = Math.Round(pos.Y);
-		double z = Math.Round(pos.Z);
+		double x = Math.Round(pos.X,2);
+		double y = Math.Round(pos.Y,2);
+		double z = Math.Round(pos.Z,2);
 		return new Position (x, y, z);
 
 	}
@@ -146,11 +147,32 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     #region Iface implementation
     public bool Annotate( Annotation an )
     {
-		if (an.Position != null)
-			return addNoteToPosition (an);
-		else
-			return addAnnotationToObject (an);
+		//generate IDs for new Annotations
+		an.Id = rnd.Next ();
+		while(annotation_ids.Contains(an.Id))
+			an.Id = rnd.Next();
+		//push the annotion in the correct list in the dictonary
+		if (addAnnotationToObject (an)) {
+			annotation_ids.Add (an.Id);
+			return true;
+		}
+		return false;
     }
+
+	public bool Note( Note n )
+	{
+		//generate IDs for new Notes
+		n.Id = rnd.Next ();
+		while(note_ids.Contains(n.Id))
+			n.Id = rnd.Next();
+		//push the note in the correct list in the dictonary
+		if (addNoteToPosition (n)) {
+			note_ids.Add (n.Id);
+			return true;
+		}
+		return false;
+	}
+
 
 
 	public bool UpdateAnnotation (int objectId, Annotation an)
@@ -158,56 +180,58 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		if (!Annotations.ContainsKey (objectId))
 			return false;
 		//search if list contains an annotation with the id of an
-		Annotation old_annotation = null;
+		bool found_an = false;
 		foreach (Annotation annotation in Annotations[objectId]){
 			if (annotation.Id == an.Id)
-				old_annotation = annotation;
+				found_an = true;
 		}
-		if (old_annotation == null)
+		if (!found_an)
 			return false;
 		//delete old annotation
-		if (DeleteAnnotation (objectId, old_annotation))
+		if (DeleteAnnotation (objectId, an.Id))
 			return addAnnotationToObject (an);
 		return false;
 		
 	}
-	public bool UpdateNote (Position pos, Annotation an)
+	public bool UpdateNote (Position pos, Note n)
 	{
 		pos = NormalizePosition(pos);
-		an.Position = NormalizePosition (an.Position);
+		n.Position = NormalizePosition (n.Position);
 		if (!Notes.ContainsKey (pos))
 			return false;
 		//search if list contains an note with the id of an
-		Annotation old_note = null;
-		foreach (Annotation note in Notes[pos]){
-			if (note.Id == an.Id)
-				old_note = note;
+		bool found_note = false;
+		foreach (Note note in Notes[pos]){
+			if (note.Id == n.Id)
+				found_note = true;
 		}
-		if (old_note == null)
+		if (!found_note)
 			return false;
 		//delete old note
-		if (DeleteNote (pos, old_note))
-			return addNoteToPosition ( an);
+		if (DeleteNote (pos, n.Id))
+			return addNoteToPosition (n);
 		return false;
 
 
 	}
 
-	public bool DeleteAnnotation (int objectId, Annotation an){
+	public bool DeleteAnnotation (int objectId, int id){
 		if(!Annotations.ContainsKey(objectId))
 			return false;
-		int removes = Annotations [objectId].RemoveAll (x => x.Id == an.Id);
+		int removes = Annotations [objectId].RemoveAll (x => x.Id == id);
+		annotation_ids.Remove (id);
 		if (removes == 1)
 			return true;
 		return false;
 	}
 
 
-	public bool DeleteNote (Position pos, Annotation an){
+	public bool DeleteNote (Position pos, int id){
 		pos = NormalizePosition(pos);
 		if (!Notes.ContainsKey (pos))
 			return false;
-		int removes = Notes [pos].RemoveAll (x => x.Id == an.Id);
+		int removes = Notes [pos].RemoveAll (x => x.Id == id);
+		note_ids.Remove (id);
 		if (removes == 1)
 			return true;
 		return false;
