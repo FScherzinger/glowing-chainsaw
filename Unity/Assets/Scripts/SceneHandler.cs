@@ -41,61 +41,36 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     }
 
 
-    void FixedUpdate()
-    {
+    void UpdatePositionsRotations()
+	{
+		for (int i = 0; i < DirectionUpdates.Count; ++i) {
+			DirectionEvent d = DirectionUpdates.Dequeue ();
+			Vector3 curposition = SceneObjects [d.Id].transform.position;
+			Vector3 currotation = SceneObjects [d.Id].transform.eulerAngles;
+			Vector3 destination = curposition;
+			foreach (var position in PositionUpdates) {
+				if (position.Id == d.Id) {
+					destination = new Vector3 ((float)position.Position.X, (float)position.Position.Y, (float)position.Position.Z);
+				}
+			}
+
+			Quaternion direction = new Quaternion ((float)d.Direction.X,
+				(float)d.Direction.Y,
+				(float)d.Direction.Z,
+				(float)d.Direction.W);
 
 
-        for( int i = 0; i < DirectionUpdates.Count; ++i )
-        {
-            DirectionEvent d = DirectionUpdates.Dequeue();
-            Vector3 curposition = SceneObjects[d.Id].transform.position;
-            Vector3 currotation = SceneObjects[d.Id].transform.eulerAngles;
-            Vector3 destination = curposition;
-            foreach( var position in PositionUpdates )
-            {
-                if( position.Id == d.Id )
-                {
-                    destination = new Vector3( (float)position.Position.X, (float) position.Position.Y, (float) position.Position.Z);
-                }
-            }
-
-            Quaternion direction = new Quaternion( (float) d.Direction.X,
-                                                   (float) d.Direction.Y,
-                                                   (float) d.Direction.Z,
-                                                   (float) d.Direction.W );
-            
-
-			if(baxterCommunicator!=null)
-            	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, destination, currotation, direction.eulerAngles);
-            //SceneObjects[d.Id].transform.rotation = direction;
-        }
-/*
-        for( int i = 0; i < PositionUpdates.Count; ++i )
-        {
-            PositionEvent p = PositionUpdates.Dequeue();
-
-            Vector3 goalpos = new Vector3( (float) p.Position.X,
-                        (float) p.Position.Y,
-                        (float) p.Position.Z );
-
-            Vector3 curposition = SceneObjects[p.Id].transform.position;
-            Vector3 currotation = SceneObjects[p.Id].transform.eulerAngles;
-
-            if( baxterCommunicator != null )
-                baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos, currotation, currotation );
-
-            Vector3 position = new Vector3( (float) p.Position.X,
-                                            (float) p.Position.Y,
-                                            (float) p.Position.Z );
-            //SceneObjects[p.Id].transform.position = position;
-        }
-*/
+			if (baxterCommunicator != null)
+				baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
+			//SceneObjects[d.Id].transform.rotation = direction;
+		}
+	}
 
 
-    }
 
     public void publishPositionRotation(){
-		if( ps_publisher == null || PositionUpdates.Count > 0 || DirectionUpdates.Count > 0 )
+		UpdatePositionsRotations ();
+		if( ps_publisher == null )
 			return;
 		foreach( int id in SceneObjects.Keys )
 		{
