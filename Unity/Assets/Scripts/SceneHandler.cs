@@ -17,9 +17,10 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
 	private volatile List<int> note_ids; 
 	private volatile List<int> annotation_ids; 
-
+	private bool appliationQuit = false;
 	private volatile Queue<Tuple<PositionEvent,DirectionEvent>> Updates;
 
+	private IEnumerator publish_posrot;
     private System.Random rnd;
     public Publisher ps_publisher { get; set; }
     public GameObject baxterCommunicator;
@@ -36,7 +37,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		note_ids = new List<int>();
 		annotation_ids = new List<int>();
 		//invoke publishers
-		StartCoroutine(publishPositionRotation(0.1f));
+		publish_posrot = publishPositionRotation(0.1f);
+		StartCoroutine(publish_posrot);
 //		StartCoroutine(publishAnnotationsNotes(2f));
     }
 
@@ -85,6 +87,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 			
 	IEnumerator publishPositionRotation(float intervall){
 		for (;;) {
+
 			UpdatePositionsRotations ();
 			if (ps_publisher == null)
 				yield return null;
@@ -116,6 +119,10 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 			}
 			yield return new WaitForSeconds (intervall);
 		}
+	}
+
+	void OnApplicationQuit(){
+		StopCoroutine (publish_posrot);
 	}
 
     public int addToSceneObjects( GameObject go )
