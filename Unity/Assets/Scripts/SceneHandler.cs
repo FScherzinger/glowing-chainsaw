@@ -18,8 +18,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 	private volatile List<int> note_ids; 
 	private volatile List<int> annotation_ids; 
 
-    private volatile Queue<PositionEvent> PositionUpdates;
-    private volatile Queue<DirectionEvent> DirectionUpdates;
+	private volatile Queue<Tuple<PositionEvent,DirectionEvent>> Updates;
 
     private System.Random rnd;
     public Publisher ps_publisher { get; set; }
@@ -33,8 +32,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         LockedObjects = new List<int>();
         Annotations = new Dictionary<int, List<Annotation>>();
 		Notes = new Dictionary<Position, List<Note>>();
-        PositionUpdates = new Queue<PositionEvent>();
-        DirectionUpdates = new Queue<DirectionEvent>();
+		Updates = new Queue<Tuple<PositionEvent,DirectionEvent>>();
 		note_ids = new List<int>();
 		annotation_ids = new List<int>();
 		//invoke publishers
@@ -45,27 +43,41 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     void UpdatePositionsRotations()
 	{
-		for (int i = 0; i < DirectionUpdates.Count; ++i) {
-			DirectionEvent d = DirectionUpdates.Dequeue ();
-			Vector3 curposition = SceneObjects [d.Id].transform.position;
-			Vector3 currotation = SceneObjects [d.Id].transform.eulerAngles;
-			Vector3 destination = curposition;
-			foreach (var position in PositionUpdates) {
-				if (position.Id == d.Id) {
-					destination = new Vector3 ((float)position.Position.X, (float)position.Position.Y, (float)position.Position.Z);
-				}
+		Vector3 curposition = new Vector3();
+		Vector3 currotation = new Vector3();;
+		Quaternion direction = new Quaternion();
+		Vector3 destination = new Vector3(); 
+
+		if (Updates.Count < 0) {
+
+			Tuple<PositionEvent,DirectionEvent> t = Updates.Dequeue ();
+
+			if (t.First != null) {
+				PositionEvent pe = t.First;
+				curposition = SceneObjects [pe.Id].transform.position;
+				currotation = SceneObjects [pe.Id].transform.eulerAngles;
+				destination = new Vector3 ((float)pe.Position.X, (float)pe.Position.Y, (float)pe.Position.Z);
+
+			} else {
+				return;
 			}
-
-			Quaternion direction = new Quaternion ((float)d.Direction.X,
-				(float)d.Direction.Y,
-				(float)d.Direction.Z,
-				(float)d.Direction.W);
-
-
-			if (baxterCommunicator != null)
-				baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
-			//SceneObjects[d.Id].transform.rotation = direction;
+			if (t.Second != null) {
+				DirectionEvent de = t.Second;
+				curposition = SceneObjects [de.Id].transform.position;
+				currotation = SceneObjects [de.Id].transform.eulerAngles;
+				direction = new Quaternion ((float)de.Direction.X,(float)de.Direction.Y,(float)de.Direction.Z,(float)de.Direction.W);
+			}
+			if (baxterCommunicator != null) {
+				if (t.Second == null )
+					baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
+				else
+					baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
+			}
+				
+				
 		}
+			
+		
 	}
 
 
@@ -300,8 +312,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             Debug.Log( "Gameobject with id " + e.Id + " should be locked before moving. Aborting..." );
             return false;
         }
-
-        PositionUpdates.Enqueue( e );
+		Tuple<PositionEvent,DirectionEvent> t = new Tuple<PositionEvent,DirectionEvent> (e, null);
+		Updates.Enqueue( t );
 
         //unlock gameobject
         LockedObjects.Remove( e.Id );
@@ -321,8 +333,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
             return false;
         }
 
-        PositionUpdates.Enqueue( e );
-        DirectionUpdates.Enqueue( d );
+		Tuple<PositionEvent,DirectionEvent> t = new Tuple<PositionEvent,DirectionEvent> (e, d);
+		Updates.Enqueue( t );
 
         // unlock gameobject
         LockedObjects.Remove( e.Id );

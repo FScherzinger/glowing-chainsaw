@@ -28,6 +28,7 @@ public class RPCClient {
 	}
 
 	public void Disconnect(){
-		transport.Close();
+		if(transport.IsOpen)
+			transport.Close();
 	}
 }

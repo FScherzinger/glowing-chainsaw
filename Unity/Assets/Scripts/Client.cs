@@ -20,17 +20,19 @@ public class Client : MonoBehaviour  {
 
 	void Start(){
 		//PS
-		ObjectInitializer obj_init = objectInitializer.GetComponent<ObjectInitializer>();
-		if (obj_init == null)
-			throw new Exception("Client needs an ObjectInitializer gameobject with attached ObjectInitializer script"); 
-		receiver = new Receiver {
-			serverPort = ps_port,
-			serverAddr = ps_serveraddress,
-			device = device,
-			obj_init = obj_init
-		};
-		receiverThread = new Thread(receiver.Connect);
-		receiverThread.Start ();
+		if (objectInitializer == null)
+			Debug.LogError ("Client needs an ObjectInitializer gameobject with attached ObjectInitializer script");
+		else {
+			ObjectInitializer obj_init = objectInitializer.GetComponent<ObjectInitializer>();
+			receiver = new Receiver {
+				serverPort = ps_port,
+				serverAddr = ps_serveraddress,
+				device = device,
+				obj_init = obj_init
+			};
+			receiverThread = new Thread(receiver.Connect);
+			receiverThread.Start ();
+		}
 		//RPC
 		rpcclient = new RPCClient {
 			address = rpc_serveraddress,
@@ -42,17 +44,21 @@ public class Client : MonoBehaviour  {
 		
 
 	void OnApplicationQuit(){
-		receiver.Disconnect ();
-		receiverThread.Join ();
-		rpcclient.Disconnect();
-		rpcThread.Join();
+		CloseConnections ();
 	}
 
 	void OnDisable(){
-		receiver.Disconnect ();
-		receiverThread.Join ();
-		rpcclient.Disconnect();
-		rpcThread.Join();
+		CloseConnections ();
+	}
+	void CloseConnections(){
+		if(receiver !=null )
+			receiver.Disconnect ();
+		if(receiverThread !=null)
+			receiverThread.Join ();
+		if(rpcclient != null)
+			rpcclient.Disconnect();
+		if(rpcThread != null)
+			rpcThread.Join();
 	}
 
 
