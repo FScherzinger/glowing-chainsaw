@@ -35,57 +35,67 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		Notes = new Dictionary<Position, List<Note>>();
         PositionUpdates = new Queue<PositionEvent>();
         DirectionUpdates = new Queue<DirectionEvent>();
+		note_ids = new List<int>();
+		annotation_ids = new List<int>();
+		//invoke publishers
+		InvokeRepeating("publishPositionRotation", 3, 0.1F);
+		InvokeRepeating("publishAnnotationsNotes", 3, 2F);
     }
 
 
-    void FixedUpdate()
-    {
-        for( int i = 0; i < PositionUpdates.Count; ++i )
-        {
-            PositionEvent p = PositionUpdates.Dequeue();
+    void UpdatePositionsRotations()
+	{
+		for (int i = 0; i < DirectionUpdates.Count; ++i) {
+			DirectionEvent d = DirectionUpdates.Dequeue ();
+			Vector3 curposition = SceneObjects [d.Id].transform.position;
+			Vector3 currotation = SceneObjects [d.Id].transform.eulerAngles;
+			Vector3 destination = curposition;
+			foreach (var position in PositionUpdates) {
+				if (position.Id == d.Id) {
+					destination = new Vector3 ((float)position.Position.X, (float)position.Position.Y, (float)position.Position.Z);
+				}
+			}
 
-            Vector3 goalpos = new Vector3( (float) p.Position.X,
-                        (float) p.Position.Y,
-                        (float) p.Position.Z );
-
-            Vector3 curposition = SceneObjects[p.Id].transform.position;
-            Vector3 currotation = SceneObjects[p.Id].transform.eulerAngles;
-
-			if(baxterCommunicator!=null)
-            	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP( curposition, goalpos,currotation,currotation);
-
-            Vector3 position = new Vector3( (float) p.Position.X,
-                                            (float) p.Position.Y,
-                                            (float) p.Position.Z );
-            //SceneObjects[p.Id].transform.position = position;
-        }
+			Quaternion direction = new Quaternion ((float)d.Direction.X,
+				(float)d.Direction.Y,
+				(float)d.Direction.Z,
+				(float)d.Direction.W);
 
 
-        for( int i = 0; i < DirectionUpdates.Count; ++i )
-        {
-            DirectionEvent d = DirectionUpdates.Dequeue();
-            Quaternion direction = new Quaternion( (float) d.Direction.X,
-                                                   (float) d.Direction.Y,
-                                                   (float) d.Direction.Z,
-                                                   (float) d.Direction.W );
-            Vector3 curposition = SceneObjects[d.Id].transform.position;
-            Vector3 currotation = SceneObjects[d.Id].transform.eulerAngles;
+			if (baxterCommunicator != null)
+				baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
+			//SceneObjects[d.Id].transform.rotation = direction;
+		}
+	}
 
-			if(baxterCommunicator!=null)
-            	baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, curposition, currotation, direction.eulerAngles);
-            //SceneObjects[d.Id].transform.rotation = direction;
-        }
 
-        if( ps_publisher == null )
-            return;
-        foreach( int id in SceneObjects.Keys )
-        {
+
+    public void publishPositionRotation(){
+		UpdatePositionsRotations ();
+		if( ps_publisher == null )
+			return;
+		foreach( int id in SceneObjects.Keys )
+		{
 			//TODO: determinate objtype
 			ps_publisher.SendPosition( id, ObjType.CUBE, SceneObjects[id] );
 			ps_publisher.SendRotation( id, ObjType.CUBE, SceneObjects[id] );
-        }
+		}
+	}
 
-    }
+	public void publishAnnotationsNotes(){
+		if( ps_publisher == null )
+			return;
+		foreach( int objectid in Annotations.Keys )
+		{
+			foreach (Annotation an in Annotations[objectid])
+				ps_publisher.SendAnnotation (an);
+		}
+		foreach( Position pos in Notes.Keys )
+		{
+			foreach (Note n in Notes[pos])
+				ps_publisher.SendNote (n);
+		}
+	}
 
     public int addToSceneObjects( GameObject go )
     {

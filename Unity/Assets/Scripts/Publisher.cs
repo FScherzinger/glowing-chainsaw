@@ -20,7 +20,7 @@ public class Publisher
     public void Connect()
     {
         Debug.Log( "waiting for tecs-server... (publisher)" );
-		connection_id = "p_" + device + "_" + ObjType.CUBE;
+		connection_id = "p_" + device;
         Uri uri = PSFactory.CreateURI( connection_id, serverAddr, serverPort );
         publish_client = PSFactory.CreatePSClient( uri );
         publish_client.Connect();
@@ -57,6 +57,24 @@ public class Publisher
 	        publish_client.Send(".*", "PositionEvent", pe);
         }
     }
+
+	public void SendAnnotation(Annotation an){
+		if (an == null || publish_client == null)
+			return;
+		if (publish_client.IsOnline() && publish_client.IsConnected())
+		{
+			publish_client.Send(".*", "Annotation", an);
+		}
+	}
+
+	public void SendNote(Note n){
+		if (n == null || publish_client == null)
+			return;
+		if (publish_client.IsOnline() && publish_client.IsConnected())
+		{
+			publish_client.Send(".*", "Note", n);
+		}
+	}
 
 	public void Disconnect()
     {
