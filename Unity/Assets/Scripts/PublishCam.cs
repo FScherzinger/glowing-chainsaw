@@ -12,7 +12,7 @@ public class PublishCam : MonoBehaviour {
 	private Publisher pub ;
 	private Thread pubThread;
 	private IEnumerator publish_pos_rot;
-	private int camID;
+	public int camID;
 	void Start () {
 		pub = new Publisher {
 			serverPort = ps_port,
