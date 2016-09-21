@@ -22,7 +22,7 @@ public class PublishCam : MonoBehaviour {
 		pubThread = new Thread(pub.Connect);
 		pubThread.Start ();
 
-		camID = RPCClient.client.getUniqueCameraId ();
+        camID = 5;// RPCClient.client.getUniqueCameraId ();
 		publish_pos_rot = PublishPosRot (.2f);
 		StartCoroutine (publish_pos_rot);
 	}
