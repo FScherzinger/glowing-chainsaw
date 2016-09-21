@@ -39,10 +39,10 @@ public class SendPickAndPlace : MonoBehaviour
             if (thread == null || !thread.IsAlive)
             {
                 waiting = false;
-                Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, armAtFixedMarkerposition.z);
-                from = new Vector3(-from.z, from.x, armAtFixedMarkerposition.z);
+                Vector3 markertoarm = new Vector3(-fixedMarker.transform.position.z, fixedMarker.transform.position.x, fixedMarker.transform.position.y);
+                from = new Vector3(-from.z, from.x, from.y);
                 Vector3 pickpos = from - markertoarm + armAtFixedMarkerposition;
-                to = new Vector3(-to.z, to.x, armAtFixedMarkerposition.z);
+                to = new Vector3(-to.z, to.x, to.y);
                 Vector3 placepos = to - markertoarm + armAtFixedMarkerposition;
                 //Has to be changed if more rotations than around y axis possible;
                 Vector3 pickrot = armAtFixedMarkerrotation;
