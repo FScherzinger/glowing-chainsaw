@@ -68,9 +68,10 @@ public class InputHandler : MonoBehaviour
 	{
 		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGNDROP){
 			if(movingCube == null && !draggable){
-				draggable = true;
-				renderer.material = dragMaterial;
+
 				if(RPCClient.client.Can_Interact(id)){
+					draggable = true;
+					renderer.material = dragMaterial;
 					RPCClient.client.LockGameObject(id);
 					movingCube = Instantiate(movingCubeModel);
 					movingCube.SetActive(true);
