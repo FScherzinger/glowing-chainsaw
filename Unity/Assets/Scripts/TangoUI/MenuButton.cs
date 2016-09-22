@@ -34,7 +34,7 @@ public class MenuButton : MonoBehaviour
 
     public void CollapseMenu()
     {
-        Debug.Log( "Collapsing Menu" );
+        //Debug.Log( "Collapsing Menu" );
         StartCoroutine( MoveButton( Button1, -3 ) );
         StartCoroutine( MoveButton( Button2, -5 ) );
         StartCoroutine( MoveButton( Button3, -7 ) );

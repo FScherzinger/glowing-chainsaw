@@ -85,6 +85,49 @@ NavMeshSettings:
     cellSize: 0.16666666
     manualCellSize: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &367880998
+GameObject:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  serializedVersion: 4
+  m_Component:
+  - 4: {fileID: 367881000}
+  - 114: {fileID: 367880999}
+  m_Layer: 0
+  m_Name: ObjectInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &367880999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 367880998}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 312e42c993ed78040a14bc243dc2d9c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cubeModel: {fileID: 170872, guid: b678aa050b76f48ca944922034618a8e, type: 2}
+  camModel: {fileID: 104432, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+  ownCam: {fileID: 1338123777}
+--- !u!4 &367881000
+Transform:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 367880998}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 7
 --- !u!1001 &582458011
 Prefab:
   m_ObjectHideFlags: 0
@@ -233,6 +276,7 @@ GameObject:
   - 124: {fileID: 1338123774}
   - 92: {fileID: 1338123773}
   - 81: {fileID: 1338123772}
+  - 114: {fileID: 1338123777}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -308,6 +352,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 3
+--- !u!114 &1338123777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1338123771}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ps_server: localhost
+  ps_port: 9000
+  device: 4
+  camID: 0
 --- !u!1 &1361648611
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +444,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1543431776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -401,7 +460,7 @@ MonoBehaviour:
   rpc_port: 9001
   ps_serveraddress: localhost
   rpc_serveraddress: localhost
-  device: 0
+  device: 4
   objectInitializer: {fileID: 0}
 --- !u!4 &1543431777
 Transform:

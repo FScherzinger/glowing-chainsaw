@@ -12,6 +12,7 @@ public class AnnotateButton : MonoBehaviour
 
     public void annotate()
     {
+        Debug.Log("annotating mode");
         Handler.setCurrent(ButtonHandler.SelectedButton.annotate);
         Menu.CollapseMenu();
     }

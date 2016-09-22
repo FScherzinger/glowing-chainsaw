@@ -10,6 +10,7 @@ public class InspectButton : MonoBehaviour
 
     public void inspect()
     {
+        Debug.Log("inspecting mode");
         Handler.setCurrent(ButtonHandler.SelectedButton.inspect);
         Menu.CollapseMenu();
     }
