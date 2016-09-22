@@ -9,9 +9,10 @@ public class RPCClient {
 
 	public static Scene.Client client {get; set;}
 	public string address {get;set;}
-	public int port {get;set;} 
+	public int port {get;set;}
 
-	TTransport transport;
+   public  static bool connected = false;
+	  TTransport transport;
 
 
 	// Use this for initialization
@@ -21,11 +22,14 @@ public class RPCClient {
 			TProtocol protocol = new TBinaryProtocol(transport);
 			client = new Scene.Client(protocol);
 			transport.Open();
+            connected = true;
 			Debug.Log("connected");
 		} catch (Exception e){
 			Debug.LogError(e);
 		}
 	}
+
+
 
 	public void Disconnect(){
 		if(transport.IsOpen)

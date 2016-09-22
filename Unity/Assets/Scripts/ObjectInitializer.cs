@@ -84,8 +84,6 @@ public class ObjectInitializer : MonoBehaviour
 					}
 				}
 			}
-			Debug.LogError("This should not happen");
-			Debug.Break();
 			return null;
 		}
 	}
