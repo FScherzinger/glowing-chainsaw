@@ -19,6 +19,7 @@ public class TangoCalibrationScript : MonoBehaviour {
         if (calibrating)
         {
             TangoARCamera.transform.position = VuforiaARCamera.transform.position;
+            TangoARCamera.transform.rotation = VuforiaARCamera.transform.rotation;
         }
 	}
 
