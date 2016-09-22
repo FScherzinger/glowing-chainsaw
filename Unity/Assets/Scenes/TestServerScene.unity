@@ -112,7 +112,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312e42c993ed78040a14bc243dc2d9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  cubeModel: {fileID: 170872, guid: b678aa050b76f48ca944922034618a8e, type: 2}
+  cubeModel: {fileID: 170872, guid: e4dfcf3bb557e8c418ddb88522c654c2, type: 2}
   camModel: {fileID: 104432, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
   ownCam: {fileID: 1338123777}
 --- !u!4 &367881000
@@ -358,7 +358,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1338123771}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
