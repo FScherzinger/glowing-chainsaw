@@ -205,6 +205,56 @@ CanvasRenderer:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 426562898}
+--- !u!1001 &465071758
+Prefab:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 0}
+    m_Modifications:
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.y
+      value: 4.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalPosition.z
+      value: -7
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.x
+      value: -0.00000011520229
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.y
+      value: -0.70710695
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.z
+      value: -0.7071066
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_LocalRotation.w
+      value: 0.00000011520235
+      objectReference: {fileID: 0}
+    - target: {fileID: 442074, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_RootOrder
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 104432, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_ParentPrefab: {fileID: 100100000, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+  m_IsPrefabParent: 0
+--- !u!1 &465071759 stripped
+GameObject:
+  m_PrefabParentObject: {fileID: 104432, guid: 426c07f3f740340ceb738197f34a9807, type: 2}
+  m_PrefabInternal: {fileID: 465071758}
 --- !u!1001 &524634688
 Prefab:
   m_ObjectHideFlags: 0
@@ -651,8 +701,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 192.168.1.169
-  rpc_serveraddress: 192.168.1.169
+  ps_serveraddress: 192.168.1.163
+  rpc_serveraddress: 192.168.1.163
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -667,7 +717,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
 --- !u!1 &1563991089
 GameObject:
   m_ObjectHideFlags: 0
@@ -695,7 +745,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 312e42c993ed78040a14bc243dc2d9c2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  temporaryGO: {fileID: 1747439561}
+  cubeModel: {fileID: 1747439561}
+  camModel: {fileID: 465071759}
+  ownCam: {fileID: 1805501113}
 --- !u!4 &1563991091
 Transform:
   m_ObjectHideFlags: 0
@@ -831,6 +883,7 @@ GameObject:
   m_Component:
   - 4: {fileID: 1805501111}
   - 114: {fileID: 1805501112}
+  - 114: {fileID: 1805501113}
   m_Layer: 0
   m_Name: WarpAnchor
   m_TagString: Untagged
@@ -851,7 +904,7 @@ Transform:
   m_Children:
   - {fileID: 2116470502}
   m_Father: {fileID: 0}
-  m_RootOrder: 9
+  m_RootOrder: 6
 --- !u!114 &1805501112
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -865,6 +918,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   vRInput: {fileID: 2116470505}
   reticle: {fileID: 1022149712}
+--- !u!114 &1805501113
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1805501110}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ps_server: 192.168.1.163
+  ps_port: 9000
+  device: 1
+  camID: 0
 --- !u!1 &1815493926 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 582e320d34da24844b95a9ba820789c7, type: 3}
@@ -1045,7 +1113,6 @@ GameObject:
   - 114: {fileID: 2116470505}
   - 114: {fileID: 2116470507}
   - 114: {fileID: 2116470508}
-  - 114: {fileID: 2116470509}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1219,17 +1286,3 @@ MonoBehaviour:
   warpTool: {fileID: 2800000, guid: 6be312efbe647294cbe64679770d9413, type: 3}
   annotationTool: {fileID: 2800000, guid: 077028084dceb584798dade6c58d1978, type: 3}
   image: {fileID: 1285064986}
---- !u!114 &2116470509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 2116470497}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  ps_server: 
-  ps_port: 0
-  device: 1
