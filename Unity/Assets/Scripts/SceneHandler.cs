@@ -74,14 +74,14 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 				direction = new Quaternion ((float)de.Direction.X,(float)de.Direction.Y,(float)de.Direction.Z,(float)de.Direction.W);
 			}
 				if (t.Second == null) {
-					SceneObjects [t.First.Id].transform.position = destination;
-					if (baxterCommunicator != null)
-						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
-				} else {
-					SceneObjects [t.First.Id].transform.position = destination;
-					SceneObjects [t.Second.Id].transform.rotation = direction;
+					//SceneObjects [t.First.Id].transform.position = destination;
 					if (baxterCommunicator != null)
 						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
+				} else {
+					//SceneObjects [t.First.Id].transform.position = destination;
+					//SceneObjects [t.Second.Id].transform.rotation = direction;
+					if (baxterCommunicator != null)
+						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
 				}
 					
 		}
