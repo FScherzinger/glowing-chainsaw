@@ -14,6 +14,9 @@ public class PublishCam : MonoBehaviour {
 	private IEnumerator publish_pos_rot;
 	public int camID;
 	void Start () {
+		while (RPCClient.client == null) {
+		}
+			
 		pub = new Publisher {
 			serverPort = ps_port,
 			serverAddr = ps_server,
@@ -21,7 +24,7 @@ public class PublishCam : MonoBehaviour {
 		};
 		pubThread = new Thread(pub.Connect);
 		pubThread.Start ();
-        camID = new System.Random().Next();// RPCClient.client.getUniqueCameraId ();
+        camID = RPCClient.client.getUniqueCameraId ();
 		publish_pos_rot = PublishPosRot (.2f);
 		StartCoroutine (publish_pos_rot);
 	}
