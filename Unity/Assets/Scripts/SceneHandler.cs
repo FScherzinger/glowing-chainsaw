@@ -197,7 +197,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		int id = rnd.Next ();
 		while(cam_ids.Contains(id))
 			id = rnd.Next ();
-
+		cam_ids.Add(id);
 		return id;
 		
 	}

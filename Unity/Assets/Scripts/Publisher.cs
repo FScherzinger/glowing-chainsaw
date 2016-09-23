@@ -38,7 +38,7 @@ public class Publisher
 			float y = go.transform.rotation.y;
 			float z = go.transform.rotation.z;
 			float w = go.transform.rotation.w;
-			DirectionEvent de = new DirectionEvent( device,ObjType.CUBE, new Direction( x,y,z,w), id );
+			DirectionEvent de = new DirectionEvent( device, type, new Direction( x,y,z,w), id );
             publish_client.Send( ".*", "DirectionEvent", de );
         }
     }
