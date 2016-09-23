@@ -26,7 +26,7 @@ public class ReceivedObject : MonoBehaviour {
 
 	public void updatePosition(PositionEvent pe ){
 			Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-			if ( (transform.position - newpos).sqrMagnitude > 0.0025)
+			if ( (transform.position - newpos).sqrMagnitude > 0.00025)
 				transform.position = newpos;
 	}
 		
