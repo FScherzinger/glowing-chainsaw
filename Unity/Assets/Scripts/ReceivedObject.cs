@@ -32,7 +32,7 @@ public class ReceivedObject : MonoBehaviour {
 		
 	public void updateDirection(DirectionEvent de){
 			Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
-		if ( Quaternion.Angle(transform.rotation,newrot) > 1)
+		//if ( Quaternion.Angle(transform.rotation,newrot) > 1)
 				transform.rotation = newrot;
 	}
 		
