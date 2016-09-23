@@ -20,7 +20,7 @@ public class Publisher
     public void Connect()
     {
         Debug.Log( "waiting for tecs-server... (publisher)" );
-		connection_id = "p_" + device + "_" + ObjType.CUBE;
+		connection_id = "p_" + device;
         Uri uri = PSFactory.CreateURI( connection_id, serverAddr, serverPort );
         publish_client = PSFactory.CreatePSClient( uri );
         publish_client.Connect();
@@ -28,7 +28,7 @@ public class Publisher
         Debug.Log( "conneted as " + connection_id );
     }
 
-	public void SendRotation(int id, GameObject go )
+	public void SendRotation(int id,ObjType type, GameObject go )
     {
         if( go == null || publish_client == null )
             return;
@@ -38,12 +38,12 @@ public class Publisher
 			float y = go.transform.rotation.y;
 			float z = go.transform.rotation.z;
 			float w = go.transform.rotation.w;
-			DirectionEvent de = new DirectionEvent( device,ObjType.CUBE, new Direction( x,y,z,w), id );
+			DirectionEvent de = new DirectionEvent( device, type, new Direction( x,y,z,w), id );
             publish_client.Send( ".*", "DirectionEvent", de );
         }
     }
 
-    public void SendPosition(int id, GameObject go)
+	public void SendPosition(int id,ObjType type, GameObject go)
     {
         if (go == null || publish_client == null)
             return;
@@ -53,20 +53,28 @@ public class Publisher
             float y = go.transform.position.y;
             float z = go.transform.position.z;
 
-            PositionEvent pe;
-       //     if (RPCClient.client.getObjType(id) == (ObjType.CUBE))
-       //     {
-                pe = new PositionEvent(device, ObjType.CUBE, new Position(x, y, z), id);
-	                publish_client.Send(".*", "PositionEvent", pe);
-//            }
-//            else
-//            {
-//                    pe = new PositionEvent(device, ObjType.CAMERA, new Position(x, y, z), id);
-//                    publish_client.Send(".*", "PositionEvent", pe);
-//
-//            }
+			PositionEvent pe = new PositionEvent(device, type, new Position(x, y, z), id);
+	        publish_client.Send(".*", "PositionEvent", pe);
         }
     }
+
+	public void SendAnnotation(Annotation an){
+		if (an == null || publish_client == null)
+			return;
+		if (publish_client.IsOnline() && publish_client.IsConnected())
+		{
+			publish_client.Send(".*", "Annotation", an);
+		}
+	}
+
+	public void SendNote(Note n){
+		if (n == null || publish_client == null)
+			return;
+		if (publish_client.IsOnline() && publish_client.IsConnected())
+		{
+			publish_client.Send(".*", "Note", n);
+		}
+	}
 
 	public void Disconnect()
     {

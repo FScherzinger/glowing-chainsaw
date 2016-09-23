@@ -25,7 +25,7 @@ GameObject:
   - 54: {fileID: 54000012726378562}
   - 114: {fileID: 114000012426437820}
   - 114: {fileID: 114000012130017692}
-  - 114: {fileID: 114000013345091226}
+  - 114: {fileID: 114000014134474454}
   m_Layer: 0
   m_Name: InteractableCube
   m_TagString: InteractableCube
@@ -49,7 +49,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &4000011713953194
 Transform:
   m_ObjectHideFlags: 1
@@ -200,10 +200,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010535058262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa65172695c56ec4ab008ee5473f07ee, type: 3}
+  m_Script: {fileID: 11500000, guid: de9c324949989a84683d4c93a12e936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ObjType: 0
+  noUpdate: 0
 --- !u!114 &114000012426437820
 MonoBehaviour:
   m_ObjectHideFlags: 1
@@ -247,7 +247,7 @@ MonoBehaviour:
   ismarked: 0
   inspect: 0
   emptyCube: {fileID: 1000013952924206, guid: 64ddd3ffa324a8440ba720520c54b29c, type: 2}
---- !u!114 &114000013345091226
+--- !u!114 &114000014134474454
 MonoBehaviour:
   m_ObjectHideFlags: 1
   m_PrefabParentObject: {fileID: 0}
@@ -255,6 +255,6 @@ MonoBehaviour:
   m_GameObject: {fileID: 1000010535058262}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01fc6462ec1922343a5269d76d3e4290, type: 3}
+  m_Script: {fileID: 11500000, guid: 59926cddfa7f941ce9347b500fa6464f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -24,45 +24,35 @@ namespace de.dfki.events
       IAsyncResult Begin_Annotate(AsyncCallback callback, object state, Annotation an);
       bool End_Annotate(IAsyncResult asyncResult);
       #endif
-      List<Annotation> GetAnnotations(int objectID);
+      bool Note(Note n);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetAnnotations(AsyncCallback callback, object state, int objectID);
-      List<Annotation> End_GetAnnotations(IAsyncResult asyncResult);
+      IAsyncResult Begin_Note(AsyncCallback callback, object state, Note n);
+      bool End_Note(IAsyncResult asyncResult);
       #endif
-      Annotation GetAnnotationById(int id);
+      bool UpdateAnnotation(int objectId, Annotation an);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetAnnotationById(AsyncCallback callback, object state, int id);
-      Annotation End_GetAnnotationById(IAsyncResult asyncResult);
+      IAsyncResult Begin_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an);
+      bool End_UpdateAnnotation(IAsyncResult asyncResult);
       #endif
-      Information GetInformation(Position pos);
+      bool UpdateNote(Position pos, Note n);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetInformation(AsyncCallback callback, object state, Position pos);
-      Information End_GetInformation(IAsyncResult asyncResult);
+      IAsyncResult Begin_UpdateNote(AsyncCallback callback, object state, Position pos, Note n);
+      bool End_UpdateNote(IAsyncResult asyncResult);
       #endif
-      Information GetInformationById(int id);
+      bool DeleteAnnotation(int objectId, int id);
       #if SILVERLIGHT
-      IAsyncResult Begin_GetInformationById(AsyncCallback callback, object state, int id);
-      Information End_GetInformationById(IAsyncResult asyncResult);
+      IAsyncResult Begin_DeleteAnnotation(AsyncCallback callback, object state, int objectId, int id);
+      bool End_DeleteAnnotation(IAsyncResult asyncResult);
       #endif
-      bool Informate(Information info);
+      bool DeleteNote(Position pos, int id);
       #if SILVERLIGHT
-      IAsyncResult Begin_Informate(AsyncCallback callback, object state, Information info);
-      bool End_Informate(IAsyncResult asyncResult);
+      IAsyncResult Begin_DeleteNote(AsyncCallback callback, object state, Position pos, int id);
+      bool End_DeleteNote(IAsyncResult asyncResult);
       #endif
-      List<Node> GetNodes(Position pos);
+      int getUniqueCameraId();
       #if SILVERLIGHT
-      IAsyncResult Begin_GetNodes(AsyncCallback callback, object state, Position pos);
-      List<Node> End_GetNodes(IAsyncResult asyncResult);
-      #endif
-      Node GetNodeById(int id);
-      #if SILVERLIGHT
-      IAsyncResult Begin_GetNodeById(AsyncCallback callback, object state, int id);
-      Node End_GetNodeById(IAsyncResult asyncResult);
-      #endif
-      bool Node(Node node);
-      #if SILVERLIGHT
-      IAsyncResult Begin_Node(AsyncCallback callback, object state, Node node);
-      bool End_Node(IAsyncResult asyncResult);
+      IAsyncResult Begin_getUniqueCameraId(AsyncCallback callback, object state);
+      int End_getUniqueCameraId(IAsyncResult asyncResult);
       #endif
       bool Can_Interact(int id);
       #if SILVERLIGHT
@@ -211,40 +201,40 @@ namespace de.dfki.events
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetAnnotations(AsyncCallback callback, object state, int objectID)
+      public IAsyncResult Begin_Note(AsyncCallback callback, object state, Note n)
       {
-        return send_GetAnnotations(callback, state, objectID);
+        return send_Note(callback, state, n);
       }
 
-      public List<Annotation> End_GetAnnotations(IAsyncResult asyncResult)
+      public bool End_Note(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetAnnotations();
+        return recv_Note();
       }
 
       #endif
 
-      public List<Annotation> GetAnnotations(int objectID)
+      public bool Note(Note n)
       {
         #if !SILVERLIGHT
-        send_GetAnnotations(objectID);
-        return recv_GetAnnotations();
+        send_Note(n);
+        return recv_Note();
 
         #else
-        var asyncResult = Begin_GetAnnotations(null, null, objectID);
-        return End_GetAnnotations(asyncResult);
+        var asyncResult = Begin_Note(null, null, n);
+        return End_Note(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetAnnotations(AsyncCallback callback, object state, int objectID)
+      public IAsyncResult send_Note(AsyncCallback callback, object state, Note n)
       #else
-      public void send_GetAnnotations(int objectID)
+      public void send_Note(Note n)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetAnnotations", TMessageType.Call, seqid_));
-        GetAnnotations_args args = new GetAnnotations_args();
-        args.ObjectID = objectID;
+        oprot_.WriteMessageBegin(new TMessage("Note", TMessageType.Call, seqid_));
+        Note_args args = new Note_args();
+        args.N = n;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -254,7 +244,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public List<Annotation> recv_GetAnnotations()
+      public bool recv_Note()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -262,51 +252,52 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetAnnotations_result result = new GetAnnotations_result();
+        Note_result result = new Note_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetAnnotations failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "Note failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetAnnotationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult Begin_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
       {
-        return send_GetAnnotationById(callback, state, id);
+        return send_UpdateAnnotation(callback, state, objectId, an);
       }
 
-      public Annotation End_GetAnnotationById(IAsyncResult asyncResult)
+      public bool End_UpdateAnnotation(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetAnnotationById();
+        return recv_UpdateAnnotation();
       }
 
       #endif
 
-      public Annotation GetAnnotationById(int id)
+      public bool UpdateAnnotation(int objectId, Annotation an)
       {
         #if !SILVERLIGHT
-        send_GetAnnotationById(id);
-        return recv_GetAnnotationById();
+        send_UpdateAnnotation(objectId, an);
+        return recv_UpdateAnnotation();
 
         #else
-        var asyncResult = Begin_GetAnnotationById(null, null, id);
-        return End_GetAnnotationById(asyncResult);
+        var asyncResult = Begin_UpdateAnnotation(null, null, objectId, an);
+        return End_UpdateAnnotation(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetAnnotationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult send_UpdateAnnotation(AsyncCallback callback, object state, int objectId, Annotation an)
       #else
-      public void send_GetAnnotationById(int id)
+      public void send_UpdateAnnotation(int objectId, Annotation an)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetAnnotationById", TMessageType.Call, seqid_));
-        GetAnnotationById_args args = new GetAnnotationById_args();
-        args.Id = id;
+        oprot_.WriteMessageBegin(new TMessage("UpdateAnnotation", TMessageType.Call, seqid_));
+        UpdateAnnotation_args args = new UpdateAnnotation_args();
+        args.ObjectId = objectId;
+        args.An = an;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -316,7 +307,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public Annotation recv_GetAnnotationById()
+      public bool recv_UpdateAnnotation()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -324,51 +315,52 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetAnnotationById_result result = new GetAnnotationById_result();
+        UpdateAnnotation_result result = new UpdateAnnotation_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetAnnotationById failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "UpdateAnnotation failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetInformation(AsyncCallback callback, object state, Position pos)
+      public IAsyncResult Begin_UpdateNote(AsyncCallback callback, object state, Position pos, Note n)
       {
-        return send_GetInformation(callback, state, pos);
+        return send_UpdateNote(callback, state, pos, n);
       }
 
-      public Information End_GetInformation(IAsyncResult asyncResult)
+      public bool End_UpdateNote(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetInformation();
+        return recv_UpdateNote();
       }
 
       #endif
 
-      public Information GetInformation(Position pos)
+      public bool UpdateNote(Position pos, Note n)
       {
         #if !SILVERLIGHT
-        send_GetInformation(pos);
-        return recv_GetInformation();
+        send_UpdateNote(pos, n);
+        return recv_UpdateNote();
 
         #else
-        var asyncResult = Begin_GetInformation(null, null, pos);
-        return End_GetInformation(asyncResult);
+        var asyncResult = Begin_UpdateNote(null, null, pos, n);
+        return End_UpdateNote(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetInformation(AsyncCallback callback, object state, Position pos)
+      public IAsyncResult send_UpdateNote(AsyncCallback callback, object state, Position pos, Note n)
       #else
-      public void send_GetInformation(Position pos)
+      public void send_UpdateNote(Position pos, Note n)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetInformation", TMessageType.Call, seqid_));
-        GetInformation_args args = new GetInformation_args();
+        oprot_.WriteMessageBegin(new TMessage("UpdateNote", TMessageType.Call, seqid_));
+        UpdateNote_args args = new UpdateNote_args();
         args.Pos = pos;
+        args.N = n;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -378,7 +370,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public Information recv_GetInformation()
+      public bool recv_UpdateNote()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -386,50 +378,51 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetInformation_result result = new GetInformation_result();
+        UpdateNote_result result = new UpdateNote_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetInformation failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "UpdateNote failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_GetInformationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult Begin_DeleteAnnotation(AsyncCallback callback, object state, int objectId, int id)
       {
-        return send_GetInformationById(callback, state, id);
+        return send_DeleteAnnotation(callback, state, objectId, id);
       }
 
-      public Information End_GetInformationById(IAsyncResult asyncResult)
+      public bool End_DeleteAnnotation(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetInformationById();
+        return recv_DeleteAnnotation();
       }
 
       #endif
 
-      public Information GetInformationById(int id)
+      public bool DeleteAnnotation(int objectId, int id)
       {
         #if !SILVERLIGHT
-        send_GetInformationById(id);
-        return recv_GetInformationById();
+        send_DeleteAnnotation(objectId, id);
+        return recv_DeleteAnnotation();
 
         #else
-        var asyncResult = Begin_GetInformationById(null, null, id);
-        return End_GetInformationById(asyncResult);
+        var asyncResult = Begin_DeleteAnnotation(null, null, objectId, id);
+        return End_DeleteAnnotation(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_GetInformationById(AsyncCallback callback, object state, int id)
+      public IAsyncResult send_DeleteAnnotation(AsyncCallback callback, object state, int objectId, int id)
       #else
-      public void send_GetInformationById(int id)
+      public void send_DeleteAnnotation(int objectId, int id)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("GetInformationById", TMessageType.Call, seqid_));
-        GetInformationById_args args = new GetInformationById_args();
+        oprot_.WriteMessageBegin(new TMessage("DeleteAnnotation", TMessageType.Call, seqid_));
+        DeleteAnnotation_args args = new DeleteAnnotation_args();
+        args.ObjectId = objectId;
         args.Id = id;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -440,7 +433,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public Information recv_GetInformationById()
+      public bool recv_DeleteAnnotation()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -448,174 +441,51 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetInformationById_result result = new GetInformationById_result();
+        DeleteAnnotation_result result = new DeleteAnnotation_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetInformationById failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "DeleteAnnotation failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_Informate(AsyncCallback callback, object state, Information info)
+      public IAsyncResult Begin_DeleteNote(AsyncCallback callback, object state, Position pos, int id)
       {
-        return send_Informate(callback, state, info);
+        return send_DeleteNote(callback, state, pos, id);
       }
 
-      public bool End_Informate(IAsyncResult asyncResult)
+      public bool End_DeleteNote(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_Informate();
+        return recv_DeleteNote();
       }
 
       #endif
 
-      public bool Informate(Information info)
+      public bool DeleteNote(Position pos, int id)
       {
         #if !SILVERLIGHT
-        send_Informate(info);
-        return recv_Informate();
+        send_DeleteNote(pos, id);
+        return recv_DeleteNote();
 
         #else
-        var asyncResult = Begin_Informate(null, null, info);
-        return End_Informate(asyncResult);
+        var asyncResult = Begin_DeleteNote(null, null, pos, id);
+        return End_DeleteNote(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_Informate(AsyncCallback callback, object state, Information info)
+      public IAsyncResult send_DeleteNote(AsyncCallback callback, object state, Position pos, int id)
       #else
-      public void send_Informate(Information info)
+      public void send_DeleteNote(Position pos, int id)
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("Informate", TMessageType.Call, seqid_));
-        Informate_args args = new Informate_args();
-        args.Info = info;
-        args.Write(oprot_);
-        oprot_.WriteMessageEnd();
-        #if SILVERLIGHT
-        return oprot_.Transport.BeginFlush(callback, state);
-        #else
-        oprot_.Transport.Flush();
-        #endif
-      }
-
-      public bool recv_Informate()
-      {
-        TMessage msg = iprot_.ReadMessageBegin();
-        if (msg.Type == TMessageType.Exception) {
-          TApplicationException x = TApplicationException.Read(iprot_);
-          iprot_.ReadMessageEnd();
-          throw x;
-        }
-        Informate_result result = new Informate_result();
-        result.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        if (result.__isset.success) {
-          return result.Success;
-        }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "Informate failed: unknown result");
-      }
-
-      
-      #if SILVERLIGHT
-      public IAsyncResult Begin_GetNodes(AsyncCallback callback, object state, Position pos)
-      {
-        return send_GetNodes(callback, state, pos);
-      }
-
-      public List<Node> End_GetNodes(IAsyncResult asyncResult)
-      {
-        oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetNodes();
-      }
-
-      #endif
-
-      public List<Node> GetNodes(Position pos)
-      {
-        #if !SILVERLIGHT
-        send_GetNodes(pos);
-        return recv_GetNodes();
-
-        #else
-        var asyncResult = Begin_GetNodes(null, null, pos);
-        return End_GetNodes(asyncResult);
-
-        #endif
-      }
-      #if SILVERLIGHT
-      public IAsyncResult send_GetNodes(AsyncCallback callback, object state, Position pos)
-      #else
-      public void send_GetNodes(Position pos)
-      #endif
-      {
-        oprot_.WriteMessageBegin(new TMessage("GetNodes", TMessageType.Call, seqid_));
-        GetNodes_args args = new GetNodes_args();
+        oprot_.WriteMessageBegin(new TMessage("DeleteNote", TMessageType.Call, seqid_));
+        DeleteNote_args args = new DeleteNote_args();
         args.Pos = pos;
-        args.Write(oprot_);
-        oprot_.WriteMessageEnd();
-        #if SILVERLIGHT
-        return oprot_.Transport.BeginFlush(callback, state);
-        #else
-        oprot_.Transport.Flush();
-        #endif
-      }
-
-      public List<Node> recv_GetNodes()
-      {
-        TMessage msg = iprot_.ReadMessageBegin();
-        if (msg.Type == TMessageType.Exception) {
-          TApplicationException x = TApplicationException.Read(iprot_);
-          iprot_.ReadMessageEnd();
-          throw x;
-        }
-        GetNodes_result result = new GetNodes_result();
-        result.Read(iprot_);
-        iprot_.ReadMessageEnd();
-        if (result.__isset.success) {
-          return result.Success;
-        }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetNodes failed: unknown result");
-      }
-
-      
-      #if SILVERLIGHT
-      public IAsyncResult Begin_GetNodeById(AsyncCallback callback, object state, int id)
-      {
-        return send_GetNodeById(callback, state, id);
-      }
-
-      public Node End_GetNodeById(IAsyncResult asyncResult)
-      {
-        oprot_.Transport.EndFlush(asyncResult);
-        return recv_GetNodeById();
-      }
-
-      #endif
-
-      public Node GetNodeById(int id)
-      {
-        #if !SILVERLIGHT
-        send_GetNodeById(id);
-        return recv_GetNodeById();
-
-        #else
-        var asyncResult = Begin_GetNodeById(null, null, id);
-        return End_GetNodeById(asyncResult);
-
-        #endif
-      }
-      #if SILVERLIGHT
-      public IAsyncResult send_GetNodeById(AsyncCallback callback, object state, int id)
-      #else
-      public void send_GetNodeById(int id)
-      #endif
-      {
-        oprot_.WriteMessageBegin(new TMessage("GetNodeById", TMessageType.Call, seqid_));
-        GetNodeById_args args = new GetNodeById_args();
         args.Id = id;
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
@@ -626,7 +496,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public Node recv_GetNodeById()
+      public bool recv_DeleteNote()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -634,51 +504,50 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        GetNodeById_result result = new GetNodeById_result();
+        DeleteNote_result result = new DeleteNote_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "GetNodeById failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "DeleteNote failed: unknown result");
       }
 
       
       #if SILVERLIGHT
-      public IAsyncResult Begin_Node(AsyncCallback callback, object state, Node node)
+      public IAsyncResult Begin_getUniqueCameraId(AsyncCallback callback, object state)
       {
-        return send_Node(callback, state, node);
+        return send_getUniqueCameraId(callback, state);
       }
 
-      public bool End_Node(IAsyncResult asyncResult)
+      public int End_getUniqueCameraId(IAsyncResult asyncResult)
       {
         oprot_.Transport.EndFlush(asyncResult);
-        return recv_Node();
+        return recv_getUniqueCameraId();
       }
 
       #endif
 
-      public bool Node(Node node)
+      public int getUniqueCameraId()
       {
         #if !SILVERLIGHT
-        send_Node(node);
-        return recv_Node();
+        send_getUniqueCameraId();
+        return recv_getUniqueCameraId();
 
         #else
-        var asyncResult = Begin_Node(null, null, node);
-        return End_Node(asyncResult);
+        var asyncResult = Begin_getUniqueCameraId(null, null);
+        return End_getUniqueCameraId(asyncResult);
 
         #endif
       }
       #if SILVERLIGHT
-      public IAsyncResult send_Node(AsyncCallback callback, object state, Node node)
+      public IAsyncResult send_getUniqueCameraId(AsyncCallback callback, object state)
       #else
-      public void send_Node(Node node)
+      public void send_getUniqueCameraId()
       #endif
       {
-        oprot_.WriteMessageBegin(new TMessage("Node", TMessageType.Call, seqid_));
-        Node_args args = new Node_args();
-        args.Node = node;
+        oprot_.WriteMessageBegin(new TMessage("getUniqueCameraId", TMessageType.Call, seqid_));
+        getUniqueCameraId_args args = new getUniqueCameraId_args();
         args.Write(oprot_);
         oprot_.WriteMessageEnd();
         #if SILVERLIGHT
@@ -688,7 +557,7 @@ namespace de.dfki.events
         #endif
       }
 
-      public bool recv_Node()
+      public int recv_getUniqueCameraId()
       {
         TMessage msg = iprot_.ReadMessageBegin();
         if (msg.Type == TMessageType.Exception) {
@@ -696,13 +565,13 @@ namespace de.dfki.events
           iprot_.ReadMessageEnd();
           throw x;
         }
-        Node_result result = new Node_result();
+        getUniqueCameraId_result result = new getUniqueCameraId_result();
         result.Read(iprot_);
         iprot_.ReadMessageEnd();
         if (result.__isset.success) {
           return result.Success;
         }
-        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "Node failed: unknown result");
+        throw new TApplicationException(TApplicationException.ExceptionType.MissingResult, "getUniqueCameraId failed: unknown result");
       }
 
       
@@ -1022,14 +891,12 @@ namespace de.dfki.events
       {
         iface_ = iface;
         processMap_["Annotate"] = Annotate_Process;
-        processMap_["GetAnnotations"] = GetAnnotations_Process;
-        processMap_["GetAnnotationById"] = GetAnnotationById_Process;
-        processMap_["GetInformation"] = GetInformation_Process;
-        processMap_["GetInformationById"] = GetInformationById_Process;
-        processMap_["Informate"] = Informate_Process;
-        processMap_["GetNodes"] = GetNodes_Process;
-        processMap_["GetNodeById"] = GetNodeById_Process;
-        processMap_["Node"] = Node_Process;
+        processMap_["Note"] = Note_Process;
+        processMap_["UpdateAnnotation"] = UpdateAnnotation_Process;
+        processMap_["UpdateNote"] = UpdateNote_Process;
+        processMap_["DeleteAnnotation"] = DeleteAnnotation_Process;
+        processMap_["DeleteNote"] = DeleteNote_Process;
+        processMap_["getUniqueCameraId"] = getUniqueCameraId_Process;
         processMap_["Can_Interact"] = Can_Interact_Process;
         processMap_["LockGameObject"] = LockGameObject_Process;
         processMap_["Move"] = Move_Process;
@@ -1080,105 +947,79 @@ namespace de.dfki.events
         oprot.Transport.Flush();
       }
 
-      public void GetAnnotations_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void Note_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetAnnotations_args args = new GetAnnotations_args();
+        Note_args args = new Note_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetAnnotations_result result = new GetAnnotations_result();
-        result.Success = iface_.GetAnnotations(args.ObjectID);
-        oprot.WriteMessageBegin(new TMessage("GetAnnotations", TMessageType.Reply, seqid)); 
+        Note_result result = new Note_result();
+        result.Success = iface_.Note(args.N);
+        oprot.WriteMessageBegin(new TMessage("Note", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void GetAnnotationById_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void UpdateAnnotation_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetAnnotationById_args args = new GetAnnotationById_args();
+        UpdateAnnotation_args args = new UpdateAnnotation_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetAnnotationById_result result = new GetAnnotationById_result();
-        result.Success = iface_.GetAnnotationById(args.Id);
-        oprot.WriteMessageBegin(new TMessage("GetAnnotationById", TMessageType.Reply, seqid)); 
+        UpdateAnnotation_result result = new UpdateAnnotation_result();
+        result.Success = iface_.UpdateAnnotation(args.ObjectId, args.An);
+        oprot.WriteMessageBegin(new TMessage("UpdateAnnotation", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void GetInformation_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void UpdateNote_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetInformation_args args = new GetInformation_args();
+        UpdateNote_args args = new UpdateNote_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetInformation_result result = new GetInformation_result();
-        result.Success = iface_.GetInformation(args.Pos);
-        oprot.WriteMessageBegin(new TMessage("GetInformation", TMessageType.Reply, seqid)); 
+        UpdateNote_result result = new UpdateNote_result();
+        result.Success = iface_.UpdateNote(args.Pos, args.N);
+        oprot.WriteMessageBegin(new TMessage("UpdateNote", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void GetInformationById_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void DeleteAnnotation_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetInformationById_args args = new GetInformationById_args();
+        DeleteAnnotation_args args = new DeleteAnnotation_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetInformationById_result result = new GetInformationById_result();
-        result.Success = iface_.GetInformationById(args.Id);
-        oprot.WriteMessageBegin(new TMessage("GetInformationById", TMessageType.Reply, seqid)); 
+        DeleteAnnotation_result result = new DeleteAnnotation_result();
+        result.Success = iface_.DeleteAnnotation(args.ObjectId, args.Id);
+        oprot.WriteMessageBegin(new TMessage("DeleteAnnotation", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void Informate_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void DeleteNote_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        Informate_args args = new Informate_args();
+        DeleteNote_args args = new DeleteNote_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        Informate_result result = new Informate_result();
-        result.Success = iface_.Informate(args.Info);
-        oprot.WriteMessageBegin(new TMessage("Informate", TMessageType.Reply, seqid)); 
+        DeleteNote_result result = new DeleteNote_result();
+        result.Success = iface_.DeleteNote(args.Pos, args.Id);
+        oprot.WriteMessageBegin(new TMessage("DeleteNote", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
       }
 
-      public void GetNodes_Process(int seqid, TProtocol iprot, TProtocol oprot)
+      public void getUniqueCameraId_Process(int seqid, TProtocol iprot, TProtocol oprot)
       {
-        GetNodes_args args = new GetNodes_args();
+        getUniqueCameraId_args args = new getUniqueCameraId_args();
         args.Read(iprot);
         iprot.ReadMessageEnd();
-        GetNodes_result result = new GetNodes_result();
-        result.Success = iface_.GetNodes(args.Pos);
-        oprot.WriteMessageBegin(new TMessage("GetNodes", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-        oprot.WriteMessageEnd();
-        oprot.Transport.Flush();
-      }
-
-      public void GetNodeById_Process(int seqid, TProtocol iprot, TProtocol oprot)
-      {
-        GetNodeById_args args = new GetNodeById_args();
-        args.Read(iprot);
-        iprot.ReadMessageEnd();
-        GetNodeById_result result = new GetNodeById_result();
-        result.Success = iface_.GetNodeById(args.Id);
-        oprot.WriteMessageBegin(new TMessage("GetNodeById", TMessageType.Reply, seqid)); 
-        result.Write(oprot);
-        oprot.WriteMessageEnd();
-        oprot.Transport.Flush();
-      }
-
-      public void Node_Process(int seqid, TProtocol iprot, TProtocol oprot)
-      {
-        Node_args args = new Node_args();
-        args.Read(iprot);
-        iprot.ReadMessageEnd();
-        Node_result result = new Node_result();
-        result.Success = iface_.Node(args.Node);
-        oprot.WriteMessageBegin(new TMessage("Node", TMessageType.Reply, seqid)); 
+        getUniqueCameraId_result result = new getUniqueCameraId_result();
+        result.Success = iface_.getUniqueCameraId();
+        oprot.WriteMessageBegin(new TMessage("getUniqueCameraId", TMessageType.Reply, seqid)); 
         result.Write(oprot);
         oprot.WriteMessageEnd();
         oprot.Transport.Flush();
@@ -1473,20 +1314,20 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetAnnotations_args : TBase
+    public partial class Note_args : TBase
     {
-      private int _objectID;
+      private Note _n;
 
-      public int ObjectID
+      public Note N
       {
         get
         {
-          return _objectID;
+          return _n;
         }
         set
         {
-          __isset.objectID = true;
-          this._objectID = value;
+          __isset.n = true;
+          this._n = value;
         }
       }
 
@@ -1496,467 +1337,10 @@ namespace de.dfki.events
       [Serializable]
       #endif
       public struct Isset {
-        public bool objectID;
+        public bool n;
       }
 
-      public GetAnnotations_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.I32) {
-                  ObjectID = iprot.ReadI32();
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetAnnotations_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (__isset.objectID) {
-            field.Name = "objectID";
-            field.Type = TType.I32;
-            field.ID = 1;
-            oprot.WriteFieldBegin(field);
-            oprot.WriteI32(ObjectID);
-            oprot.WriteFieldEnd();
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotations_args(");
-        bool __first = true;
-        if (__isset.objectID) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("ObjectID: ");
-          __sb.Append(ObjectID);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetAnnotations_result : TBase
-    {
-      private List<Annotation> _success;
-
-      public List<Annotation> Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetAnnotations_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.List) {
-                  {
-                    Success = new List<Annotation>();
-                    TList _list0 = iprot.ReadListBegin();
-                    for( int _i1 = 0; _i1 < _list0.Count; ++_i1)
-                    {
-                      Annotation _elem2;
-                      _elem2 = new Annotation();
-                      _elem2.Read(iprot);
-                      Success.Add(_elem2);
-                    }
-                    iprot.ReadListEnd();
-                  }
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetAnnotations_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.List;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              {
-                oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (Annotation _iter3 in Success)
-                {
-                  _iter3.Write(oprot);
-                }
-                oprot.WriteListEnd();
-              }
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotations_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetAnnotationById_args : TBase
-    {
-      private int _id;
-
-      public int Id
-      {
-        get
-        {
-          return _id;
-        }
-        set
-        {
-          __isset.id = true;
-          this._id = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool id;
-      }
-
-      public GetAnnotationById_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.I32) {
-                  Id = iprot.ReadI32();
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetAnnotationById_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (__isset.id) {
-            field.Name = "id";
-            field.Type = TType.I32;
-            field.ID = 1;
-            oprot.WriteFieldBegin(field);
-            oprot.WriteI32(Id);
-            oprot.WriteFieldEnd();
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotationById_args(");
-        bool __first = true;
-        if (__isset.id) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Id: ");
-          __sb.Append(Id);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetAnnotationById_result : TBase
-    {
-      private Annotation _success;
-
-      public Annotation Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetAnnotationById_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.Struct) {
-                  Success = new Annotation();
-                  Success.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetAnnotationById_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.Struct;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              Success.Write(oprot);
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetAnnotationById_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetInformation_args : TBase
-    {
-      private Position _pos;
-
-      public Position Pos
-      {
-        get
-        {
-          return _pos;
-        }
-        set
-        {
-          __isset.pos = true;
-          this._pos = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool pos;
-      }
-
-      public GetInformation_args() {
+      public Note_args() {
       }
 
       public void Read (TProtocol iprot)
@@ -1976,8 +1360,8 @@ namespace de.dfki.events
             {
               case 1:
                 if (field.Type == TType.Struct) {
-                  Pos = new Position();
-                  Pos.Read(iprot);
+                  N = new Note();
+                  N.Read(iprot);
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -2000,15 +1384,15 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetInformation_args");
+          TStruct struc = new TStruct("Note_args");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
-          if (Pos != null && __isset.pos) {
-            field.Name = "pos";
+          if (N != null && __isset.n) {
+            field.Name = "n";
             field.Type = TType.Struct;
             field.ID = 1;
             oprot.WriteFieldBegin(field);
-            Pos.Write(oprot);
+            N.Write(oprot);
             oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
@@ -2021,13 +1405,13 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetInformation_args(");
+        StringBuilder __sb = new StringBuilder("Note_args(");
         bool __first = true;
-        if (Pos != null && __isset.pos) {
+        if (N != null && __isset.n) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("Pos: ");
-          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
+          __sb.Append("N: ");
+          __sb.Append(N);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -2039,448 +1423,7 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetInformation_result : TBase
-    {
-      private Information _success;
-
-      public Information Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetInformation_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.Struct) {
-                  Success = new Information();
-                  Success.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetInformation_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.Struct;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              Success.Write(oprot);
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetInformation_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetInformationById_args : TBase
-    {
-      private int _id;
-
-      public int Id
-      {
-        get
-        {
-          return _id;
-        }
-        set
-        {
-          __isset.id = true;
-          this._id = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool id;
-      }
-
-      public GetInformationById_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.I32) {
-                  Id = iprot.ReadI32();
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetInformationById_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (__isset.id) {
-            field.Name = "id";
-            field.Type = TType.I32;
-            field.ID = 1;
-            oprot.WriteFieldBegin(field);
-            oprot.WriteI32(Id);
-            oprot.WriteFieldEnd();
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetInformationById_args(");
-        bool __first = true;
-        if (__isset.id) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Id: ");
-          __sb.Append(Id);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetInformationById_result : TBase
-    {
-      private Information _success;
-
-      public Information Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetInformationById_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.Struct) {
-                  Success = new Information();
-                  Success.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetInformationById_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.Struct;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              Success.Write(oprot);
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetInformationById_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class Informate_args : TBase
-    {
-      private Information _info;
-
-      public Information Info
-      {
-        get
-        {
-          return _info;
-        }
-        set
-        {
-          __isset.info = true;
-          this._info = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool info;
-      }
-
-      public Informate_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.Struct) {
-                  Info = new Information();
-                  Info.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("Informate_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (Info != null && __isset.info) {
-            field.Name = "info";
-            field.Type = TType.Struct;
-            field.ID = 1;
-            oprot.WriteFieldBegin(field);
-            Info.Write(oprot);
-            oprot.WriteFieldEnd();
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("Informate_args(");
-        bool __first = true;
-        if (Info != null && __isset.info) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Info: ");
-          __sb.Append(Info);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class Informate_result : TBase
+    public partial class Note_result : TBase
     {
       private bool _success;
 
@@ -2506,7 +1449,7 @@ namespace de.dfki.events
         public bool success;
       }
 
-      public Informate_result() {
+      public Note_result() {
       }
 
       public void Read (TProtocol iprot)
@@ -2549,7 +1492,7 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("Informate_result");
+          TStruct struc = new TStruct("Note_result");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
 
@@ -2571,7 +1514,7 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("Informate_result(");
+        StringBuilder __sb = new StringBuilder("Note_result(");
         bool __first = true;
         if (__isset.success) {
           if(!__first) { __sb.Append(", "); }
@@ -2589,20 +1532,34 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class GetNodes_args : TBase
+    public partial class UpdateAnnotation_args : TBase
     {
-      private Position _pos;
+      private int _objectId;
+      private Annotation _an;
 
-      public Position Pos
+      public int ObjectId
       {
         get
         {
-          return _pos;
+          return _objectId;
         }
         set
         {
-          __isset.pos = true;
-          this._pos = value;
+          __isset.objectId = true;
+          this._objectId = value;
+        }
+      }
+
+      public Annotation An
+      {
+        get
+        {
+          return _an;
+        }
+        set
+        {
+          __isset.an = true;
+          this._an = value;
         }
       }
 
@@ -2612,248 +1569,11 @@ namespace de.dfki.events
       [Serializable]
       #endif
       public struct Isset {
-        public bool pos;
+        public bool objectId;
+        public bool an;
       }
 
-      public GetNodes_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.Struct) {
-                  Pos = new Position();
-                  Pos.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetNodes_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (Pos != null && __isset.pos) {
-            field.Name = "pos";
-            field.Type = TType.Struct;
-            field.ID = 1;
-            oprot.WriteFieldBegin(field);
-            Pos.Write(oprot);
-            oprot.WriteFieldEnd();
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetNodes_args(");
-        bool __first = true;
-        if (Pos != null && __isset.pos) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Pos: ");
-          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetNodes_result : TBase
-    {
-      private List<Node> _success;
-
-      public List<Node> Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetNodes_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.List) {
-                  {
-                    Success = new List<Node>();
-                    TList _list4 = iprot.ReadListBegin();
-                    for( int _i5 = 0; _i5 < _list4.Count; ++_i5)
-                    {
-                      Node _elem6;
-                      _elem6 = new Node();
-                      _elem6.Read(iprot);
-                      Success.Add(_elem6);
-                    }
-                    iprot.ReadListEnd();
-                  }
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetNodes_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.List;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              {
-                oprot.WriteListBegin(new TList(TType.Struct, Success.Count));
-                foreach (Node _iter7 in Success)
-                {
-                  _iter7.Write(oprot);
-                }
-                oprot.WriteListEnd();
-              }
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetNodes_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetNodeById_args : TBase
-    {
-      private int _id;
-
-      public int Id
-      {
-        get
-        {
-          return _id;
-        }
-        set
-        {
-          __isset.id = true;
-          this._id = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool id;
-      }
-
-      public GetNodeById_args() {
+      public UpdateAnnotation_args() {
       }
 
       public void Read (TProtocol iprot)
@@ -2873,7 +1593,15 @@ namespace de.dfki.events
             {
               case 1:
                 if (field.Type == TType.I32) {
-                  Id = iprot.ReadI32();
+                  ObjectId = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  An = new Annotation();
+                  An.Read(iprot);
                 } else { 
                   TProtocolUtil.Skip(iprot, field.Type);
                 }
@@ -2896,236 +1624,23 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("GetNodeById_args");
+          TStruct struc = new TStruct("UpdateAnnotation_args");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
-          if (__isset.id) {
-            field.Name = "id";
+          if (__isset.objectId) {
+            field.Name = "objectId";
             field.Type = TType.I32;
             field.ID = 1;
             oprot.WriteFieldBegin(field);
-            oprot.WriteI32(Id);
+            oprot.WriteI32(ObjectId);
             oprot.WriteFieldEnd();
           }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetNodeById_args(");
-        bool __first = true;
-        if (__isset.id) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Id: ");
-          __sb.Append(Id);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class GetNodeById_result : TBase
-    {
-      private Node _success;
-
-      public Node Success
-      {
-        get
-        {
-          return _success;
-        }
-        set
-        {
-          __isset.success = true;
-          this._success = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool success;
-      }
-
-      public GetNodeById_result() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 0:
-                if (field.Type == TType.Struct) {
-                  Success = new Node();
-                  Success.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("GetNodeById_result");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-
-          if (this.__isset.success) {
-            if (Success != null) {
-              field.Name = "Success";
-              field.Type = TType.Struct;
-              field.ID = 0;
-              oprot.WriteFieldBegin(field);
-              Success.Write(oprot);
-              oprot.WriteFieldEnd();
-            }
-          }
-          oprot.WriteFieldStop();
-          oprot.WriteStructEnd();
-        }
-        finally
-        {
-          oprot.DecrementRecursionDepth();
-        }
-      }
-
-      public override string ToString() {
-        StringBuilder __sb = new StringBuilder("GetNodeById_result(");
-        bool __first = true;
-        if (Success != null && __isset.success) {
-          if(!__first) { __sb.Append(", "); }
-          __first = false;
-          __sb.Append("Success: ");
-          __sb.Append(Success);
-        }
-        __sb.Append(")");
-        return __sb.ToString();
-      }
-
-    }
-
-
-    #if !SILVERLIGHT
-    [Serializable]
-    #endif
-    public partial class Node_args : TBase
-    {
-      private Node _node;
-
-      public Node Node
-      {
-        get
-        {
-          return _node;
-        }
-        set
-        {
-          __isset.node = true;
-          this._node = value;
-        }
-      }
-
-
-      public Isset __isset;
-      #if !SILVERLIGHT
-      [Serializable]
-      #endif
-      public struct Isset {
-        public bool node;
-      }
-
-      public Node_args() {
-      }
-
-      public void Read (TProtocol iprot)
-      {
-        iprot.IncrementRecursionDepth();
-        try
-        {
-          TField field;
-          iprot.ReadStructBegin();
-          while (true)
-          {
-            field = iprot.ReadFieldBegin();
-            if (field.Type == TType.Stop) { 
-              break;
-            }
-            switch (field.ID)
-            {
-              case 1:
-                if (field.Type == TType.Struct) {
-                  Node = new Node();
-                  Node.Read(iprot);
-                } else { 
-                  TProtocolUtil.Skip(iprot, field.Type);
-                }
-                break;
-              default: 
-                TProtocolUtil.Skip(iprot, field.Type);
-                break;
-            }
-            iprot.ReadFieldEnd();
-          }
-          iprot.ReadStructEnd();
-        }
-        finally
-        {
-          iprot.DecrementRecursionDepth();
-        }
-      }
-
-      public void Write(TProtocol oprot) {
-        oprot.IncrementRecursionDepth();
-        try
-        {
-          TStruct struc = new TStruct("Node_args");
-          oprot.WriteStructBegin(struc);
-          TField field = new TField();
-          if (Node != null && __isset.node) {
-            field.Name = "node";
+          if (An != null && __isset.an) {
+            field.Name = "an";
             field.Type = TType.Struct;
-            field.ID = 1;
+            field.ID = 2;
             oprot.WriteFieldBegin(field);
-            Node.Write(oprot);
+            An.Write(oprot);
             oprot.WriteFieldEnd();
           }
           oprot.WriteFieldStop();
@@ -3138,13 +1653,19 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("Node_args(");
+        StringBuilder __sb = new StringBuilder("UpdateAnnotation_args(");
         bool __first = true;
-        if (Node != null && __isset.node) {
+        if (__isset.objectId) {
           if(!__first) { __sb.Append(", "); }
           __first = false;
-          __sb.Append("Node: ");
-          __sb.Append(Node);
+          __sb.Append("ObjectId: ");
+          __sb.Append(ObjectId);
+        }
+        if (An != null && __isset.an) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("An: ");
+          __sb.Append(An);
         }
         __sb.Append(")");
         return __sb.ToString();
@@ -3156,7 +1677,7 @@ namespace de.dfki.events
     #if !SILVERLIGHT
     [Serializable]
     #endif
-    public partial class Node_result : TBase
+    public partial class UpdateAnnotation_result : TBase
     {
       private bool _success;
 
@@ -3182,7 +1703,7 @@ namespace de.dfki.events
         public bool success;
       }
 
-      public Node_result() {
+      public UpdateAnnotation_result() {
       }
 
       public void Read (TProtocol iprot)
@@ -3225,7 +1746,7 @@ namespace de.dfki.events
         oprot.IncrementRecursionDepth();
         try
         {
-          TStruct struc = new TStruct("Node_result");
+          TStruct struc = new TStruct("UpdateAnnotation_result");
           oprot.WriteStructBegin(struc);
           TField field = new TField();
 
@@ -3247,7 +1768,940 @@ namespace de.dfki.events
       }
 
       public override string ToString() {
-        StringBuilder __sb = new StringBuilder("Node_result(");
+        StringBuilder __sb = new StringBuilder("UpdateAnnotation_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class UpdateNote_args : TBase
+    {
+      private Position _pos;
+      private Note _n;
+
+      public Position Pos
+      {
+        get
+        {
+          return _pos;
+        }
+        set
+        {
+          __isset.pos = true;
+          this._pos = value;
+        }
+      }
+
+      public Note N
+      {
+        get
+        {
+          return _n;
+        }
+        set
+        {
+          __isset.n = true;
+          this._n = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool pos;
+        public bool n;
+      }
+
+      public UpdateNote_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.Struct) {
+                  Pos = new Position();
+                  Pos.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.Struct) {
+                  N = new Note();
+                  N.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("UpdateNote_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (Pos != null && __isset.pos) {
+            field.Name = "pos";
+            field.Type = TType.Struct;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            Pos.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          if (N != null && __isset.n) {
+            field.Name = "n";
+            field.Type = TType.Struct;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            N.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("UpdateNote_args(");
+        bool __first = true;
+        if (Pos != null && __isset.pos) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Pos: ");
+          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
+        }
+        if (N != null && __isset.n) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("N: ");
+          __sb.Append(N);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class UpdateNote_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public UpdateNote_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("UpdateNote_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("UpdateNote_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteAnnotation_args : TBase
+    {
+      private int _objectId;
+      private int _id;
+
+      public int ObjectId
+      {
+        get
+        {
+          return _objectId;
+        }
+        set
+        {
+          __isset.objectId = true;
+          this._objectId = value;
+        }
+      }
+
+      public int Id
+      {
+        get
+        {
+          return _id;
+        }
+        set
+        {
+          __isset.id = true;
+          this._id = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool objectId;
+        public bool id;
+      }
+
+      public DeleteAnnotation_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.I32) {
+                  ObjectId = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.I32) {
+                  Id = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteAnnotation_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (__isset.objectId) {
+            field.Name = "objectId";
+            field.Type = TType.I32;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(ObjectId);
+            oprot.WriteFieldEnd();
+          }
+          if (__isset.id) {
+            field.Name = "id";
+            field.Type = TType.I32;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(Id);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteAnnotation_args(");
+        bool __first = true;
+        if (__isset.objectId) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("ObjectId: ");
+          __sb.Append(ObjectId);
+        }
+        if (__isset.id) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Id: ");
+          __sb.Append(Id);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteAnnotation_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public DeleteAnnotation_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteAnnotation_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteAnnotation_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteNote_args : TBase
+    {
+      private Position _pos;
+      private int _id;
+
+      public Position Pos
+      {
+        get
+        {
+          return _pos;
+        }
+        set
+        {
+          __isset.pos = true;
+          this._pos = value;
+        }
+      }
+
+      public int Id
+      {
+        get
+        {
+          return _id;
+        }
+        set
+        {
+          __isset.id = true;
+          this._id = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool pos;
+        public bool id;
+      }
+
+      public DeleteNote_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 1:
+                if (field.Type == TType.Struct) {
+                  Pos = new Position();
+                  Pos.Read(iprot);
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              case 2:
+                if (field.Type == TType.I32) {
+                  Id = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteNote_args");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+          if (Pos != null && __isset.pos) {
+            field.Name = "pos";
+            field.Type = TType.Struct;
+            field.ID = 1;
+            oprot.WriteFieldBegin(field);
+            Pos.Write(oprot);
+            oprot.WriteFieldEnd();
+          }
+          if (__isset.id) {
+            field.Name = "id";
+            field.Type = TType.I32;
+            field.ID = 2;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(Id);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteNote_args(");
+        bool __first = true;
+        if (Pos != null && __isset.pos) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Pos: ");
+          __sb.Append(Pos== null ? "<null>" : Pos.ToString());
+        }
+        if (__isset.id) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Id: ");
+          __sb.Append(Id);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class DeleteNote_result : TBase
+    {
+      private bool _success;
+
+      public bool Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public DeleteNote_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.Bool) {
+                  Success = iprot.ReadBool();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("DeleteNote_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.Bool;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteBool(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("DeleteNote_result(");
+        bool __first = true;
+        if (__isset.success) {
+          if(!__first) { __sb.Append(", "); }
+          __first = false;
+          __sb.Append("Success: ");
+          __sb.Append(Success);
+        }
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getUniqueCameraId_args : TBase
+    {
+
+      public getUniqueCameraId_args() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getUniqueCameraId_args");
+          oprot.WriteStructBegin(struc);
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getUniqueCameraId_args(");
+        __sb.Append(")");
+        return __sb.ToString();
+      }
+
+    }
+
+
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public partial class getUniqueCameraId_result : TBase
+    {
+      private int _success;
+
+      public int Success
+      {
+        get
+        {
+          return _success;
+        }
+        set
+        {
+          __isset.success = true;
+          this._success = value;
+        }
+      }
+
+
+      public Isset __isset;
+      #if !SILVERLIGHT
+      [Serializable]
+      #endif
+      public struct Isset {
+        public bool success;
+      }
+
+      public getUniqueCameraId_result() {
+      }
+
+      public void Read (TProtocol iprot)
+      {
+        iprot.IncrementRecursionDepth();
+        try
+        {
+          TField field;
+          iprot.ReadStructBegin();
+          while (true)
+          {
+            field = iprot.ReadFieldBegin();
+            if (field.Type == TType.Stop) { 
+              break;
+            }
+            switch (field.ID)
+            {
+              case 0:
+                if (field.Type == TType.I32) {
+                  Success = iprot.ReadI32();
+                } else { 
+                  TProtocolUtil.Skip(iprot, field.Type);
+                }
+                break;
+              default: 
+                TProtocolUtil.Skip(iprot, field.Type);
+                break;
+            }
+            iprot.ReadFieldEnd();
+          }
+          iprot.ReadStructEnd();
+        }
+        finally
+        {
+          iprot.DecrementRecursionDepth();
+        }
+      }
+
+      public void Write(TProtocol oprot) {
+        oprot.IncrementRecursionDepth();
+        try
+        {
+          TStruct struc = new TStruct("getUniqueCameraId_result");
+          oprot.WriteStructBegin(struc);
+          TField field = new TField();
+
+          if (this.__isset.success) {
+            field.Name = "Success";
+            field.Type = TType.I32;
+            field.ID = 0;
+            oprot.WriteFieldBegin(field);
+            oprot.WriteI32(Success);
+            oprot.WriteFieldEnd();
+          }
+          oprot.WriteFieldStop();
+          oprot.WriteStructEnd();
+        }
+        finally
+        {
+          oprot.DecrementRecursionDepth();
+        }
+      }
+
+      public override string ToString() {
+        StringBuilder __sb = new StringBuilder("getUniqueCameraId_result(");
         bool __first = true;
         if (__isset.success) {
           if(!__first) { __sb.Append(", "); }

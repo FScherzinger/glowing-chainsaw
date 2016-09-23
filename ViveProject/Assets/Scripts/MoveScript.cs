@@ -15,13 +15,13 @@ public class MoveScript : MonoBehaviour
 
 	void Update()
 	{
-		if( Input.GetKey( "left" ) )
+		if( Input.GetKey( KeyCode.F ) )
 			transform.Rotate(new Vector3(0,-.1f,0));	
-		if( Input.GetKey( "right" ) )
+		if( Input.GetKey( KeyCode.H ) )
 			transform.Rotate(new Vector3(0,.1f,0));
-		if( Input.GetKey( "up" ) )
+		if( Input.GetKey( KeyCode.T ) )
 			transform.Rotate(new Vector3(-.1f,0,0));	
-		if( Input.GetKey( "down" ) )
+		if( Input.GetKey( KeyCode.G ) )
 			transform.Rotate(new Vector3(.1f,0,0));
 	
 		/*if( Input.GetKey( "left" ) )

@@ -15,6 +15,8 @@ class PickAndPlace
     public PickAndPlaceEvent pap_event { get; set; }
     public bool init { get; set; }
 
+    private bool waiting_for_baxter = true;
+
     /* standard position from where we will start and where we will end after
      * executing a PickAndPlaceEvent */
     private MoveArmEvent standardPosition = new MoveArmEvent
@@ -63,13 +65,14 @@ class PickAndPlace
         {
             // before moving to first object always move arm to initial position.
             client.Send( "receiver_right", "MoveArmEvent", standardPosition );
-
+            waiting_for_baxter = true;
             // wait for DoneEvent before continuing.
-            while( client.CanRecv() )
+            while( waiting_for_baxter ||client.CanRecv() )
             {
                 Event evt = client.Recv();
                 if( evt.Is( "DoneEvent" ) )
                 {
+                    waiting_for_baxter = false;
                     DoneEvent done_event = new DoneEvent();
                     evt.ParseData( done_event );
 

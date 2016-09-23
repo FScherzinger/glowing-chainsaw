@@ -72,32 +72,32 @@ public class MarkAndInspect : VRTK_InteractableObject
             string msg = "";
             System.Random rnd = new System.Random();
             int anno_id = rnd.Next();
-            Annotation annote = new Annotation(Device.VIVE, id, anno_id, msg);
+            Renderer rend = gameObject.GetComponent<Renderer>();
+            rend.material.color = Color.blue;
+            rend.material.SetColor("_SpecColor", Color.blue);
+            /*Annotation annote = new Annotation(Device.VIVE, id, anno_id, msg);
             if (!RPCClient.client.Annotate(annote))
-                Debug.Log("Could not annotate cube");
+                Debug.Log("Could not annotate cube");*/
         }
         else if (inspect)
         {
-            Information inf = RPCClient.client.GetInformationById(id);
-            string msg = inf.Informtion;
 
-
-            infoObj.GetComponent<TextMesh>().text = msg;
+            /*infoObj.GetComponent<TextMesh>().text = msg;
             infoObj.gameObject.SetActive(true);
-
+            */
         }
     }
 
     public override void StopUsing(GameObject usingObject)
     {
-        base.StopUsing(usingObject);
-        infoObj.SetActive(false);
+        /*base.StopUsing(usingObject);
+        infoObj.SetActive(false);*/
     }
     // Use this for initialization
     protected override void Start()
     {
         base.Start();
-        infoObj = transform.Find("Information").gameObject;
+        //infoObj = transform.Find("Information").gameObject;
 
     }
 

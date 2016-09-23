@@ -23,27 +23,59 @@ namespace de.dfki.events
   #endif
   public partial class Annotation : TBase
   {
+    private int _Id;
+    private string _information;
+
+    public int Id
+    {
+      get
+      {
+        return _Id;
+      }
+      set
+      {
+        __isset.Id = true;
+        this._Id = value;
+      }
+    }
 
     /// <summary>
     /// 
     /// <seealso cref="Device"/>
     /// </summary>
-    public Device Type { get; set; }
+    public Device Device { get; set; }
 
-    public int ObjectID { get; set; }
+    public int ObjectId { get; set; }
 
-    public int Id { get; set; }
+    public string Information
+    {
+      get
+      {
+        return _information;
+      }
+      set
+      {
+        __isset.information = true;
+        this._information = value;
+      }
+    }
 
-    public string Information { get; set; }
+
+    public Isset __isset;
+    #if !SILVERLIGHT
+    [Serializable]
+    #endif
+    public struct Isset {
+      public bool Id;
+      public bool information;
+    }
 
     public Annotation() {
     }
 
-    public Annotation(Device type, int ObjectID, int Id, string information) : this() {
-      this.Type = type;
-      this.ObjectID = ObjectID;
-      this.Id = Id;
-      this.Information = information;
+    public Annotation(Device device, int ObjectId) : this() {
+      this.Device = device;
+      this.ObjectId = ObjectId;
     }
 
     public void Read (TProtocol iprot)
@@ -51,10 +83,8 @@ namespace de.dfki.events
       iprot.IncrementRecursionDepth();
       try
       {
-        bool isset_type = false;
-        bool isset_ObjectID = false;
-        bool isset_Id = false;
-        bool isset_information = false;
+        bool isset_device = false;
+        bool isset_ObjectId = false;
         TField field;
         iprot.ReadStructBegin();
         while (true)
@@ -67,32 +97,30 @@ namespace de.dfki.events
           {
             case 1:
               if (field.Type == TType.I32) {
-                Type = (Device)iprot.ReadI32();
-                isset_type = true;
+                Id = iprot.ReadI32();
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 2:
               if (field.Type == TType.I32) {
-                ObjectID = iprot.ReadI32();
-                isset_ObjectID = true;
-              } else { 
-                TProtocolUtil.Skip(iprot, field.Type);
-              }
-              break;
-            case 4:
-              if (field.Type == TType.I32) {
-                Id = iprot.ReadI32();
-                isset_Id = true;
+                Device = (Device)iprot.ReadI32();
+                isset_device = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
               break;
             case 3:
+              if (field.Type == TType.I32) {
+                ObjectId = iprot.ReadI32();
+                isset_ObjectId = true;
+              } else { 
+                TProtocolUtil.Skip(iprot, field.Type);
+              }
+              break;
+            case 5:
               if (field.Type == TType.String) {
                 Information = iprot.ReadString();
-                isset_information = true;
               } else { 
                 TProtocolUtil.Skip(iprot, field.Type);
               }
@@ -104,13 +132,9 @@ namespace de.dfki.events
           iprot.ReadFieldEnd();
         }
         iprot.ReadStructEnd();
-        if (!isset_type)
+        if (!isset_device)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_ObjectID)
-          throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_Id)
-          throw new TProtocolException(TProtocolException.INVALID_DATA);
-        if (!isset_information)
+        if (!isset_ObjectId)
           throw new TProtocolException(TProtocolException.INVALID_DATA);
       }
       finally
@@ -126,30 +150,34 @@ namespace de.dfki.events
         TStruct struc = new TStruct("Annotation");
         oprot.WriteStructBegin(struc);
         TField field = new TField();
-        field.Name = "type";
-        field.Type = TType.I32;
-        field.ID = 1;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32((int)Type);
-        oprot.WriteFieldEnd();
-        field.Name = "ObjectID";
+        if (__isset.Id) {
+          field.Name = "Id";
+          field.Type = TType.I32;
+          field.ID = 1;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteI32(Id);
+          oprot.WriteFieldEnd();
+        }
+        field.Name = "device";
         field.Type = TType.I32;
         field.ID = 2;
         oprot.WriteFieldBegin(field);
-        oprot.WriteI32(ObjectID);
+        oprot.WriteI32((int)Device);
         oprot.WriteFieldEnd();
-        field.Name = "information";
-        field.Type = TType.String;
+        field.Name = "ObjectId";
+        field.Type = TType.I32;
         field.ID = 3;
         oprot.WriteFieldBegin(field);
-        oprot.WriteString(Information);
+        oprot.WriteI32(ObjectId);
         oprot.WriteFieldEnd();
-        field.Name = "Id";
-        field.Type = TType.I32;
-        field.ID = 4;
-        oprot.WriteFieldBegin(field);
-        oprot.WriteI32(Id);
-        oprot.WriteFieldEnd();
+        if (Information != null && __isset.information) {
+          field.Name = "information";
+          field.Type = TType.String;
+          field.ID = 5;
+          oprot.WriteFieldBegin(field);
+          oprot.WriteString(Information);
+          oprot.WriteFieldEnd();
+        }
         oprot.WriteFieldStop();
         oprot.WriteStructEnd();
       }
@@ -161,14 +189,22 @@ namespace de.dfki.events
 
     public override string ToString() {
       StringBuilder __sb = new StringBuilder("Annotation(");
-      __sb.Append(", Type: ");
-      __sb.Append(Type);
-      __sb.Append(", ObjectID: ");
-      __sb.Append(ObjectID);
-      __sb.Append(", Id: ");
-      __sb.Append(Id);
-      __sb.Append(", Information: ");
-      __sb.Append(Information);
+      bool __first = true;
+      if (__isset.Id) {
+        if(!__first) { __sb.Append(", "); }
+        __first = false;
+        __sb.Append("Id: ");
+        __sb.Append(Id);
+      }
+      if(!__first) { __sb.Append(", "); }
+      __sb.Append("Device: ");
+      __sb.Append(Device);
+      __sb.Append(", ObjectId: ");
+      __sb.Append(ObjectId);
+      if (Information != null && __isset.information) {
+        __sb.Append(", Information: ");
+        __sb.Append(Information);
+      }
       __sb.Append(")");
       return __sb.ToString();
     }
