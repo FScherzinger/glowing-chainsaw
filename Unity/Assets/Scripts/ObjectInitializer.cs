@@ -19,11 +19,13 @@ public class ObjectInitializer : MonoBehaviour
 	public PublishCam ownCam;
 	public volatile Queue<PositionEvent> pos_events;
 	public volatile Queue<DirectionEvent> dir_events;
+	public volatile Queue<Annotation> an_events;
 	private volatile Dictionary<int,ReceivedObject> ObjReceivers; //includes every interactable item, eg. cubes, gameobjects for annotations ...
 
 	void Start(){
 		pos_events = new  Queue<PositionEvent> ();
 		dir_events = new  Queue<DirectionEvent> ();
+		an_events = new  Queue<Annotation> ();
 		ObjReceivers = new Dictionary<int,ReceivedObject> ();
 	}
 		
@@ -51,17 +53,30 @@ public class ObjectInitializer : MonoBehaviour
 					obj.updateDirection (de);
 			}
 		}
+		if(an_events != null){
+			int an_counter = an_events.Count;
+			for(int i = 0; i < an_counter; i++){
+				Annotation an = an_events.Dequeue();
+				if(an == null)
+					continue;
+				ReceivedObject obj = getObjectReceiver (an.ObjectId, ObjType.CUBE);
+				if(obj != null)
+					obj.updateAnnotation(an);
+			}
+		}
 	}
 
 	public void handle (PositionEvent p){
 		pos_events.Enqueue (p);
-
 	}
 
 
 	public void handle (DirectionEvent d){
 		dir_events.Enqueue (d);
+	}
 
+	public void handle (Annotation an){
+		an_events.Enqueue (an);
 	}
 
 	public ReceivedObject getObjectReceiver(int id, ObjType objTyp){
