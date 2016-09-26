@@ -13,7 +13,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     private volatile List<int> LockedObjects; //includes id of locked gameobjects
     private volatile Dictionary<int,GameObject> SceneObjects; //includes every interactable item, eg. cubes, gameobjects for annotations ...
-	private volatile Dictionary<int,List<Annotation>> Annotations; //mapping: gameobject_id -> list<annotation>
+	private volatile Dictionary<int,Annotation> Annotations; //mapping: gameobject_id -> list<annotation>
 	private volatile Dictionary<Position,List<Note>> Notes; //mapping: position -> list<annotation>
 	private volatile Dictionary<int, ObjType> ObjTypes; //mapping: gameobject_id -> ObjType
 	private volatile List<int> cam_ids; 
@@ -33,7 +33,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
         rnd = new System.Random();
         SceneObjects = new Dictionary<int, GameObject>();
         LockedObjects = new List<int>();
-        Annotations = new Dictionary<int, List<Annotation>>();
+        Annotations = new Dictionary<int, Annotation>();
 		Notes = new Dictionary<Position, List<Note>>();
 		Updates = new Queue<Tuple<PositionEvent,DirectionEvent>>();
 		cam_ids = new List<int>();
@@ -43,7 +43,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		//invoke publishers
 		publish_posrot = publishPositionRotation(0.1f);
 		StartCoroutine(publish_posrot);
-//		StartCoroutine(publishAnnotationsNotes(2f));
+		StartCoroutine(publishAnnotationsNotes(2f));
     }
 
 
@@ -115,10 +115,12 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		for (;;) {
 			if( ps_publisher == null )
 					yield return null;
-			foreach( int objectid in Annotations.Keys )
+			foreach( Annotation an in Annotations.Values )
 			{
+				ps_publisher.SendAnnotation(an);
+				/*Debug.Log("id: " + objectid);
 				foreach (Annotation an in Annotations[objectid])
-					ps_publisher.SendAnnotation (an);
+					ps_publisher.SendAnnotation (an);*/
 			}
 			foreach( Position pos in Notes.Keys )
 			{
@@ -149,7 +151,9 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     {
 		if( SceneObjects.ContainsKey( an.ObjectId ) )
 		{
-			List<Annotation> obj_annotations;
+			Annotations[an.ObjectId] = an;
+			return true;
+			/*List<Annotation> obj_annotations;
 			//check if an annoation is already assigned to the gameobj
 			if( Annotations.ContainsKey( an.ObjectId ) )
 			{
@@ -162,7 +166,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 			//push the new annotation
 			obj_annotations.Add( an );
 			Annotations[an.ObjectId] = obj_annotations;
-			return true;
+			return true;*/
 		}
         //return false if gameobject id is invalid
         return false;
@@ -204,6 +208,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
     public bool Annotate( Annotation an )
     {
+		Debug.Log("received Annotation");
 		//generate IDs for new Annotations
 		an.Id = rnd.Next ();
 		while(annotation_ids.Contains(an.Id))
@@ -234,7 +239,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 
 	public bool UpdateAnnotation (int objectId, Annotation an)
 	{
-		if (!Annotations.ContainsKey (objectId))
+		/*if (!Annotations.ContainsKey (objectId))
 			return false;
 		//search if list contains an annotation with the id of an
 		bool found_an = false;
@@ -247,8 +252,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		//delete old annotation
 		if (DeleteAnnotation (objectId, an.Id))
 			return addAnnotationToObject (an);
-		return false;
-		
+		return false;*/
+		return true;
 	}
 	public bool UpdateNote (Position pos, Note n)
 	{
@@ -273,13 +278,14 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 	}
 
 	public bool DeleteAnnotation (int objectId, int id){
-		if(!Annotations.ContainsKey(objectId))
+		/*if(!Annotations.ContainsKey(objectId))
 			return false;
 		int removes = Annotations [objectId].RemoveAll (x => x.Id == id);
 		annotation_ids.Remove (id);
 		if (removes == 1)
 			return true;
-		return false;
+		return false;*/
+		return true;
 	}
 
 
