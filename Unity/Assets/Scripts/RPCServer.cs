@@ -18,7 +18,7 @@ public class RPCServer
 
 	public void startServer(){
 		try {
-			server = new TSimpleServer(proc,serTransport);
+			server = new TThreadedServer(proc,serTransport);
 			server.Serve();
 			Debug.Log ("Started RPC-Server on Vuforia");
 		} catch (Exception x){

@@ -14,12 +14,14 @@ public class InputHandler : MonoBehaviour
 	[SerializeField] private Material normalMaterial;                
 	[SerializeField] private Material overMaterial;
 	[SerializeField] private Material dragMaterial;
+	[SerializeField] private Material annotationMaterial;
 	[SerializeField] private VRInteractiveItem interactiveItem;
 	[SerializeField] private Renderer renderer;
 	[SerializeField] private GameObject movingCubeModel;
 	private GameObject movingCube;
 	private int id;
 
+	private bool annotated = false;
 	private bool draggable = false;
 		
 	private void Awake ()
@@ -60,7 +62,10 @@ public class InputHandler : MonoBehaviour
 	private void HandleOut()
 	{
 		if(!draggable)
-			renderer.material = normalMaterial;
+			if(!annotated)
+				renderer.material = normalMaterial;
+			else
+				renderer.material = annotationMaterial;
 	}
 
 	//Handle the Click event
@@ -78,9 +83,11 @@ public class InputHandler : MonoBehaviour
 				}
 			}
 		}else if(GearVRMenu.currentTool == GearVRMenu.Tool.ANNOTATE && interactiveItem.IsOver){
-            Annotation an = new Annotation(Device.GEARVR,1);
-            an.ObjectId = id;
-            RPCClient.client.Annotate(an);
+			if(annotated)
+				renderer.material = normalMaterial;
+			else
+				renderer.material = annotationMaterial;
+			annotated = !annotated;
 		}
 	}
 
@@ -89,7 +96,10 @@ public class InputHandler : MonoBehaviour
 			if(!interactiveItem.IsOver){
 				if(draggable && movingCube != null){
 					draggable = false;
-					renderer.material = normalMaterial;
+					if(!annotated)
+						renderer.material = normalMaterial;
+					else
+						renderer.material = annotationMaterial;
 					Vector3 pos = movingCube.transform.position;
 					PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
 					if(!RPCClient.client.Move(posEvent))

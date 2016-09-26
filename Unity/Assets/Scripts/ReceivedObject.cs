@@ -26,13 +26,13 @@ public class ReceivedObject : MonoBehaviour {
 
 	public void updatePosition(PositionEvent pe ){
 			Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
-			if ( (transform.position - newpos).sqrMagnitude > 0.0025)
+			if ( (transform.position - newpos).sqrMagnitude > 0.00025)
 				transform.position = newpos;
 	}
 		
 	public void updateDirection(DirectionEvent de){
 			Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
-		if ( Quaternion.Angle(transform.rotation,newrot) > 1)
+		//if ( Quaternion.Angle(transform.rotation,newrot) > 1)
 				transform.rotation = newrot;
 	}
 		
