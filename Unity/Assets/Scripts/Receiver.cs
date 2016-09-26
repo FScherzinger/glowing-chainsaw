@@ -45,6 +45,11 @@ using UnityEngine;
 						eve.ParseData (dir_event);
 						obj_init.handle (dir_event);
 					}
+					if(eve.Is ("Annotation")){
+						Annotation an = new Annotation();
+						eve.ParseData(an);
+						obj_init.handle(an);
+					}
 				}
 			}
 	}
