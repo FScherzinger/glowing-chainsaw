@@ -19,7 +19,8 @@ using UnityEngine;
 			receive_client = PSFactory.CreatePSClient(uri);
 			receive_client.Subscribe( "DirectionEvent" );
 			receive_client.Subscribe( "PositionEvent" );
-			receive_client.Connect();
+            receive_client.Subscribe("Annotation");
+            receive_client.Connect();
 			Debug.Log( "connected. (receiver)" );
 			Receive ();
 		}
@@ -35,6 +36,7 @@ using UnityEngine;
 						continue;
 						
 					de.dfki.tecs.Event eve = receive_client.Recv();
+
 					if (eve.Is ("PositionEvent")) {
 						PositionEvent pos_event = new PositionEvent ();
 						eve.ParseData (pos_event);

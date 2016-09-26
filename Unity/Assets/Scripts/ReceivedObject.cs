@@ -39,7 +39,7 @@ public class ReceivedObject : MonoBehaviour {
 		Renderer renderer = gameObject.GetComponent<Renderer>();
 		Material newMat = renderer.material;
 		switch(an.Device){
-		case Device.GEARVR:
+        case Device.GEARVR:
 			newMat = Resources.Load("GearAnno", typeof(Material)) as Material;
 			break;
 		case Device.TANGO:
