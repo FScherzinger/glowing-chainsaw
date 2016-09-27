@@ -24,6 +24,7 @@ public class ButtonHandler : MonoBehaviour
     }
 
     private bool cubeSelected;
+    private bool annotated = false;
 
     //GameObject for pick and place
     private GameObject go;
@@ -83,10 +84,10 @@ public class ButtonHandler : MonoBehaviour
     {
         if (cubeSelected)
         {
-            if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            //if (Input.GetTouch(0))
+            //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
+            if (Input.touchCount > 1 && Input.GetTouch(0).phase==TouchPhase.Began)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//TODO:Tango click position -> Input.GetTouch(0).position
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -162,10 +163,10 @@ public class ButtonHandler : MonoBehaviour
 
     private void select()
     {
-        if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            //if (Input.GetTouch(0))
+        //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
+            if (Input.touchCount>1 && Input.GetTouch(0).phase==TouchPhase.Began)
             {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//TODO:Tango click position -> Input.GetTouch(0).position
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -263,6 +264,8 @@ public class ButtonHandler : MonoBehaviour
     {
         if (cubeSelected)
         {
+            Annotation an = new Annotation(Device.GEARVR, id);
+            RPCClient.client.Annotate(an);
         }
     }
 }
