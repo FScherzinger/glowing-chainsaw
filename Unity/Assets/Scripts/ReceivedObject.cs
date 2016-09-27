@@ -15,10 +15,7 @@ using UnityEngine.UI;
 
 public class ReceivedObject : MonoBehaviour {
 
-
-    void Start()
-	{
-	}
+	public Viewmanager viewmananger;
 
 
 	void Update(){
@@ -28,11 +25,21 @@ public class ReceivedObject : MonoBehaviour {
 		Vector3 newpos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
 		if ( (transform.position - newpos).sqrMagnitude > 0.00025)
 			transform.position = newpos;
+		if(viewmananger != null && pe.Objtype == ObjType.CAMERA){
+			Vector3 pos = new Vector3((float)pe.Position.X,(float)pe.Position.Y,(float)pe.Position.Z);
+			viewmananger.AssignCamPostion(pe.Device,pos);
+
+		}
 	}
 		
 	public void updateDirection(DirectionEvent de){
 		Quaternion newrot = new Quaternion((float)de.Direction.X, (float)de.Direction.Y, (float)de.Direction.Z, (float)de.Direction.W);
 		transform.rotation = newrot;
+		if(viewmananger != null && de.Objtype == ObjType.CAMERA){
+			Quaternion q = new Quaternion((float)de.Direction.X,(float)de.Direction.Y,(float)de.Direction.Z,(float)de.Direction.W);
+			viewmananger.AssignCamDirection(de.Device,q);
+
+		}
 	}
 
 	public void updateAnnotation(Annotation an){

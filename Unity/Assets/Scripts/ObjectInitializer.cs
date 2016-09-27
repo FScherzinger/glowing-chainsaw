@@ -17,6 +17,7 @@ public class ObjectInitializer : MonoBehaviour
 	public GameObject cubeModel;
 	public GameObject camModel;
 	public PublishCam ownCam;
+	public Viewmanager viewmanager;
 	public volatile Queue<PositionEvent> pos_events;
 	public volatile Queue<DirectionEvent> dir_events;
 	public volatile Queue<Annotation> an_events;
@@ -38,6 +39,7 @@ public class ObjectInitializer : MonoBehaviour
 				if(pe == null)
 					continue;
 				ReceivedObject obj = getObjectReceiver (pe.Id, pe.Objtype);
+				obj.viewmananger = viewmanager;
 				if(obj != null)
 					obj.updatePosition (pe);
 			}
@@ -49,6 +51,8 @@ public class ObjectInitializer : MonoBehaviour
 				if(de == null)
 					continue;
 				ReceivedObject obj = getObjectReceiver (de.Id, de.Objtype);
+				obj.viewmananger = viewmanager;
+
 				if(obj != null)
 					obj.updateDirection (de);
 			}

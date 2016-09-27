@@ -17,7 +17,11 @@ public class Menu : MonoBehaviour
     {
         if( Input.GetKeyDown( KeyCode.Escape ) )
         {
-            ToggleMenu();
+            /*ToggleMenu();*/
+			if(maincam!=null)
+				maincam.SetActive (false);
+			if(splitscreen!=null)
+				splitscreen.SetActive (true);
         }
     }
 
