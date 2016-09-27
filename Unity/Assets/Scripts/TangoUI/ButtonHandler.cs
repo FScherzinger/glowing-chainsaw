@@ -9,7 +9,6 @@ public class ButtonHandler : MonoBehaviour
     {
         pickAndPlace,
         inspect,
-        point,
         annotate,
         rotate,
         none
@@ -25,12 +24,15 @@ public class ButtonHandler : MonoBehaviour
     }
 
     private bool cubeSelected;
+    private bool annotated = false;
 
     //GameObject for pick and place
     private GameObject go;
     private GameObject movingCube;
-    [SerializeField] private GameObject movingCubeModel;
+    [SerializeField]
+    private GameObject movingCubeModel;
     private int id = 0;
+    private Material material;
 
     //position Cube should be moved to
     private Vector3 moveto;
@@ -51,6 +53,9 @@ public class ButtonHandler : MonoBehaviour
     public void setCurrent(SelectedButton current)
     {
         currentButton = current;
+        cubeSelected = false;
+        if (go != null)
+            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
     }
 
     // Update is called once per frame
@@ -59,13 +64,15 @@ public class ButtonHandler : MonoBehaviour
         switch (currentButton)
         {
             case SelectedButton.annotate:
+                select();
+                annotate();
                 break;
             case SelectedButton.inspect:
+                select();
+                inspect();
                 break;
             case SelectedButton.pickAndPlace:
                 pickAndPlace();
-                break;
-            case SelectedButton.point:
                 break;
             case SelectedButton.rotate:
                 select();
@@ -78,23 +85,23 @@ public class ButtonHandler : MonoBehaviour
     {
         if (cubeSelected)
         {
-            if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            //if (Input.GetTouch(0))
+            //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
+            if (Input.GetTouch(0).phase == TouchPhase.Began)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//TODO:Tango click position -> Input.GetTouch(0).position
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
+                        Position pos = new Position(moveto.x, moveto.y, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
-                        PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, new Position(moveto.x, moveto.y, moveto.z), id);
+                        PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         if (!RPCClient.client.Move(posEvent))
                             Debug.Log("Could not move cube");
-                        Destroy(movingCube);
-                        movingCube = null;
                         cubeSelected = false;
+                        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
                     }
                 }
                 else
@@ -143,7 +150,7 @@ public class ButtonHandler : MonoBehaviour
                     }
                     break;
             }
-            Vector3 pos = this.gameObject.transform.position;
+            Vector3 pos = movingCube.transform.position;
             PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
             Quaternion dir = movingCube.transform.rotation;
             DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
@@ -157,10 +164,10 @@ public class ButtonHandler : MonoBehaviour
 
     private void select()
     {
-        if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            //if (Input.GetTouch(0))
-            {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);//TODO:Tango click position -> Input.GetTouch(0).position
+        //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
+        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -172,13 +179,12 @@ public class ButtonHandler : MonoBehaviour
                         && hit.collider.gameObject.GetComponent<MetaData>().ObjType == ObjType.CUBE)
                     {
                         go = hit.collider.gameObject;
+                        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0xFF, 0x16, 0xFF);
                         id = go.GetComponent<MetaData>().id;
                         if (RPCClient.client.Can_Interact(id))
                         {
                             RPCClient.client.LockGameObject(id);
-                            movingCube = Instantiate(go);
-                            movingCube.SetActive(true);
-                            Debug.Log("GameObject at " + movingCube.transform.position + " selected");
+                            Debug.Log("GameObject at " + go.transform.position + " selected");
                             cubeSelected = true;
                         }
                     }
@@ -240,6 +246,27 @@ public class ButtonHandler : MonoBehaviour
         {
             swiping = false;
             eventSent = false;
+        }
+    }
+
+    private void inspect()
+    {
+        if (cubeSelected)
+        {
+            /*Information inf = RPCClient.client.GetInformationById(id);
+            string msg = inf.Informtion;
+
+            infoObj.GetComponent<TextMesh>().text = msg;
+            infoObj.gameObject.SetActive(true);*/
+        }
+    }
+
+    private void annotate()
+    {
+        if (cubeSelected)
+        {
+            Annotation an = new Annotation(Device.GEARVR, id);
+            RPCClient.client.Annotate(an);
         }
     }
 }

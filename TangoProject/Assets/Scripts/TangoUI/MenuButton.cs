@@ -29,7 +29,6 @@ public class MenuButton : MonoBehaviour
             CollapseMenu();
         else
             ExtendMenu();
-        MenuState = !MenuState;
     }
 
     public void CollapseMenu()
