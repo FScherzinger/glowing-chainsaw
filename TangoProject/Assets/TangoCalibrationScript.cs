@@ -18,8 +18,8 @@ public class TangoCalibrationScript : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		//transform.position = VuforiaARCamera.transform.position;
-		//transform.rotation = VuforiaARCamera.transform.rotation;
+		transform.position = VuforiaARCamera.transform.position;
+		transform.rotation = VuforiaARCamera.transform.rotation;
 	}
 
     public void StartCalibration()
