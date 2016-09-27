@@ -4,7 +4,6 @@ using System.Collections;
 
 public class TangoCalibrationScript : MonoBehaviour {
 
-    public GameObject TangoARCamera;
     public GameObject VuforiaARCamera;
     public GameObject FixedMarker;
     private bool calibrating=true;
@@ -22,7 +21,7 @@ public class TangoCalibrationScript : MonoBehaviour {
 		transform.rotation = VuforiaARCamera.transform.rotation;
 	}
 
-    public void StartCalibration()
+    /*public void StartCalibration()
     {
         TangoARCamera.SetActive(false);
         VuforiaARCamera.SetActive(true);
@@ -36,7 +35,7 @@ public class TangoCalibrationScript : MonoBehaviour {
         FixedMarker.SetActive(false);
         VuforiaARCamera.SetActive(false);
         TangoARCamera.SetActive(true);
-    }
+    }*/
 
 	public void switchScene(){
 		SceneManager.LoadScene("TangoScene");

@@ -29,8 +29,7 @@ public class ButtonHandler : MonoBehaviour
     //GameObject for pick and place
     private GameObject go;
     private GameObject movingCube;
-    [SerializeField]
-    private GameObject movingCubeModel;
+    [SerializeField] private GameObject movingCubeModel;
     private int id = 0;
     private Material material;
 
@@ -54,8 +53,8 @@ public class ButtonHandler : MonoBehaviour
     {
         currentButton = current;
         cubeSelected = false;
-        if (go != null)
-            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+        if(go != null)
+        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
     }
 
     // Update is called once per frame
@@ -86,7 +85,7 @@ public class ButtonHandler : MonoBehaviour
         if (cubeSelected)
         {
             //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            if (Input.touchCount > 1 && Input.GetTouch(0).phase==TouchPhase.Began)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
@@ -165,8 +164,8 @@ public class ButtonHandler : MonoBehaviour
     private void select()
     {
         //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-        if (Input.GetTouch(0).phase == TouchPhase.Began)
-        {
+            if (Input.touchCount>1 && Input.GetTouch(0).phase==TouchPhase.Began)
+            {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
