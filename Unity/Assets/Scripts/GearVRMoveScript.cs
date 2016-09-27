@@ -23,16 +23,5 @@ public class MoveScript : MonoBehaviour
 			transform.Rotate(new Vector3(-.1f,0,0));	
 		if( Input.GetKey( KeyCode.G ) )
 			transform.Rotate(new Vector3(.1f,0,0));
-	
-		/*if( Input.GetKey( "left" ) )
-			new_position.x -= .1f;
-		if( Input.GetKey( "right" ) )
-			new_position.x += .1f;
-		if( Input.GetKey( "up" ) )
-			new_position.z += .1f;
-		if( Input.GetKey( "down" ) )
-			new_position.z -= .1f;
-
-		transform.position = new_position;*/
 	}
 }

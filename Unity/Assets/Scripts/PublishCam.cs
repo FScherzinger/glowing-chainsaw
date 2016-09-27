@@ -31,7 +31,7 @@ public class PublishCam : MonoBehaviour {
 
 	IEnumerator PublishPosRot(float intervall){
 		for (;;) {
-            if( pub == null || !RPCClient.connected )
+            if( pub == null )
                 continue;
             if (camID == 0 )
                 camID = RPCClient.client.getUniqueCameraId();
