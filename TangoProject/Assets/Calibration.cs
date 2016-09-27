@@ -10,7 +10,9 @@ public class Calibration : MonoBehaviour {
 		
 		calibrator = GameObject.Find("Calibrator");
 		gameObject.transform.position = calibrator.transform.position;
-		gameObject.transform.rotation = calibrator.transform.rotation;
+		GameObject cam = GameObject.Find("Tango AR Camera");
+		Quaternion inverseCam = Quaternion.Inverse(cam.transform.rotation);
+		gameObject.transform.rotation = inverseCam * calibrator.transform.rotation;
 	}
 
 	void Update(){

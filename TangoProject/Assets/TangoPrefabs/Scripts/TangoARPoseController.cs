@@ -278,8 +278,8 @@ public class TangoARPoseController : MonoBehaviour, ITangoLifecycle
         m_poseStatus = pose.status_code;
         
         // Apply final position and rotation.
-        transform.position = m_tangoPosition;
-        transform.rotation = m_tangoRotation;
+		transform.localPosition = m_tangoPosition;
+		transform.localRotation = m_tangoRotation;
     }
 
     /// <summary>
