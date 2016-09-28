@@ -281,12 +281,8 @@ public class TangoARPoseController : MonoBehaviour, ITangoLifecycle
         
         // Apply final position and rotation.
 		transform.localPosition = m_tangoPosition;
-        if (first) {
-            initrot = m_tangoRotation;
-        }
-        Quaternion relative = Quaternion.Inverse(initrot) * m_tangoRotation;
-
-        transform.localRotation = relative;
+        
+        transform.localRotation = m_tangoRotation;
     }
 
     /// <summary>
