@@ -37,6 +37,11 @@ public class WarpAnchor : MonoBehaviour {
 			if(new_pos.z > max_z)
 				new_pos.z = max_z;
 			this.gameObject.transform.position = new Vector3(new_pos.x, curr_pos.y, new_pos.z);
+		} else if(GearVRMenu.currentTool == GearVRMenu.Tool.TEAMSPEAK){
+			if(TeamSpeakClient.started)
+				this.gameObject.GetComponent<TeamSpeakVoiceChat>().Disconnect();
+			else
+				this.gameObject.GetComponent<TeamSpeakVoiceChat>().Connect();
 		}
 	}
 		
