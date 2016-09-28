@@ -574,8 +574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 10.9.32.163
-  rpc_serveraddress: 10.9.32.163
+  ps_serveraddress: 10.9.32.243
+  rpc_serveraddress: 10.9.32.243
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -621,6 +621,7 @@ MonoBehaviour:
   cubeModel: {fileID: 1747439561}
   camModel: {fileID: 195694, guid: 6c43f116605cbd540a4246c81874dfa2, type: 2}
   ownCam: {fileID: 1805501113}
+  viewmanager: {fileID: 0}
 --- !u!4 &1563991091
 Transform:
   m_ObjectHideFlags: 0
@@ -735,6 +736,7 @@ MonoBehaviour:
   normalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
   overMaterial: {fileID: 2100000, guid: b43e5571a9fe23946bf3070cdfceb1b0, type: 2}
   dragMaterial: {fileID: 2100000, guid: a0c8c1497159d724d936e67058244861, type: 2}
+  annotationMaterial: {fileID: 0}
   interactiveItem: {fileID: 1747439563}
   renderer: {fileID: 1747439565}
   movingCubeModel: {fileID: 726561817}
@@ -794,7 +796,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 10.9.32.163
+  ps_server: 10.9.32.243
   ps_port: 9000
   device: 1
   camID: 0
@@ -809,6 +811,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: de9c324949989a84683d4c93a12e936f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  viewmananger: {fileID: 0}
 --- !u!1 &1815493926 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 582e320d34da24844b95a9ba820789c7, type: 3}
@@ -987,8 +990,8 @@ GameObject:
   - 114: {fileID: 2116470504}
   - 114: {fileID: 2116470506}
   - 114: {fileID: 2116470505}
-  - 114: {fileID: 2116470507}
   - 114: {fileID: 2116470508}
+  - 114: {fileID: 2116470507}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -1144,7 +1147,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e162cac6d3f764e50b7747251a86a56a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  menu: {fileID: 1909881469}
 --- !u!114 &2116470508
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1161,4 +1163,5 @@ MonoBehaviour:
   rotationTool: {fileID: 2800000, guid: 79a33e7a7166c6142ad50f46a9a23d3e, type: 3}
   warpTool: {fileID: 2800000, guid: 6be312efbe647294cbe64679770d9413, type: 3}
   annotationTool: {fileID: 2800000, guid: 077028084dceb584798dade6c58d1978, type: 3}
+  dragRotationtool: {fileID: 2800000, guid: ee6b6c047f060074596445bbb9ebbfe7, type: 3}
   image: {fileID: 1285064986}

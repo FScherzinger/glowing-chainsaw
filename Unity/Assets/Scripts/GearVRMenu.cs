@@ -9,6 +9,7 @@ public class GearVRMenu: MonoBehaviour
 		WARP,
 		DRAGNDROP,
 		ROTATE,
+		DRAGROTATE,
 		ANNOTATE
 	};
 
@@ -17,8 +18,8 @@ public class GearVRMenu: MonoBehaviour
 	[SerializeField] private Texture rotationTool;
 	[SerializeField] private Texture warpTool;
 	[SerializeField] private Texture annotationTool;
+	[SerializeField] private Texture dragRotationtool;
 	[SerializeField] private RawImage image;
-	private int i = 0;
 
 	public static Tool currentTool;
 
@@ -31,14 +32,12 @@ public class GearVRMenu: MonoBehaviour
 	private void OnEnable()
 	{
 		vRInput.OnSwipe += HandleSwipe;
-		//vRInput.OnDoubleClick += HandleDoubleClick;
 	}
 
 
 	private void OnDisable()
 	{
 		vRInput.OnSwipe -= HandleSwipe;
-		//vRInput.OnDoubleClick -= HandleDoubleClick;
 	}
 
 	private void HandleSwipe(VRInput.SwipeDirection swipeDirection)
@@ -50,7 +49,7 @@ public class GearVRMenu: MonoBehaviour
 		case VRInput.SwipeDirection.RIGHT:
 			break;
 		case VRInput.SwipeDirection.UP:
-			//DRAGNDROP -> ROTATE -> WARP -> ANNOTATE
+			//DRAGNDROP -> ROTATE -> WARP -> DRAGROTATE -> ANNOTATE
 			switch(currentTool)
 			{
 				case Tool.ANNOTATE:
@@ -69,6 +68,11 @@ public class GearVRMenu: MonoBehaviour
 					currentTool = Tool.WARP;
 					break;
 				case Tool.WARP:
+				image.texture = dragRotationtool;
+					this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
+					currentTool = Tool.DRAGROTATE;
+					break;
+				case Tool.DRAGROTATE:
 					image.texture = annotationTool;
 					this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
 					currentTool = Tool.ANNOTATE;
@@ -76,7 +80,7 @@ public class GearVRMenu: MonoBehaviour
 			}
 			break;
 		case VRInput.SwipeDirection.DOWN:
-			//DRAGNDROP <- ROTATE <- WARP <- ANNOTATE
+			//DRAGNDROP <- ROTATE <- WARP <- DRAGROTATE <- ANNOTATE
 			switch(currentTool)
 			{
 				case Tool.WARP:
@@ -95,37 +99,16 @@ public class GearVRMenu: MonoBehaviour
 					currentTool = Tool.DRAGNDROP;
 					break;
 				case Tool.ANNOTATE:
+					image.texture = dragRotationtool;
+					this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
+					currentTool = Tool.DRAGROTATE;
+					break;
+				case Tool.DRAGROTATE:
 					image.texture = warpTool;
 					this.gameObject.GetComponentInChildren<Text>().text = "WARP";
 					currentTool = Tool.WARP;
 					break;
 			}
-			break;
-		}
-	}
-
-	private void HandleDoubleClick(){
-		switch(currentTool)
-		{
-		case Tool.ANNOTATE:
-			image.texture = dragNDropTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
-			currentTool = Tool.DRAGNDROP;
-			break;
-		case Tool.DRAGNDROP:
-			image.texture = rotationTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "ROTATE";
-			currentTool = Tool.ROTATE;
-			break;
-		case Tool.ROTATE:
-			image.texture = warpTool;					
-			this.gameObject.GetComponentInChildren<Text>().text = "WARP";
-			currentTool = Tool.WARP;
-			break;
-		case Tool.WARP:
-			image.texture = annotationTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
-			currentTool = Tool.ANNOTATE;
 			break;
 		}
 	}

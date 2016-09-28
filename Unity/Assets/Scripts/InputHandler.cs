@@ -38,6 +38,7 @@ public class InputHandler : MonoBehaviour
 		interactiveItem.OnClick += Click;
 		interactiveItem.OnSwipe += Rotate;
 		vRInput.OnClick += VRClick;
+		vRInput.OnSwipe += VRSwipe;
 	}
 
 
@@ -71,9 +72,8 @@ public class InputHandler : MonoBehaviour
 	//Handle the Click event
 	private void Click()
 	{
-		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGNDROP){
+		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGNDROP && interactiveItem.IsOver){
 			if(movingCube == null && !draggable){
-
 				if(RPCClient.client.Can_Interact(id)){
 					draggable = true;
 					renderer.material = dragMaterial;
@@ -88,6 +88,16 @@ public class InputHandler : MonoBehaviour
             {
                 Debug.Log("Annotation Failed");
             }
+		}else if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGROTATE && interactiveItem.IsOver){
+			if(movingCube == null && !draggable){
+				if(RPCClient.client.Can_Interact(id)){
+					draggable = true;
+					renderer.material = dragMaterial;
+					RPCClient.client.LockGameObject(id);
+					movingCube = Instantiate(movingCubeModel);
+					movingCube.SetActive(true);
+				}
+			}
 		}
 	}
 
@@ -96,13 +106,23 @@ public class InputHandler : MonoBehaviour
 			if(!interactiveItem.IsOver){
 				if(draggable && movingCube != null){
 					draggable = false;
-					if(!annotated)
-						renderer.material = normalMaterial;
-					else
-						renderer.material = annotationMaterial;
 					Vector3 pos = movingCube.transform.position;
 					PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
 					if(!RPCClient.client.Move(posEvent))
+						Debug.Log("Could not move cube");
+					Destroy(movingCube);
+					movingCube = null;
+				}
+			}
+		}else if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGROTATE){
+			if(!interactiveItem.IsOver){
+				if(draggable && movingCube != null){
+					draggable = false;
+					Vector3 pos = movingCube.transform.position;
+					PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
+					Quaternion dir = movingCube.transform.rotation;
+					DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+					if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
 						Debug.Log("Could not move cube");
 					Destroy(movingCube);
 					movingCube = null;
@@ -112,8 +132,8 @@ public class InputHandler : MonoBehaviour
 	}
 
 	private void Rotate(VRInput.SwipeDirection swipeDirection){
+		Debug.Log("swipe detected");
 		if(GearVRMenu.currentTool == GearVRMenu.Tool.ROTATE){
-			float degree;
 			switch(swipeDirection){
 				case VRInput.SwipeDirection.DOWN:
 				case VRInput.SwipeDirection.NONE:
@@ -151,6 +171,25 @@ public class InputHandler : MonoBehaviour
 			this.gameObject.SetActive(true);
 			if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
 				Debug.Log("Could not rotate cube");
+		}
+	}
+
+	void VRSwipe(VRInput.SwipeDirection swipeDirection){
+		if(GearVRMenu.currentTool == GearVRMenu.Tool.DRAGROTATE && draggable && movingCube != null){
+			switch(swipeDirection){
+			case VRInput.SwipeDirection.DOWN:
+			case VRInput.SwipeDirection.NONE:
+			case VRInput.SwipeDirection.UP:
+				return;
+			case VRInput.SwipeDirection.LEFT:
+				Debug.Log("dragRotate left swipe");
+				movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+				break;
+			case VRInput.SwipeDirection.RIGHT:
+				Debug.Log("dragRotate right swipe");
+				movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+				break;
+			}
 		}
 	}
 }

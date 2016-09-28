@@ -3,14 +3,10 @@ using System;
 using System.Collections;
 
 
-public class MoveScript : MonoBehaviour
+public class GearVRMoveScript : MonoBehaviour
 {
-	private Vector3 new_position;
-	[SerializeField] private Canvas menu;
-
 	void Start()
 	{
-		new_position = transform.position;
 	}
 
 	void Update()

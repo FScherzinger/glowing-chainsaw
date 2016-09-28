@@ -25,7 +25,8 @@ public class PCInputHandler : MonoBehaviour {
 	private void OnEnable()
 	{
 		PcInput.OnKeyOne += OnDragDrop;
-		PcInput.OnKeyTwo += OnAnnotate;
+		PcInput.OnKeyTwo += OnDragRotate;
+		PcInput.OnKeyThree += OnAnnotate;
 		PcInput.OnWheelUp += OnRotateLeft;
 		PcInput.OnWheelDown += OnRotateRight;
 	}
@@ -39,7 +40,9 @@ public class PCInputHandler : MonoBehaviour {
 	}
 	
 	void OnDragDrop(){
+		Debug.Log("started drag drop");
 		if(interactiveItem.IsOver){
+			Debug.Log("is Over");
 			if(movingCube == null && !draggable){
 				if(RPCClient.client.Can_Interact(id)){
 					draggable = true;
@@ -75,42 +78,79 @@ public class PCInputHandler : MonoBehaviour {
 	}
 
 	void OnRotateLeft(){
-		if(RPCClient.client.LockGameObject(id)){
-			movingCube = Instantiate(movingCubeModel);
-			movingCube.SetActive(true);
-			movingCube.transform.position = this.gameObject.transform.position;
-			movingCube.transform.rotation = this.gameObject.transform.rotation;
-			this.gameObject.SetActive(false);
+		if(movingCube != null && draggable)
 			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
-			Vector3 pos = this.gameObject.transform.position;
-			PositionEvent posEvent = new PositionEvent(Device.PC, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
-			Quaternion dir = movingCube.transform.rotation;
-			DirectionEvent dirEvent = new DirectionEvent(Device.PC, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
-			Destroy(movingCube);
-			movingCube = null;
-			this.gameObject.SetActive(true);
-			if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-				Debug.Log("Could not rotate cube");
+		else if(interactiveItem.IsOver){
+			if(RPCClient.client.LockGameObject(id)){
+				movingCube = Instantiate(movingCubeModel);
+				movingCube.SetActive(true);
+				movingCube.transform.position = this.gameObject.transform.position;
+				movingCube.transform.rotation = this.gameObject.transform.rotation;
+				this.gameObject.SetActive(false);
+				movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+				Vector3 pos = this.gameObject.transform.position;
+				PositionEvent posEvent = new PositionEvent(Device.PC, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
+				Quaternion dir = movingCube.transform.rotation;
+				DirectionEvent dirEvent = new DirectionEvent(Device.PC, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+				Destroy(movingCube);
+				movingCube = null;
+				this.gameObject.SetActive(true);
+				if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+					Debug.Log("Could not rotate cube");
+			}
 		}
 	}
 
 	void OnRotateRight(){
-		if(RPCClient.client.LockGameObject(id)){
-			movingCube = Instantiate(movingCubeModel);
-			movingCube.SetActive(true);
-			movingCube.transform.position = this.gameObject.transform.position;
-			movingCube.transform.rotation = this.gameObject.transform.rotation;
-			this.gameObject.SetActive(false);
+		if(movingCube != null && draggable)
 			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
-			Vector3 pos = this.gameObject.transform.position;
+		else if(interactiveItem.IsOver){
+			if(RPCClient.client.LockGameObject(id)){
+				movingCube = Instantiate(movingCubeModel);
+				movingCube.SetActive(true);
+				movingCube.transform.position = this.gameObject.transform.position;
+				movingCube.transform.rotation = this.gameObject.transform.rotation;
+				this.gameObject.SetActive(false);
+				movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+				Vector3 pos = this.gameObject.transform.position;
+				PositionEvent posEvent = new PositionEvent(Device.PC, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
+				Quaternion dir = movingCube.transform.rotation;
+				DirectionEvent dirEvent = new DirectionEvent(Device.PC, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+				Destroy(movingCube);
+				movingCube = null;
+				this.gameObject.SetActive(true);
+				if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+					Debug.Log("Could not rotate cube");
+			}
+		}
+	}
+
+	void OnDragRotate(){
+		if(interactiveItem.IsOver){
+			Debug.Log("is Over");
+			if(movingCube == null && !draggable){
+				if(RPCClient.client.Can_Interact(id)){
+					draggable = true;
+					gameObject.GetComponent<Renderer>().material = dragMaterial;
+					RPCClient.client.LockGameObject(id);
+					movingCube = Instantiate(movingCubeModel);
+					movingCube.SetActive(true);
+				}
+			}
+		} else if(movingCube != null && draggable){
+			draggable = false;
+			if(!annotated)
+				gameObject.GetComponent<Renderer>().material = normalMaterial;
+			else
+				gameObject.GetComponent<Renderer>().material = annotationMaterial;
+			Vector3 pos = movingCube.transform.position;
 			PositionEvent posEvent = new PositionEvent(Device.PC, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
 			Quaternion dir = movingCube.transform.rotation;
 			DirectionEvent dirEvent = new DirectionEvent(Device.PC, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+			if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+				Debug.Log("Could not move cube");
 			Destroy(movingCube);
 			movingCube = null;
-			this.gameObject.SetActive(true);
-			if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-				Debug.Log("Could not rotate cube");
 		}
 	}
 }
