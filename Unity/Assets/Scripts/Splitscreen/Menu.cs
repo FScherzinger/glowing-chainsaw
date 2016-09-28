@@ -12,6 +12,7 @@ public class Menu : MonoBehaviour
 
     private bool menu_state = false;
     private bool locked = false;
+	private bool switchScreen = false;
 
     void Update()
     {
@@ -19,9 +20,10 @@ public class Menu : MonoBehaviour
         {
             /*ToggleMenu();*/
 			if(maincam!=null)
-				maincam.SetActive (false);
+				maincam.SetActive (switchScreen);
 			if(splitscreen!=null)
-				splitscreen.SetActive (true);
+				splitscreen.SetActive (!switchScreen);
+			//switchScreen = !switchScreen;
         }
     }
 

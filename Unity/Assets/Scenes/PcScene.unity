@@ -849,12 +849,7 @@ Prefab:
 GameObject:
   m_PrefabParentObject: {fileID: 170872, guid: b678aa050b76f48ca944922034618a8e, type: 2}
   m_PrefabInternal: {fileID: 902815961}
---- !u!23 &902815966 stripped
-MeshRenderer:
-  m_PrefabParentObject: {fileID: 2347654, guid: b678aa050b76f48ca944922034618a8e,
-    type: 2}
-  m_PrefabInternal: {fileID: 902815961}
---- !u!114 &902815970
+--- !u!114 &902815963
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -862,16 +857,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 902815962}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 43ea8748f112d4a558efbcfbd50615c3, type: 3}
+  m_Script: {fileID: 11500000, guid: 2ab19cfda98464f84a33396ef9e31c0a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  vRInput: {fileID: 1102244012}
+  PcInput: {fileID: 1102244012}
   normalMaterial: {fileID: 2100000, guid: 1d4e8b5ea59f043bc8ceca4778d0b1ac, type: 2}
   overMaterial: {fileID: 2100000, guid: f2718aa0266784e2984001cf035a229f, type: 2}
   dragMaterial: {fileID: 2100000, guid: a0c8c1497159d724d936e67058244861, type: 2}
   annotationMaterial: {fileID: 0}
   interactiveItem: {fileID: 902815971}
-  renderer: {fileID: 902815966}
   movingCubeModel: {fileID: 1647495072}
 --- !u!114 &902815971
 MonoBehaviour:
@@ -1425,11 +1419,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 1102244001}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8902ef04f323e444b98d2e4fd80a56ab, type: 3}
+  m_Script: {fileID: 11500000, guid: 8387a5430f8644226975b78f8f070faf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_DoubleClickTime: 0.3
-  m_SwipeWidth: 0.3
 --- !u!114 &1102244013
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1462,7 +1454,7 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 0
   m_Reticle: {fileID: 1102244013}
-  m_VrInput: {fileID: 1102244012}
+  m_VrInput: {fileID: 0}
   m_ShowDebugRay: 1
   m_DebugRayLength: 5
   m_DebugRayDuration: 1
@@ -2255,6 +2247,10 @@ Prefab:
     - target: {fileID: 170872, guid: b678aa050b76f48ca944922034618a8e, type: 2}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5440818, guid: b678aa050b76f48ca944922034618a8e, type: 2}
+      propertyPath: m_IsKinematic
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 11413164, guid: b678aa050b76f48ca944922034618a8e, type: 2}
