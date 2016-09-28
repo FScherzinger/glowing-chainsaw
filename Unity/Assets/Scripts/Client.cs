@@ -23,6 +23,7 @@ public class Client : MonoBehaviour  {
 		if (objectInitializer == null)
 			Debug.LogError ("Client needs an ObjectInitializer gameobject with attached ObjectInitializer script");
 		else {
+			Debug.Log("bla");
 			ObjectInitializer obj_init = objectInitializer.GetComponent<ObjectInitializer>();
 			receiver = new Receiver {
 				serverPort = ps_port,

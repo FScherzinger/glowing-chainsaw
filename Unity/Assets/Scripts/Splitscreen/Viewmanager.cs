@@ -1,22 +1,58 @@
 ﻿using UnityEngine;
 using System.Collections;
 using UnityEngine.UI;
+using de.dfki.events;
 
 public class Viewmanager : MonoBehaviour
 {
     // debug variable to change number of views
     public int ViewCount = 1;
-
     private int max_number_of_camera = 4;
     private int last_count = 0;
     private Camera[] cameras;
-    private int count;
+
+	public void AssignCamPostion(Device device, Vector3 pos){
+		cameras = Camera.allCameras;
+
+		switch(device){
+		case Device.GEARVR:
+			cameras[0].transform.position = pos;
+			break;
+		case Device.PC:
+			cameras[1].transform.position = pos;
+			break;
+		case Device.TANGO:
+			cameras[2].transform.position = pos;
+			break;
+		case Device.VIVE:
+			cameras[3].transform.position = pos;
+			break;
+		}
+	}
+
+	public void AssignCamDirection(Device device, Quaternion dir){
+		cameras = Camera.allCameras;
+
+		switch(device){
+		case Device.GEARVR:
+			cameras[0].transform.rotation = dir;
+			break;
+		case Device.PC:
+			cameras[1].transform.rotation = dir;
+			break;
+		case Device.TANGO:
+			cameras[2].transform.rotation = dir;
+			break;
+		case Device.VIVE:
+			cameras[3].transform.rotation = dir;
+			break;
+		}
+	}
 
 	void Start()
     {
         // get all cameras of the current scene
         cameras = Camera.allCameras;
-        count = cameras.Length;
 
         // label each view to see whitch device we are watching
         foreach( Camera camera in cameras )
@@ -70,6 +106,7 @@ public class Viewmanager : MonoBehaviour
         if( ViewCount > 0 && ViewCount != last_count )
         {
             UpdateCameras( ViewCount );
+
         }
         last_count = ViewCount;
     }
