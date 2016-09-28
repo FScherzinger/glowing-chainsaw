@@ -31,6 +31,8 @@ using UnityEngine;
 [RequireComponent(typeof(TangoARScreen))]
 public class TangoARPoseController : MonoBehaviour, ITangoLifecycle
 {
+    private bool first=true;
+    private Quaternion initrot;
     /// <summary>
     /// If set, use the Area Description base frame for the pose.
     /// </summary>
@@ -279,7 +281,12 @@ public class TangoARPoseController : MonoBehaviour, ITangoLifecycle
         
         // Apply final position and rotation.
 		transform.localPosition = m_tangoPosition;
-		transform.localRotation = m_tangoRotation;
+        if (first) {
+            initrot = m_tangoRotation;
+        }
+        Quaternion relative = Quaternion.Inverse(initrot) * m_tangoRotation;
+
+        transform.localRotation = relative;
     }
 
     /// <summary>
