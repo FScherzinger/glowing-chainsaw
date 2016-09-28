@@ -17,8 +17,11 @@ public class Calibration : MonoBehaviour {
         waittwoframes++;
         if( waittwoframes == 2 )
         {
-            GameObject cam = GameObject.Find( "Tango AR Camera" );
-            Quaternion inverseCam = Quaternion.Inverse( cam.transform.rotation );
+            GameObject cam = GameObject.Find("Tango AR Camera");
+            Quaternion inverseCam = Quaternion.Euler(-cam.transform.eulerAngles.x,
+                -cam.transform.eulerAngles.y,
+                -cam.transform.eulerAngles.z);
+            Debug.Log(inverseCam.eulerAngles);
             gameObject.transform.rotation = inverseCam* calibrator.transform.rotation;
             gameObject.transform.position = calibrator.transform.position;
         }
