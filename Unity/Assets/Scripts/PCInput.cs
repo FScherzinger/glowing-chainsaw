@@ -6,7 +6,8 @@ public class PCInput : MonoBehaviour {
 
 	public event Action OnKeyOne;                            
 	public event Action OnKeyTwo;
-	public event Action OnKeyThree;                                 
+	public event Action OnKeyThree;  
+	public event Action OnKeyFour;
 	public event Action OnWheelUp;
 	public event Action OnWheelDown;
 
@@ -33,6 +34,12 @@ public class PCInput : MonoBehaviour {
 			Debug.Log("3 pressed");
 			if (OnKeyThree != null)
 				OnKeyThree();
+		}
+		if (Input.GetKeyDown("4"))
+		{
+			Debug.Log("4 pressed");
+			if (OnKeyFour != null)
+				OnKeyFour();
 		}
 		if (Input.GetAxis("Mouse ScrollWheel") != 0){
 			Debug.Log("scrolled mouse wheel");
