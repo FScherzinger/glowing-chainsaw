@@ -14,6 +14,6 @@ public class RotateButton : MonoBehaviour
     {
         Debug.Log("rotating mode");
         Handler.setCurrent(ButtonHandler.SelectedButton.rotate);
-        Menu.CollapseMenu();
+        //Menu.CollapseMenu();
     }
 }

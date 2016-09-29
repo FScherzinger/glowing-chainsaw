@@ -11,6 +11,6 @@ public class PickButton : MonoBehaviour {
     {
         Debug.Log("picking mode");
         Handler.setCurrent(ButtonHandler.SelectedButton.pickAndPlace);
-        Menu.CollapseMenu();
+        //Menu.CollapseMenu();
     }
 }

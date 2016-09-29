@@ -8,7 +8,7 @@ public class ButtonHandler : MonoBehaviour
     public enum SelectedButton
     {
         pickAndPlace,
-        inspect,
+        //inspect,
         annotate,
         rotate,
         none
@@ -41,6 +41,7 @@ public class ButtonHandler : MonoBehaviour
     private bool swiping = false;
     private bool eventSent = false;
     private Vector2 lastPosition;
+    private bool tap = false;
 
     SelectedButton currentButton = SelectedButton.none;
     SwipeDirection swipeDirection = SwipeDirection.NONE;
@@ -67,15 +68,14 @@ public class ButtonHandler : MonoBehaviour
                 select();
                 annotate();
                 break;
-            case SelectedButton.inspect:
+            /*case SelectedButton.inspect:
                 select();
                 inspect();
-                break;
+                break;*/
             case SelectedButton.pickAndPlace:
                 pickAndPlace();
                 break;
             case SelectedButton.rotate:
-                select();
                 rotate();
                 break;
         }
@@ -85,8 +85,8 @@ public class ButtonHandler : MonoBehaviour
     {
         if (cubeSelected)
         {
-            //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-            if (Input.GetTouch(0).phase == TouchPhase.Began)
+            //if (Input.GetMouseButtonDown(0))
+            if (Input.touchCount==1)
             {
                 Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
@@ -118,54 +118,83 @@ public class ButtonHandler : MonoBehaviour
 
     private void rotate()
     {
-        if (cubeSelected)
+        if (!cubeSelected)
         {
-            swipe();
-            switch (swipeDirection)
-            {
-                case SwipeDirection.DOWN:
-                case SwipeDirection.NONE:
-                case SwipeDirection.UP:
-                    return;
-                case SwipeDirection.LEFT:
-                    if (RPCClient.client.Can_Interact(id))
-                    {
-                        RPCClient.client.LockGameObject(id);
-                        movingCube = Instantiate(movingCubeModel);
-                        movingCube.transform.position = this.gameObject.transform.position;
-                        movingCube.transform.rotation = this.gameObject.transform.rotation;
-                        this.gameObject.SetActive(false);
-                        movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
-                    }
-                    break;
-                case SwipeDirection.RIGHT:
-                    if (RPCClient.client.Can_Interact(id))
-                    {
-                        RPCClient.client.LockGameObject(id);
-                        movingCube = Instantiate(movingCubeModel);
-                        movingCube.transform.position = this.gameObject.transform.position;
-                        movingCube.transform.rotation = this.gameObject.transform.rotation;
-                        this.gameObject.SetActive(false);
-                        movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
-                    }
-                    break;
-            }
-            Vector3 pos = movingCube.transform.position;
-            PositionEvent posEvent = new PositionEvent(Device.GEARVR, ObjType.CUBE, new Position(pos.x, pos.y, pos.z), id);
-            Quaternion dir = movingCube.transform.rotation;
-            DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
-            Destroy(movingCube);
-            movingCube = null;
-            this.gameObject.SetActive(true);
-            if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                Debug.Log("Could not rotate cube");
+            select();
         }
-    }
+        else
+        {
+                swipe();
+            if (!tap)
+            {
+                switch (swipeDirection)
+                {
+                    case SwipeDirection.DOWN:
+                        return;
+                    case SwipeDirection.NONE:
+                        return;
+                    case SwipeDirection.UP:
+                        return;
+                    case SwipeDirection.LEFT:
+                        if (RPCClient.client.Can_Interact(id))
+                        {
+                            RPCClient.client.LockGameObject(id);
+                            movingCube = Instantiate(movingCubeModel);
+                            movingCube.transform.position = this.gameObject.transform.position;
+                            movingCube.transform.rotation = this.gameObject.transform.rotation;
+                            this.gameObject.SetActive(false);
+                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+                        }
+                        break;
+                    case SwipeDirection.RIGHT:
+                        if (RPCClient.client.Can_Interact(id))
+                        {
+                            RPCClient.client.LockGameObject(id);
+                            movingCube = Instantiate(movingCubeModel);
+                            movingCube.transform.position = this.gameObject.transform.position;
+                            movingCube.transform.rotation = this.gameObject.transform.rotation;
+                            this.gameObject.SetActive(false);
+                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+                        }
+                        break;
+                }
+            }
+            else
+            {
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                RaycastHit hit;
+                if (Physics.Raycast(ray, out hit))
+                {
+                    if (hit.collider != null)
+                    {
+                        moveto = hit.point;
+                        Position pos = new Position(moveto.x, moveto.y, moveto.z);
+                        Debug.Log("Move " + go + " to " + moveto);
+                        PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
+                        cubeSelected = false;
+                        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+                Quaternion dir = movingCube.transform.rotation;
+                DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+                Destroy(movingCube);
+                movingCube = null;
+                this.gameObject.SetActive(true);
+                if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                    Debug.Log("Could not rotate cube");
+                tap = false;
+                    }
+                }
+                else
+                {
+                    Debug.Log("No valid object or no metadata attached to cube");
+                }
+            }
+            }
+        }
 
     private void select()
     {
-        //if (Input.GetMouseButtonDown(0))//TODO:replace mouse input action by Tango click (see next line)
-        if (Input.GetTouch(0).phase == TouchPhase.Began)
+        //if (Input.GetMouseButtonDown(0))
+        if (Input.touchCount==1)
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hit;
@@ -208,7 +237,7 @@ public class ButtonHandler : MonoBehaviour
 
         if (Input.GetTouch(0).deltaPosition.sqrMagnitude != 0)
         {
-            if (swiping == false)
+            if (!swiping)
             {
                 swiping = true;
                 lastPosition = Input.GetTouch(0).position;
@@ -244,29 +273,36 @@ public class ButtonHandler : MonoBehaviour
         }
         else
         {
-            swiping = false;
-            eventSent = false;
+            if (swiping)
+            {
+                swiping = false;
+                eventSent = false;
+                tap = true;
+            }
         }
     }
 
-    private void inspect()
+    /*private void inspect()
     {
         if (cubeSelected)
         {
-            /*Information inf = RPCClient.client.GetInformationById(id);
+            Information inf = RPCClient.client.GetInformationById(id);
             string msg = inf.Informtion;
 
             infoObj.GetComponent<TextMesh>().text = msg;
-            infoObj.gameObject.SetActive(true);*/
+            infoObj.gameObject.SetActive(true);
         }
-    }
+    }*/
 
     private void annotate()
     {
         if (cubeSelected)
         {
-            Annotation an = new Annotation(Device.GEARVR, id);
-            RPCClient.client.Annotate(an);
+            Annotation an = new Annotation(Device.PC, id);
+            if (!RPCClient.client.Annotate(an))
+            {
+                Debug.Log("Annotation Failed");
+            }
         }
     }
 }
