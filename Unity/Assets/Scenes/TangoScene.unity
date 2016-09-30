@@ -476,9 +476,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 541410674}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 295859223eae4fd459585e82f1cdbab2, type: 3}
+  m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ps_server: 
+  ps_port: 0
+  device: 0
+  camID: 0
 --- !u!114 &541410676
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -505,7 +509,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 
+  ps_server: 10.9.33.1
   ps_port: 0
   device: 0
   camID: 0
@@ -564,7 +568,6 @@ GameObject:
   m_Component:
   - 4: {fileID: 682352136}
   - 114: {fileID: 682352135}
-  - 114: {fileID: 682352137}
   m_Layer: 0
   m_Name: Client
   m_TagString: Untagged
@@ -585,8 +588,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 192.168.178.45
-  rpc_serveraddress: 192.168.178.45
+  ps_serveraddress: 10.9.33.1
+  rpc_serveraddress: 10.9.33.1
   device: 0
   objectInitializer: {fileID: 1089718773}
 --- !u!4 &682352136
@@ -602,17 +605,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 6
---- !u!114 &682352137
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 682352134}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9769ec9475391434cb76c2826d592b78, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &706871833
 GameObject:
   m_ObjectHideFlags: 0

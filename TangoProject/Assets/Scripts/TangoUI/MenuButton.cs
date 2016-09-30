@@ -8,7 +8,7 @@ public class MenuButton : MonoBehaviour
     public Button Button1;
     public Button Button2;
     public Button Button3;
-    public Button Button4;
+    //public Button Button4;
 
     private bool MenuState = false; // collapsed = false, extended = true
 
@@ -37,7 +37,7 @@ public class MenuButton : MonoBehaviour
         StartCoroutine( MoveButton( Button1, -3 ) );
         StartCoroutine( MoveButton( Button2, -5 ) );
         StartCoroutine( MoveButton( Button3, -7 ) );
-        StartCoroutine( MoveButton( Button4, -9 ) );
+        //StartCoroutine( MoveButton( Button4, -9 ) );
         MenuState = false;
     }
 
@@ -47,7 +47,7 @@ public class MenuButton : MonoBehaviour
         StartCoroutine( MoveButton( Button1, 3 ) );
         StartCoroutine( MoveButton( Button2, 5 ) );
         StartCoroutine( MoveButton( Button3, 7 ) );
-        StartCoroutine( MoveButton( Button4, 9 ) );
+        //StartCoroutine( MoveButton( Button4, 9 ) );
         MenuState = true;
     }
 

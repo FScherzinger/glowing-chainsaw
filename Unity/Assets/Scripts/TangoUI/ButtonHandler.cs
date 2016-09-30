@@ -85,17 +85,17 @@ public class ButtonHandler : MonoBehaviour
     {
         if (cubeSelected)
         {
-            //if (Input.GetMouseButtonDown(0))
-            if (Input.touchCount==1)
+            if (Input.GetMouseButtonDown(0))
+            //if (Input.touchCount==1)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //GetTouch(0).position);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         if (!RPCClient.client.Move(posEvent))
@@ -168,7 +168,7 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         cubeSelected = false;
@@ -193,10 +193,10 @@ public class ButtonHandler : MonoBehaviour
 
     private void select()
     {
-        //if (Input.GetMouseButtonDown(0))
-        if (Input.touchCount==1)
+        if (Input.GetMouseButtonDown(0))
+        //if (Input.touchCount==1)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);// GetTouch(0).position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
