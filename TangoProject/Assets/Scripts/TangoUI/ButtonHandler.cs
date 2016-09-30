@@ -95,7 +95,7 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y + 5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         if (!RPCClient.client.Move(posEvent))
@@ -124,7 +124,7 @@ public class ButtonHandler : MonoBehaviour
         }
         else
         {
-                swipe();
+            swipe();
             if (!tap)
             {
                 switch (swipeDirection)
@@ -168,19 +168,19 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y + 5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         cubeSelected = false;
                         go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
-                Quaternion dir = movingCube.transform.rotation;
-                DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
-                Destroy(movingCube);
-                movingCube = null;
-                this.gameObject.SetActive(true);
-                if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                    Debug.Log("Could not rotate cube");
-                tap = false;
+                        Quaternion dir = movingCube.transform.rotation;
+                        DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+                        Destroy(movingCube);
+                        movingCube = null;
+                        this.gameObject.SetActive(true);
+                        if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                            Debug.Log("Could not rotate cube");
+                        tap = false;
                     }
                 }
                 else
@@ -188,8 +188,8 @@ public class ButtonHandler : MonoBehaviour
                     Debug.Log("No valid object or no metadata attached to cube");
                 }
             }
-            }
         }
+    }
 
     private void select()
     {

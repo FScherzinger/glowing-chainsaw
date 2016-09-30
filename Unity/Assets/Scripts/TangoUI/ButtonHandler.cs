@@ -95,7 +95,7 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y+5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         if (!RPCClient.client.Move(posEvent))
@@ -168,7 +168,7 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y-5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y+5, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         cubeSelected = false;
