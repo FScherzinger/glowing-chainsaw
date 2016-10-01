@@ -65,7 +65,6 @@ public class ButtonHandler : MonoBehaviour
         switch (currentButton)
         {
             case SelectedButton.annotate:
-                select();
                 annotate();
                 break;
             /*case SelectedButton.inspect:
@@ -95,11 +94,11 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y+5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y + 0.05, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
-                        if (!RPCClient.client.Move(posEvent))
-                            Debug.Log("Could not move cube");
+                        /*if (!RPCClient.client.Move(posEvent))
+                            Debug.Log("Could not move cube");*/
                         cubeSelected = false;
                         go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
                     }
@@ -120,11 +119,17 @@ public class ButtonHandler : MonoBehaviour
     {
         if (!cubeSelected)
         {
-            select();
+            if (select())
+            {
+                movingCube = Instantiate(movingCubeModel);
+                movingCube.transform.position = this.gameObject.transform.position;
+                movingCube.transform.rotation = this.gameObject.transform.rotation;
+                this.gameObject.SetActive(false);
+            }
         }
         else
         {
-                swipe();
+            swipe();
             if (!tap)
             {
                 switch (swipeDirection)
@@ -136,26 +141,10 @@ public class ButtonHandler : MonoBehaviour
                     case SwipeDirection.UP:
                         return;
                     case SwipeDirection.LEFT:
-                        if (RPCClient.client.Can_Interact(id))
-                        {
-                            RPCClient.client.LockGameObject(id);
-                            movingCube = Instantiate(movingCubeModel);
-                            movingCube.transform.position = this.gameObject.transform.position;
-                            movingCube.transform.rotation = this.gameObject.transform.rotation;
-                            this.gameObject.SetActive(false);
-                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
-                        }
+                        movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
                         break;
                     case SwipeDirection.RIGHT:
-                        if (RPCClient.client.Can_Interact(id))
-                        {
-                            RPCClient.client.LockGameObject(id);
-                            movingCube = Instantiate(movingCubeModel);
-                            movingCube.transform.position = this.gameObject.transform.position;
-                            movingCube.transform.rotation = this.gameObject.transform.rotation;
-                            this.gameObject.SetActive(false);
-                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
-                        }
+                        movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
                         break;
                 }
             }
@@ -168,19 +157,19 @@ public class ButtonHandler : MonoBehaviour
                     if (hit.collider != null)
                     {
                         moveto = hit.point;
-                        Position pos = new Position(moveto.x, moveto.y+5, moveto.z);
+                        Position pos = new Position(moveto.x, moveto.y + 0.05, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         cubeSelected = false;
                         go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
-                Quaternion dir = movingCube.transform.rotation;
-                DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
-                Destroy(movingCube);
-                movingCube = null;
-                this.gameObject.SetActive(true);
-                if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                    Debug.Log("Could not rotate cube");
-                tap = false;
+                        Quaternion dir = movingCube.transform.rotation;
+                        DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
+                        Destroy(movingCube);
+                        movingCube = null;
+                        this.gameObject.SetActive(true);
+                        if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                            Debug.Log("Could not rotate cube");
+                        tap = false;
                     }
                 }
                 else
@@ -188,10 +177,10 @@ public class ButtonHandler : MonoBehaviour
                     Debug.Log("No valid object or no metadata attached to cube");
                 }
             }
-            }
         }
+    }
 
-    private void select()
+    private bool select()
     {
         if (Input.GetMouseButtonDown(0))
         //if (Input.touchCount==1)
@@ -210,12 +199,13 @@ public class ButtonHandler : MonoBehaviour
                         go = hit.collider.gameObject;
                         go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0xFF, 0x16, 0xFF);
                         id = go.GetComponent<MetaData>().id;
-                        if (RPCClient.client.Can_Interact(id))
+                        /*if (RPCClient.client.Can_Interact(id))
                         {
-                            RPCClient.client.LockGameObject(id);
+                            RPCClient.client.LockGameObject(id);*/
                             Debug.Log("GameObject at " + go.transform.position + " selected");
                             cubeSelected = true;
-                        }
+                            return true;
+                        //}
                     }
                     else
                     {
@@ -228,6 +218,7 @@ public class ButtonHandler : MonoBehaviour
                 Debug.Log("Not clicked in valid area");
             }
         }
+        return false;
     }
 
     void swipe()
@@ -296,7 +287,7 @@ public class ButtonHandler : MonoBehaviour
 
     private void annotate()
     {
-        if (cubeSelected)
+        if (select())
         {
             Annotation an = new Annotation(Device.PC, id);
             if (!RPCClient.client.Annotate(an))
