@@ -32,7 +32,6 @@ public class ButtonHandler : MonoBehaviour
     [SerializeField]
     private GameObject movingCubeModel;
     private int id = 0;
-    private Material material;
 
     //position Cube should be moved to
     private Vector3 moveto;
@@ -56,7 +55,12 @@ public class ButtonHandler : MonoBehaviour
         currentButton = current;
         cubeSelected = false;
         if (go != null)
-            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+        {
+            if (!annotated)
+                go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+            else
+                go.gameObject.GetComponent<Renderer>().material.color = new Color32(0xB3, 0x00, 0x98, 0xFF);
+        }
     }
 
     // Update is called once per frame
@@ -87,7 +91,7 @@ public class ButtonHandler : MonoBehaviour
             if (Input.GetMouseButtonDown(0))
             //if (Input.touchCount==1)
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //GetTouch(0).position);
+                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -100,7 +104,10 @@ public class ButtonHandler : MonoBehaviour
                         if (!RPCClient.client.Move(posEvent))
                             Debug.Log("Could not move cube");
                         cubeSelected = false;
-                        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+                        if (!annotated)
+                            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+                        else
+                            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0xB3, 0x00, 0x98, 0xFF);
                     }
                 }
                 else
@@ -121,10 +128,10 @@ public class ButtonHandler : MonoBehaviour
         {
             if (select())
             {
-                movingCube = Instantiate(movingCubeModel);
-                movingCube.transform.position = this.gameObject.transform.position;
-                movingCube.transform.rotation = this.gameObject.transform.rotation;
-                this.gameObject.SetActive(false);
+                //movingCube = Instantiate(movingCubeModel);
+                //movingCube.transform.position = this.gameObject.transform.position;
+                //movingCube.transform.rotation = this.gameObject.transform.rotation;
+                //this.gameObject.SetActive(false);
             }
         }
         else
@@ -134,23 +141,21 @@ public class ButtonHandler : MonoBehaviour
             {
                 switch (swipeDirection)
                 {
-                    case SwipeDirection.DOWN:
-                        return;
                     case SwipeDirection.NONE:
                         return;
-                    case SwipeDirection.UP:
-                        return;
                     case SwipeDirection.LEFT:
-                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+                        go.transform.RotateAround(go.transform.position, Vector3.down, 10);
+                        swipeDirection = SwipeDirection.NONE;
                         break;
                     case SwipeDirection.RIGHT:
-                            movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+                        go.transform.RotateAround(go.transform.position, Vector3.up, 10);
+                        swipeDirection = SwipeDirection.NONE;
                         break;
                 }
             }
             else
             {
-                Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition); //GetTouch(0).position);
                 RaycastHit hit;
                 if (Physics.Raycast(ray, out hit))
                 {
@@ -161,14 +166,16 @@ public class ButtonHandler : MonoBehaviour
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
                         cubeSelected = false;
-                        go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
-                        Quaternion dir = movingCube.transform.rotation;
+                        if (!annotated)
+                            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+                        else
+                            go.gameObject.GetComponent<Renderer>().material.color = new Color32(0xB3, 0x00, 0x98, 0xFF); Quaternion dir = go.transform.rotation;
                         DirectionEvent dirEvent = new DirectionEvent(Device.GEARVR, ObjType.CUBE, new Direction(dir.x, dir.y, dir.z, dir.w), id);
-                        Destroy(movingCube);
-                        movingCube = null;
-                        this.gameObject.SetActive(true);
-                        if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                            Debug.Log("Could not rotate cube");
+                        //Destroy(movingCube);
+                        //movingCube = null;
+                        //this.gameObject.SetActive(true);
+                         if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                             Debug.Log("Could not rotate cube");
                         tap = false;
                     }
                 }
@@ -185,7 +192,7 @@ public class ButtonHandler : MonoBehaviour
         if (Input.GetMouseButtonDown(0))
         //if (Input.touchCount==1)
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);// GetTouch(0).position);
+            Ray ray = Camera.main.ScreenPointToRay(Input.GetTouch(0).position);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit))
             {
@@ -202,9 +209,9 @@ public class ButtonHandler : MonoBehaviour
                         if (RPCClient.client.Can_Interact(id))
                         {
                             RPCClient.client.LockGameObject(id);
-                            Debug.Log("GameObject at " + go.transform.position + " selected");
-                            cubeSelected = true;
-                            return true;
+                        Debug.Log("GameObject at " + go.transform.position + " selected");
+                        cubeSelected = true;
+                        return true;
                         }
                     }
                     else
@@ -236,28 +243,29 @@ public class ButtonHandler : MonoBehaviour
             }
             else
             {
-                if (!eventSent)
+                if (swipeDirection != SwipeDirection.NONE)
                 {
-                    if (swipeDirection != SwipeDirection.NONE)
-                    {
-                        Vector2 direction = Input.GetTouch(0).position - lastPosition;
+                    Vector2 direction = Input.GetTouch(0).position - lastPosition;
 
-                        if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+                    if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
+                    {
+                        if (direction.x > 0)
                         {
-                            if (direction.x > 0)
-                                swipeDirection = SwipeDirection.RIGHT;
-                            else
-                                swipeDirection = SwipeDirection.LEFT;
+                            swipeDirection = SwipeDirection.RIGHT;
+                            Debug.Log("swipe right");
                         }
                         else
                         {
-                            if (direction.y > 0)
-                                swipeDirection = SwipeDirection.UP;
-                            else
-                                swipeDirection = SwipeDirection.DOWN;
+                            swipeDirection = SwipeDirection.LEFT;
+                            Debug.Log("swipe left");
                         }
-
-                        eventSent = true;
+                    }
+                    else
+                    {
+                        if (direction.y > 0)
+                            swipeDirection = SwipeDirection.UP;
+                        else
+                            swipeDirection = SwipeDirection.DOWN;
                     }
                 }
             }
@@ -267,7 +275,6 @@ public class ButtonHandler : MonoBehaviour
             if (swiping)
             {
                 swiping = false;
-                eventSent = false;
                 tap = true;
             }
         }
@@ -294,6 +301,29 @@ public class ButtonHandler : MonoBehaviour
             {
                 Debug.Log("Annotation Failed");
             }
+        }
+    }
+
+    void swipeTestPC()
+    {
+        if (Input.GetKeyDown("1"))
+        {
+            swipeDirection = SwipeDirection.RIGHT;
+            Debug.Log("swipe right");
+        }
+        else
+        {
+            if (Input.GetKeyDown("2"))
+            {
+                swipeDirection = SwipeDirection.LEFT;
+                Debug.Log("swipe left");
+            }
+        }
+        if (Input.GetMouseButtonDown(0))
+        {
+            swiping = false;
+            tap = true;
+            Debug.Log("Place Cube");
         }
     }
 }
