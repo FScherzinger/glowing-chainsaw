@@ -51,23 +51,18 @@ public class GearVRMenu: MonoBehaviour
 		case VRInput.SwipeDirection.RIGHT:
 			break;
 		case VRInput.SwipeDirection.UP:
-			//DRAGNDROP -> ROTATE -> WARP -> DRAGROTATE -> ANNOTATE -> TEAMSPEAK
+			//DRAGNDROP -> WARP -> DRAGROTATE -> ANNOTATE -> TEAMSPEAK
 			switch(currentTool)
 			{
 				case Tool.ANNOTATE:
 					image.texture = teamSpeakTool;
-					if(TeamSpeakClient.started)
-						this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
-					else
+					//if(TeamSpeakClient.started)
+					//	this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
+					//else
 						this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
 					currentTool = Tool.TEAMSPEAK;
 					break;
 				case Tool.DRAGNDROP:
-					image.texture = rotationTool;
-					this.gameObject.GetComponentInChildren<Text>().text = "ROTATE";
-					currentTool = Tool.ROTATE;
-					break;
-				case Tool.ROTATE:
 					image.texture = warpTool;					
 					this.gameObject.GetComponentInChildren<Text>().text = "WARP";
 					currentTool = Tool.WARP;
@@ -90,23 +85,19 @@ public class GearVRMenu: MonoBehaviour
 			}
 			break;
 		case VRInput.SwipeDirection.DOWN:
-			//DRAGNDROP <- ROTATE <- WARP <- DRAGROTATE <- ANNOTATE <- TEAMSPEAK
+			//DRAGNDROP <- WARP <- DRAGROTATE <- ANNOTATE <- TEAMSPEAK
 			switch(currentTool)
 			{
-				case Tool.WARP:
-					image.texture = rotationTool;
-					this.gameObject.GetComponentInChildren<Text>().text = "ROTATE";
-					currentTool = Tool.ROTATE;
-					break;
+				
 				case Tool.DRAGNDROP:
 					image.texture = teamSpeakTool;
-					if(TeamSpeakClient.started)
-						this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
-					else
+					//if(TeamSpeakClient.started)
+					//	this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
+					//else
 						this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
 					currentTool = Tool.TEAMSPEAK;
 					break;
-				case Tool.ROTATE:
+				case Tool.WARP:
 					image.texture = dragNDropTool;
 					this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
 					currentTool = Tool.DRAGNDROP;
