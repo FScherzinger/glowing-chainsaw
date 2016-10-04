@@ -25,6 +25,14 @@ public class MarkAndInspect : VRTK_InteractableObject
         grabcontroller=base.GetGrabbingObject();
         grabcontroller.transform.Find("RadialMenu").gameObject.SetActive(false);
         turnable = true;
+        StartCoroutine(blockObject(id));
+        Debug.Log("works");
+
+
+    }
+
+    IEnumerator blockObject(int id)
+    {
         if (RPCClient.client.Can_Interact(id))
         {
             RPCClient.client.LockGameObject(id);
@@ -33,12 +41,33 @@ public class MarkAndInspect : VRTK_InteractableObject
             gameObject.GetComponent<ReceivedObject>().noUpdate = true;
             Debug.Log(base.GetGrabbingObject());
         }
-
-
+        yield return null; 
     }
+
+    IEnumerator moveRotObject(PositionEvent posEvent, DirectionEvent dirEvent,GameObject previousGrabbingObject)
+    {
+        if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+            Debug.Log("Could not move cube");
+        Destroy(eCube);
+        gameObject.GetComponent<ReceivedObject>().noUpdate = false;
+        base.Ungrabbed(previousGrabbingObject);
+        yield return null;
+    }
+
+    IEnumerator moveObject(PositionEvent posEvent,GameObject previousGrabbingObject)
+    {
+        if (!RPCClient.client.Move(posEvent))
+            Debug.Log("Could not move cube");
+        Destroy(eCube);
+        gameObject.GetComponent<ReceivedObject>().noUpdate = false;
+        base.Ungrabbed(previousGrabbingObject);
+        yield return null;
+    }
+
 
     public override void Ungrabbed(GameObject previousGrabbingObject)
     {
+
         int id = this.gameObject.GetComponent<MetaData>().id;
         Vector3 pos = transform.position;
         Quaternion rot = transform.rotation;
@@ -48,18 +77,14 @@ public class MarkAndInspect : VRTK_InteractableObject
         if (turned)
         {
             DirectionEvent dirEvent = new DirectionEvent(Device.VIVE, ObjType.CUBE, new Direction(rot.x, rot.y, rot.z, rot.w), id);
-            if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                Debug.Log("Could not move cube");
+            StartCoroutine(moveRotObject(posEvent, dirEvent, previousGrabbingObject));
             turned = false;
         }else
         {
-            if (!RPCClient.client.Move(posEvent))
-                Debug.Log("Could not move cube");
+            StartCoroutine(moveObject(posEvent,previousGrabbingObject));
         }
 
-        Destroy(eCube);
-        gameObject.GetComponent<ReceivedObject>().noUpdate = false;
-        base.Ungrabbed(previousGrabbingObject);
+      
     }
 
 
