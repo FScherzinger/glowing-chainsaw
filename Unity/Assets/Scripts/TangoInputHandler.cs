@@ -12,6 +12,7 @@ public class TangoInputHandler : MonoBehaviour {
 	[SerializeField] private Material annotationMaterial;
 	[SerializeField] private VRInteractiveItem interactiveItem;
 	[SerializeField] private GameObject movingCubeModel;
+    [SerializeField] private Renderer renderer;
 	private GameObject movingCube;
 	private int id;
 
@@ -24,20 +25,40 @@ public class TangoInputHandler : MonoBehaviour {
 
 	private void OnEnable()
 	{
-		tangoInput.OnSelect += OnSelect;
+        interactiveItem.OnOver += HandleOver;
+        interactiveItem.OnOut += HandleOut;
+        tangoInput.OnSelect += OnSelect;
 		tangoInput.OnRotateLeft += OnRotateLeft;
 		tangoInput.OnRotateRight += OnRotateRight;
 	}
 
 	private void OnDisable()
-	{
-		tangoInput.OnSelect -= OnSelect;
+    {
+        interactiveItem.OnOver -= HandleOver;
+        interactiveItem.OnOut -= HandleOut;
+        tangoInput.OnSelect -= OnSelect;
 		tangoInput.OnRotateLeft -= OnRotateLeft;
 		tangoInput.OnRotateRight -= OnRotateRight;
 	}
 
+    //Handle the Over event
+    private void HandleOver()
+    {
+        renderer.material = overMaterial;
+    }
 
-	void OnSelect(){
+
+    //Handle the Out event
+    private void HandleOut()
+    {
+        if (!draggable)
+            if (!annotated)
+                renderer.material = normalMaterial;
+            else
+                renderer.material = annotationMaterial;
+    }
+
+    void OnSelect(){
 		switch (TangoUI.currentTool){
 			case TangoUI.Tool.DRAGNDROP:
 				OnDragDrop();
@@ -94,8 +115,8 @@ public class TangoInputHandler : MonoBehaviour {
 
 	void OnRotateLeft(){
 		if(movingCube != null && draggable)
-			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
-		else if(interactiveItem.IsOver){
+			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
+		/*else if(interactiveItem.IsOver){
 			if(RPCClient.client.LockGameObject(id)){
 				movingCube = Instantiate(movingCubeModel);
 				movingCube.SetActive(true);
@@ -113,13 +134,13 @@ public class TangoInputHandler : MonoBehaviour {
 				if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
 					Debug.Log("Could not rotate cube");
 			}
-		}
+		}*/
 	}
 
 	void OnRotateRight(){
 		if(movingCube != null && draggable)
-			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.up, 10);
-		else if(interactiveItem.IsOver){
+			movingCube.transform.RotateAround(movingCube.transform.position, Vector3.down, 10);
+		/*else if(interactiveItem.IsOver){
 			if(RPCClient.client.LockGameObject(id)){
 				movingCube = Instantiate(movingCubeModel);
 				movingCube.SetActive(true);
@@ -137,7 +158,7 @@ public class TangoInputHandler : MonoBehaviour {
 				if(!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
 					Debug.Log("Could not rotate cube");
 			}
-		}
+		}*/
 	}
 
 	void OnDragRotate(){
