@@ -81,12 +81,14 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 						SceneObjects [t.First.Id].transform.position = destination;
 						
 				} else {
-					if (baxterCommunicator != null)
-						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, direction.eulerAngles);
-					else
-						SceneObjects [t.First.Id].transform.position = destination;
-						SceneObjects [t.Second.Id].transform.rotation = direction;
-				}
+                if (baxterCommunicator != null)
+                    baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, destination, currotation, direction.eulerAngles);
+                else
+                {
+                    SceneObjects[t.First.Id].transform.position = destination;
+                    SceneObjects[t.Second.Id].transform.rotation = direction;
+                }
+                }
 					
 		}
 				
