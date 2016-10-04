@@ -45,6 +45,8 @@ public class ButtonHandler : MonoBehaviour
     SelectedButton currentButton = SelectedButton.none;
     SwipeDirection swipeDirection = SwipeDirection.NONE;
 
+    Material normalMaterial = Resources.Load("Green", typeof(Material)) as Material;
+
     // Use this for initialization
     void Start()
     {
@@ -100,8 +102,8 @@ public class ButtonHandler : MonoBehaviour
                         Position pos = new Position(moveto.x, moveto.y + 0.05, moveto.z);
                         Debug.Log("Move " + go + " to " + moveto);
                         PositionEvent posEvent = new PositionEvent(Device.TANGO, ObjType.CUBE, pos, id);
-                        /*if (!RPCClient.client.Move(posEvent))
-                            Debug.Log("Could not move cube");*/
+                        if (!RPCClient.client.Move(posEvent))
+                            Debug.Log("Could not move cube");
                         cubeSelected = false;
                         if (!annotated)
                             go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
@@ -127,9 +129,9 @@ public class ButtonHandler : MonoBehaviour
         {
             if (select())
             {
-                //movingCube = Instantiate(movingCubeModel);
-                //movingCube.transform.position = this.gameObject.transform.position;
-                //movingCube.transform.rotation = this.gameObject.transform.rotation;
+                /*movingCube = Instantiate(movingCubeModel);
+                movingCube.transform.position = this.gameObject.transform.position;
+                movingCube.transform.rotation = this.gameObject.transform.rotation;*/
                 //this.gameObject.SetActive(false);
             }
         }
@@ -143,12 +145,12 @@ public class ButtonHandler : MonoBehaviour
                     case SwipeDirection.NONE:
                         return;
                     case SwipeDirection.LEFT:
-                        go.transform.RotateAround(go.transform.position, Vector3.down, 10);
-                        swipeDirection = SwipeDirection.NONE;
+                            go.transform.RotateAround(go.transform.position, Vector3.down, 10);
+                            swipeDirection = SwipeDirection.NONE;
                         break;
                     case SwipeDirection.RIGHT:
-                        go.transform.RotateAround(go.transform.position, Vector3.up, 10);
-                        swipeDirection = SwipeDirection.NONE;
+                            go.transform.RotateAround(go.transform.position, Vector3.up, 10);
+                            swipeDirection = SwipeDirection.NONE;
                         break;
                 }
             }
@@ -173,8 +175,8 @@ public class ButtonHandler : MonoBehaviour
                         //Destroy(movingCube);
                         //movingCube = null;
                         //this.gameObject.SetActive(true);
-                       /* if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
-                            Debug.Log("Could not rotate cube");*/
+                        if (!RPCClient.client.Move_And_Rotate(posEvent, dirEvent))
+                            Debug.Log("Could not rotate cube");
                         tap = false;
                     }
                 }
@@ -205,13 +207,13 @@ public class ButtonHandler : MonoBehaviour
                         go = hit.collider.gameObject;
                         go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0xFF, 0x16, 0xFF);
                         id = go.GetComponent<MetaData>().id;
-                        /*if (RPCClient.client.Can_Interact(id))
+                       if (RPCClient.client.Can_Interact(id))
                         {
-                            RPCClient.client.LockGameObject(id);*/
+                            RPCClient.client.LockGameObject(id);
                             Debug.Log("GameObject at " + go.transform.position + " selected");
                             cubeSelected = true;
                             return true;
-                        //}
+                        }
                     }
                     else
                     {
@@ -271,11 +273,8 @@ public class ButtonHandler : MonoBehaviour
         }
         else
         {
-            if (swiping)
-            {
                 swiping = false;
                 tap = true;
-            }
         }
     }
 

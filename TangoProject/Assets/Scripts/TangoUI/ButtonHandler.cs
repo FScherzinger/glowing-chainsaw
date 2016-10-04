@@ -45,6 +45,8 @@ public class ButtonHandler : MonoBehaviour
     SelectedButton currentButton = SelectedButton.none;
     SwipeDirection swipeDirection = SwipeDirection.NONE;
 
+    [SerializeField] Material normalMaterial;
+
     // Use this for initialization
     void Start()
     {
@@ -57,7 +59,7 @@ public class ButtonHandler : MonoBehaviour
         if (go != null)
         {
             if (!annotated)
-                go.gameObject.GetComponent<Renderer>().material.color = new Color32(0x00, 0x92, 0x0D, 0xFF);
+                go.gameObject.GetComponent<Renderer>().material = normalMaterial;
             else
                 go.gameObject.GetComponent<Renderer>().material.color = new Color32(0xB3, 0x00, 0x98, 0xFF);
         }
@@ -272,11 +274,8 @@ public class ButtonHandler : MonoBehaviour
         }
         else
         {
-            if (swiping)
-            {
                 swiping = false;
                 tap = true;
-            }
         }
     }
 
