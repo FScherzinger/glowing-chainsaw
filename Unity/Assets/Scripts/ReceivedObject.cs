@@ -44,22 +44,27 @@ public class ReceivedObject : MonoBehaviour {
 
 	public void updateAnnotation(Annotation an){
 		Renderer renderer = gameObject.GetComponent<Renderer>();
-		Material newMat = renderer.material;
+		//Material newMat = renderer.material;
+		Color color = Color.green;
 		switch(an.Device){
-        case Device.GEARVR:
-			newMat = Resources.Load("GearAnno", typeof(Material)) as Material;
+		case Device.GEARVR:
+			color = Color.blue;
+			//newMat = Resources.Load("GearAnno", typeof(Material)) as Material;
 			break;
 		case Device.TANGO:
-			newMat = Resources.Load("TangoAnno", typeof(Material)) as Material;
+			color = Color.cyan;
+			//newMat = Resources.Load("TangoAnno", typeof(Material)) as Material;
 			break;
 		case Device.VIVE:
-			newMat = Resources.Load("ViveAnno", typeof(Material)) as Material;
+			color = Color.grey;
+			//newMat = Resources.Load("ViveAnno", typeof(Material)) as Material;
 			break;
 		case Device.PC:
-			newMat = Resources.Load("PCAnno", typeof(Material)) as Material;
+			color = Color.white;
+			//newMat = Resources.Load("PCAnno", typeof(Material)) as Material;
 			break;
 		}
-		renderer.material = newMat;
+		renderer.material.color = color;
 	}
 		
 }
