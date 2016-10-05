@@ -6,6 +6,7 @@ using de.dfki.events;
 
 public class ReceivedObject : MonoBehaviour {
     public bool noUpdate=false;
+    public Device dev=Device.VUFORIA;
 
     void Start()
 	{
@@ -33,6 +34,33 @@ public class ReceivedObject : MonoBehaviour {
             transform.rotation = newrot;
         }
 	}
-		
+    public void updateAnnotation(Annotation an)
+    {
+        Renderer renderer = gameObject.GetComponent<Renderer>();
+        Material newMat = renderer.material;
+        Color color = Color.green;
+        dev = an.Device;
+        switch (an.Device)
+        {
+            case Device.GEARVR:
+                color = Color.blue;
+                //newMat = Resources.Load("GearAnno", typeof(Material)) as Material;
+                break;
+            case Device.TANGO:
+                color = Color.cyan;
+                //newMat = Resources.Load("TangoAnno", typeof(Material)) as Material;
+                break;
+            case Device.VIVE:
+                color = Color.grey;
+                //newMat = Resources.Load("ViveAnno", typeof(Material)) as Material;
+                break;
+            case Device.PC:
+                color = Color.white;
+                //newMat = Resources.Load("PCAnno", typeof(Material)) as Material;
+                break;
+        }
+        renderer.material.color = color;
+    }
+
 }
   

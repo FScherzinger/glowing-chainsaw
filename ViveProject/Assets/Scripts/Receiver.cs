@@ -19,7 +19,8 @@ using UnityEngine;
 			receive_client = PSFactory.CreatePSClient(uri);
 			receive_client.Subscribe( "DirectionEvent" );
 			receive_client.Subscribe( "PositionEvent" );
-			receive_client.Connect();
+            receive_client.Subscribe("Annotation");
+            receive_client.Connect();
 			Debug.Log( "connected. (receiver)" );
 			Receive ();
 		}
@@ -45,7 +46,13 @@ using UnityEngine;
 						eve.ParseData (dir_event);
 						obj_init.handle (dir_event);
 					}
-				}
+                if (eve.Is("Annotation"))
+                {
+                    Annotation an = new Annotation();
+                    eve.ParseData(an);
+                    obj_init.handle(an);
+                }
+            }
 			}
 	}
 
