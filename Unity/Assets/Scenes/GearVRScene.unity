@@ -574,8 +574,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 10.9.32.243
-  rpc_serveraddress: 10.9.32.243
+  ps_serveraddress: 192.168.1.169
+  rpc_serveraddress: 192.168.1.169
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -797,7 +797,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 10.9.32.243
+  ps_server: 192.168.1.169
   ps_port: 9000
   device: 1
   camID: 0
@@ -819,7 +819,7 @@ MonoBehaviour:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1805501110}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c56649a7ef00c4d2d8fabe00c39c11fb, type: 3}
   m_Name: 

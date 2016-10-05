@@ -2,6 +2,7 @@
 using System.Collections;
 using VRStandardAssets.Utils;
 using de.dfki.events;
+using UnityEngine.UI;
 
 public class TangoInputHandler : MonoBehaviour {
 
@@ -13,6 +14,7 @@ public class TangoInputHandler : MonoBehaviour {
 	[SerializeField] private VRInteractiveItem interactiveItem;
 	[SerializeField] private GameObject movingCubeModel;
     [SerializeField] private Renderer renderer;
+	[SerializeField] private Image reticle;
 	private GameObject movingCube;
 	private int id;
 
@@ -25,8 +27,8 @@ public class TangoInputHandler : MonoBehaviour {
 
 	private void OnEnable()
 	{
-        interactiveItem.OnOver += HandleOver;
-        interactiveItem.OnOut += HandleOut;
+        //interactiveItem.OnOver += HandleOver;
+        //interactiveItem.OnOut += HandleOut;
         tangoInput.OnSelect += OnSelect;
 		tangoInput.OnRotateLeft += OnRotateLeft;
 		tangoInput.OnRotateRight += OnRotateRight;
@@ -34,8 +36,8 @@ public class TangoInputHandler : MonoBehaviour {
 
 	private void OnDisable()
     {
-        interactiveItem.OnOver -= HandleOver;
-        interactiveItem.OnOut -= HandleOut;
+        //interactiveItem.OnOver -= HandleOver;
+        //interactiveItem.OnOut -= HandleOut;
         tangoInput.OnSelect -= OnSelect;
 		tangoInput.OnRotateLeft -= OnRotateLeft;
 		tangoInput.OnRotateRight -= OnRotateRight;
@@ -45,6 +47,7 @@ public class TangoInputHandler : MonoBehaviour {
     private void HandleOver()
     {
         renderer.material = overMaterial;
+		reticle.GetComponentInChildren<GameObject>().SetActive(true);
     }
 
 
@@ -56,6 +59,7 @@ public class TangoInputHandler : MonoBehaviour {
                 renderer.material = normalMaterial;
             else
                 renderer.material = annotationMaterial;
+		reticle.GetComponentInChildren<GameObject>().SetActive(false);
     }
 
     void OnSelect(){

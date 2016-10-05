@@ -26,7 +26,7 @@ public class TangoUI : MonoBehaviour {
 	// Use this for initialization
 	void Awake () {
 		this.gameObject.GetComponent<RawImage>().texture = dragNDropTool;
-		this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
+		//this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
 		currentTool = Tool.DRAGNDROP;
 		rotateLeft.SetActive(false);
 		rotateRight.SetActive(false);
@@ -40,26 +40,26 @@ public class TangoUI : MonoBehaviour {
 			//if(TeamSpeakClient.started)
 			//	this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
 			//else
-			this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
+			//this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
 			currentTool = Tool.TEAMSPEAK;
 			break;
 		case Tool.DRAGNDROP:
 			image.texture = dragRotationtool;
-			this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
+			//this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
 			currentTool = Tool.DRAGROTATE;
 			rotateLeft.SetActive(true);
 			rotateRight.SetActive(true);
 			break;
 		case Tool.DRAGROTATE:
 			image.texture = annotationTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
+			//this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
 			currentTool = Tool.ANNOTATE;
 			rotateLeft.SetActive(false);
 			rotateRight.SetActive(false);
 			break;
 		case Tool.TEAMSPEAK:
 			image.texture = dragNDropTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
+			//this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
 			currentTool = Tool.DRAGNDROP;
 			break;
 		}
@@ -75,26 +75,26 @@ public class TangoUI : MonoBehaviour {
 			//if(TeamSpeakClient.started)
 			//	this.gameObject.GetComponentInChildren<Text>().text = "DISCONNECT";
 			//else
-			this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
+			//this.gameObject.GetComponentInChildren<Text>().text = "CONNECT";
 			currentTool = Tool.TEAMSPEAK;
 			break;
 		case Tool.ANNOTATE:
 			image.texture = dragRotationtool;
-			this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
+			//this.gameObject.GetComponentInChildren<Text>().text = "DRAGROTATE";
 			currentTool = Tool.DRAGROTATE;
 			rotateLeft.SetActive(true);
 			rotateRight.SetActive(true);
 			break;
 		case Tool.DRAGROTATE:
 			image.texture = dragNDropTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
+			//this.gameObject.GetComponentInChildren<Text>().text = "DRAG N DROP";
 			currentTool = Tool.DRAGNDROP;
 			rotateLeft.SetActive(false);
 			rotateRight.SetActive(false);
 			break;
 		case Tool.TEAMSPEAK:
 			image.texture = annotationTool;
-			this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
+			//this.gameObject.GetComponentInChildren<Text>().text = "ANNOTATE";
 			currentTool = Tool.ANNOTATE;
 			break;
 		}
