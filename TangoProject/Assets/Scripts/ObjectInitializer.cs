@@ -38,7 +38,7 @@ public class ObjectInitializer : MonoBehaviour
 				PositionEvent pe = pos_events.Dequeue ();
 				if(pe == null)
 					continue;
-				ReceivedObject obj = getObjectReceiver (pe.Id, pe.Objtype);
+				ReceivedObject obj = getObjectReceiver (pe.Id, pe.Objtype, pe.Device);
 				obj.viewmananger = viewmanager;
 				if(obj != null)
 					obj.updatePosition (pe);
@@ -50,7 +50,7 @@ public class ObjectInitializer : MonoBehaviour
 				DirectionEvent de = dir_events.Dequeue ();
 				if(de == null)
 					continue;
-				ReceivedObject obj = getObjectReceiver (de.Id, de.Objtype);
+				ReceivedObject obj = getObjectReceiver (de.Id, de.Objtype, de.Device);
 				obj.viewmananger = viewmanager;
 
 				if(obj != null)
@@ -63,7 +63,7 @@ public class ObjectInitializer : MonoBehaviour
 				Annotation an = an_events.Dequeue();
 				if(an == null)
 					continue;
-				ReceivedObject obj = getObjectReceiver (an.ObjectId, ObjType.CUBE);
+				ReceivedObject obj = getObjectReceiver (an.ObjectId, ObjType.CUBE, an.Device);
 				if(obj != null)
 					obj.updateAnnotation(an);
 			}
@@ -83,14 +83,14 @@ public class ObjectInitializer : MonoBehaviour
 		an_events.Enqueue (an);
 	}
 
-	public ReceivedObject getObjectReceiver(int id, ObjType objTyp){
+	public ReceivedObject getObjectReceiver(int id, ObjType objTyp, Device device){
 		if (ObjReceivers == null)
 			throw new Exception ("ObjReceivers not yet initialized");
 		if (ObjReceivers.ContainsKey (id))
 			return ObjReceivers [id];
 		else {
 			if(id != ownCam.camID){
-				GameObject go = initGameObject (id, objTyp);
+				GameObject go = initGameObject (id, objTyp, device);
 				if(go != null){
 					go.SetActive(true);
 					ReceivedObject objr = go.GetComponent<ReceivedObject> ();
@@ -107,7 +107,7 @@ public class ObjectInitializer : MonoBehaviour
 		}
 	}
 
-	public GameObject initGameObject(int id, ObjType objType) {
+	public GameObject initGameObject(int id, ObjType objType, Device device) {
         //TODO: Implement using RPC-Call: Get ObjectType from Server and instantiate correct prefab
 		GameObject go = null;
 		switch(objType){
@@ -127,6 +127,20 @@ public class ObjectInitializer : MonoBehaviour
 				if(go.GetComponent<MetaData>() != null) {
 					go.GetComponent<MetaData>().id = id;
 					go.GetComponent<MetaData>().ObjType = objType;
+					switch (device){
+						case Device.GEARVR:
+							go.GetComponent<Renderer>().material.color = Color.blue;
+							break;
+						case Device.PC:
+							go.GetComponent<Renderer>().material.color = Color.white;
+							break;
+						case Device.TANGO:
+							go.GetComponent<Renderer>().material.color = Color.cyan;
+							break;
+						case Device.VIVE:
+							go.GetComponent<Renderer>().material.color = Color.grey;
+							break;
+					}	
 				}
 				else{
 					Debug.LogError("No Meta\tdata attached");
