@@ -12,6 +12,7 @@ public class PublishCam : MonoBehaviour {
 	private Publisher pub ;
 	private Thread pubThread;
 	private IEnumerator publish_pos_rot;
+	[SerializeField] private GameObject camera;
 	public int camID = 0;
     public RPCClient rpclient;
 	void Start () {
@@ -39,10 +40,9 @@ public class PublishCam : MonoBehaviour {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
 				switch(device){
 				case Device.GEARVR:
-					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject.GetComponent<Camera>());
+					pub.SendRotation (camID,ObjType.CAMERA,camera);
 					break;
 				case Device.TANGO:
-					break;
 				case Device.VIVE:
 				case Device.PC:
 					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);

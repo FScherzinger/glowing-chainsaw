@@ -841,7 +841,6 @@ GameObject:
   - 114: {fileID: 1805501112}
   - 114: {fileID: 1805501113}
   - 114: {fileID: 1805501114}
-  - 114: {fileID: 1805501115}
   m_Layer: 0
   m_Name: WarpAnchor
   m_TagString: Untagged
@@ -890,6 +889,7 @@ MonoBehaviour:
   ps_server: 192.168.1.172
   ps_port: 9000
   device: 1
+  camera: {fileID: 2116470497}
   camID: 0
 --- !u!114 &1805501114
 MonoBehaviour:
@@ -903,22 +903,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   viewmananger: {fileID: 0}
---- !u!114 &1805501115
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1805501110}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c56649a7ef00c4d2d8fabe00c39c11fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  serverAddress: 10.9.32.243
-  serverPort: 9987
-  serverPassword: secret
-  nickName: client
-  defaultChannelPassword: 
 --- !u!1 &1815493926 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 582e320d34da24844b95a9ba820789c7, type: 3}

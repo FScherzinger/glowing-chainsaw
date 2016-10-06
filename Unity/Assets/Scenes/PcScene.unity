@@ -971,6 +971,7 @@ MonoBehaviour:
   ps_server: 192.168.1.172
   ps_port: 9000
   device: 3
+  camera: {fileID: 1102244001}
   camID: 0
 --- !u!114 &1102244008
 MonoBehaviour:
