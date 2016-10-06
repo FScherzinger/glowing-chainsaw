@@ -408,7 +408,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeModel: {fileID: 902815962}
-  camModel: {fileID: 195694, guid: 6c43f116605cbd540a4246c81874dfa2, type: 2}
+  camModel: {fileID: 108274, guid: 6acb135e3fe884eab9ddb5d2b49b03bf, type: 2}
   ownCam: {fileID: 1102244007}
   viewmanager: {fileID: 1683332041}
 --- !u!4 &651016040
@@ -881,6 +881,7 @@ GameObject:
   - 114: {fileID: 1102244013}
   - 114: {fileID: 1102244012}
   - 114: {fileID: 1102244015}
+  - 114: {fileID: 1102244016}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -1093,6 +1094,22 @@ MonoBehaviour:
   serverPassword: secret
   nickName: client
   defaultChannelPassword: 
+--- !u!114 &1102244016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 1102244001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ps_server: 10.9.33.1
+  ps_port: 0
+  device: 3
+  camera: {fileID: 1102244001}
+  camID: 0
 --- !u!1 &1286850750
 GameObject:
   m_ObjectHideFlags: 0
