@@ -33,8 +33,12 @@ public class PublishCam : MonoBehaviour {
 		for (;;) {
             if( pub == null )
                 continue;
-            if (camID == 0 )
-                camID = RPCClient.client.getUniqueCameraId();
+            if (camID == 0)
+            {
+                camID = (new System.Random()).Next();
+                
+            }
+                
 			else {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
 				pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);
