@@ -12,6 +12,7 @@ public class PublishCam : MonoBehaviour {
 	private Publisher pub ;
 	private Thread pubThread;
 	private IEnumerator publish_pos_rot;
+	[SerializeField] private GameObject camera;
 	public int camID = 0;
     public RPCClient rpclient;
 	void Start () {
@@ -37,7 +38,7 @@ public class PublishCam : MonoBehaviour {
                 camID = RPCClient.client.getUniqueCameraId();
 			else {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
-				pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);
+				pub.SendRotation (camID,ObjType.CAMERA,camera);
 			}
 				
 			yield return new WaitForSeconds (intervall);

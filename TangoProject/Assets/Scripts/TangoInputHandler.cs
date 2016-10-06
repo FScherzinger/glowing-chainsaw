@@ -7,14 +7,9 @@ using UnityEngine.UI;
 public class TangoInputHandler : MonoBehaviour {
 
 	[SerializeField] private TangoInput tangoInput;
-	[SerializeField] private Material normalMaterial;                
-	[SerializeField] private Material overMaterial;
-	[SerializeField] private Material dragMaterial;
-	[SerializeField] private Material annotationMaterial;
 	[SerializeField] private VRInteractiveItem interactiveItem;
 	[SerializeField] private GameObject movingCubeModel;
     [SerializeField] private Renderer renderer;
-	[SerializeField] private Image reticle;
 	[SerializeField] private GameObject over;
 	private GameObject movingCube;
 	private int id;
