@@ -129,12 +129,16 @@ public class ObjectInitializer : MonoBehaviour
 					go.GetComponent<MetaData>().ObjType = objType;
 					switch (device){
 						case Device.GEARVR:
+							go.GetComponent<Renderer>().material.color = Color.blue;
 							break;
 						case Device.PC:
+							go.GetComponent<Renderer>().material.color = Color.white;
 							break;
 						case Device.TANGO:
+							go.GetComponent<Renderer>().material.color = Color.cyan;
 							break;
 						case Device.VIVE:
+							go.GetComponent<Renderer>().material.color = Color.grey;
 							break;
 					}	
 				}

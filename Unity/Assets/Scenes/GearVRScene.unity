@@ -532,7 +532,7 @@ Prefab:
       objectReference: {fileID: 0}
     - target: {fileID: 406272, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
       propertyPath: m_RootOrder
-      value: 10
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 170872, guid: 5a8e77a017ecb2d428385b3b37d7b662, type: 2}
       propertyPath: m_IsActive
@@ -655,8 +655,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 192.168.1.169
-  rpc_serveraddress: 192.168.1.169
+  ps_serveraddress: 10.9.33.1
+  rpc_serveraddress: 10.9.33.1
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -700,7 +700,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   cubeModel: {fileID: 1747439561}
-  camModel: {fileID: 195694, guid: 6c43f116605cbd540a4246c81874dfa2, type: 2}
+  camModel: {fileID: 108274, guid: 6acb135e3fe884eab9ddb5d2b49b03bf, type: 2}
   ownCam: {fileID: 1805501113}
   viewmanager: {fileID: 0}
 --- !u!4 &1563991091
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 192.168.1.169
+  ps_server: 10.9.33.1
   ps_port: 9000
   device: 1
   camera: {fileID: 2116470497}
@@ -1139,7 +1139,7 @@ Transform:
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 2116470497}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.237, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
