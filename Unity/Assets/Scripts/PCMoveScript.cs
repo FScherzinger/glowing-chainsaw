@@ -12,6 +12,7 @@ public class PCMoveScript : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+		UnityEngine.Cursor.visible = false;
 		y_pos = transform.position.y;
 	}
 	

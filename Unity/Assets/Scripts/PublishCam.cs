@@ -41,7 +41,17 @@ public class PublishCam : MonoBehaviour {
                 
 			else {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
-				pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);
+				switch(device){
+				case Device.GEARVR:
+					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject.GetComponent<Camera>());
+					break;
+				case Device.TANGO:
+					break;
+				case Device.VIVE:
+				case Device.PC:
+					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);
+					break;
+				}
 			}
 				
 			yield return new WaitForSeconds (intervall);

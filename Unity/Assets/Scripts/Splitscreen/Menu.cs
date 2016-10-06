@@ -23,7 +23,7 @@ public class Menu : MonoBehaviour
 				maincam.SetActive (switchScreen);
 			if(splitscreen!=null)
 				splitscreen.SetActive (!switchScreen);
-			//switchScreen = !switchScreen;
+			switchScreen = !switchScreen;
         }
     }
 

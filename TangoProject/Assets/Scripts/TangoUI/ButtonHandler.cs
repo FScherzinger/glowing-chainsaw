@@ -138,8 +138,9 @@ public class ButtonHandler : MonoBehaviour
         }
         else
         {
-            swipe();
-            if (!tap)
+            //swipe();
+            if (!Input.GetMouseButtonDown(0))
+                //if(Input.touchCount == 1)
             {
                 switch (swipeDirection)
                 {
@@ -324,5 +325,17 @@ public class ButtonHandler : MonoBehaviour
             tap = true;
             Debug.Log("Place Cube");
         }
+    }
+
+    public void swipeRight()
+    {
+        swipeDirection = SwipeDirection.RIGHT;
+        Debug.Log("swipe right");
+    }
+
+    public void swipeLeft()
+    {
+        swipeDirection = SwipeDirection.LEFT;
+        Debug.Log("swipe left");
     }
 }

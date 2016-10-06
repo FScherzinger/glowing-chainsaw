@@ -11,22 +11,19 @@ using de.dfki.events;
 public class InputHandler : MonoBehaviour
 {
 	[SerializeField] private VRInput vRInput;
-	[SerializeField] private Material normalMaterial;                
-	[SerializeField] private Material overMaterial;
-	[SerializeField] private Material dragMaterial;
-	[SerializeField] private Material annotationMaterial;
 	[SerializeField] private VRInteractiveItem interactiveItem;
 	[SerializeField] private Renderer renderer;
 	[SerializeField] private GameObject movingCubeModel;
+	[SerializeField] private GameObject over;
 	private GameObject movingCube;
 	private int id;
 
 	private bool annotated = false;
 	private bool draggable = false;
-		
+
 	private void Awake ()
 	{
-		renderer.material = normalMaterial;
+		renderer.material.color = Color.green;
 		id = this.gameObject.GetComponent<MetaData>().id;
 	}
 
@@ -35,9 +32,9 @@ public class InputHandler : MonoBehaviour
 	{
 		interactiveItem.OnOver += HandleOver;
 		interactiveItem.OnOut += HandleOut;
-		interactiveItem.OnClick += Click;
+		interactiveItem.OnDoubleClick += Click;
 		interactiveItem.OnSwipe += Rotate;
-		vRInput.OnClick += VRClick;
+		vRInput.OnDoubleClick += VRClick;
 		vRInput.OnSwipe += VRSwipe;
 	}
 
@@ -46,27 +43,27 @@ public class InputHandler : MonoBehaviour
 	{
 		interactiveItem.OnOver -= HandleOver;
 		interactiveItem.OnOut -= HandleOut;
-		interactiveItem.OnClick -= Click;
+		interactiveItem.OnDoubleClick -= Click;
 		interactiveItem.OnSwipe -= Rotate;
-		vRInput.OnClick -= VRClick;
+		vRInput.OnDoubleClick -= VRClick;
+		vRInput.OnSwipe -= VRSwipe;
 	}
 
 
 	//Handle the Over event
 	private void HandleOver()
 	{
-		renderer.material = overMaterial;
+		renderer.material.color = Color.yellow;
+		over.SetActive(true);
 	}
 
 
 	//Handle the Out event
 	private void HandleOut()
 	{
-		if(!draggable)
-			if(!annotated)
-				renderer.material = normalMaterial;
-			else
-				renderer.material = annotationMaterial;
+		if(!draggable && !annotated)
+			renderer.material.color = Color.green;
+		over.SetActive(false);
 	}
 
 	//Handle the Click event
@@ -76,9 +73,10 @@ public class InputHandler : MonoBehaviour
 			if(movingCube == null && !draggable){
 				if(RPCClient.client.Can_Interact(id)){
 					draggable = true;
-					renderer.material = dragMaterial;
+					renderer.material.color = Color.red;
 					RPCClient.client.LockGameObject(id);
 					movingCube = Instantiate(movingCubeModel);
+					movingCube.transform.rotation = this.transform.rotation;
 					movingCube.SetActive(true);
 				}
 			}
@@ -92,9 +90,10 @@ public class InputHandler : MonoBehaviour
 			if(movingCube == null && !draggable){
 				if(RPCClient.client.Can_Interact(id)){
 					draggable = true;
-					renderer.material = dragMaterial;
+					renderer.material.color = Color.red;
 					RPCClient.client.LockGameObject(id);
 					movingCube = Instantiate(movingCubeModel);
+					movingCube.transform.rotation = this.transform.rotation;
 					movingCube.SetActive(true);
 				}
 			}
