@@ -20,10 +20,6 @@ public class InputHandler : MonoBehaviour
 
 	private bool annotated = false;
 	private bool draggable = false;
-		
-	public bool isOver(){
-		return interactiveItem.IsOver;
-	}
 
 	private void Awake ()
 	{
