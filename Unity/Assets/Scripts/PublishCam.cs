@@ -43,7 +43,7 @@ public class PublishCam : MonoBehaviour {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
 				switch(device){
 				case Device.GEARVR:
-					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject.GetComponent<Camera>());
+					pub.SendRotation (camID,ObjType.CAMERA,this.gameObject);
 					break;
 				case Device.TANGO:
 					break;
