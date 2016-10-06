@@ -16,7 +16,7 @@ public class PublishCam : MonoBehaviour {
 	public int camID = 0;
     public RPCClient rpclient;
 	void Start () {
-	
+
 		pub = new Publisher {
 			serverPort = ps_port,
 			serverAddr = ps_server,
@@ -24,18 +24,22 @@ public class PublishCam : MonoBehaviour {
 		};
 		pubThread = new Thread(pub.Connect);
 		pubThread.Start ();
-      
+
 		publish_pos_rot = PublishPosRot (.2f);
 		StartCoroutine (publish_pos_rot);
 	}
-	
+
 
 	IEnumerator PublishPosRot(float intervall){
 		for (;;) {
             if( pub == null )
                 continue;
-            if (camID == 0 )
-                camID = RPCClient.client.getUniqueCameraId();
+            if (camID == 0)
+            {
+                camID = (new System.Random()).Next();
+
+            }
+
 			else {
 				pub.SendPosition (camID,ObjType.CAMERA,this.gameObject);
 				switch(device){
@@ -49,7 +53,7 @@ public class PublishCam : MonoBehaviour {
 						break;
 				}
 			}
-				
+
 			yield return new WaitForSeconds (intervall);
 		}
 	}
