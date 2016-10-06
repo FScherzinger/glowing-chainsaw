@@ -840,7 +840,6 @@ GameObject:
   - 4: {fileID: 1805501111}
   - 114: {fileID: 1805501112}
   - 114: {fileID: 1805501113}
-  - 114: {fileID: 1805501114}
   m_Layer: 0
   m_Name: WarpAnchor
   m_TagString: Untagged
@@ -891,18 +890,6 @@ MonoBehaviour:
   device: 1
   camera: {fileID: 2116470497}
   camID: 0
---- !u!114 &1805501114
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_GameObject: {fileID: 1805501110}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: de9c324949989a84683d4c93a12e936f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  viewmananger: {fileID: 0}
 --- !u!1 &1815493926 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 100002, guid: 582e320d34da24844b95a9ba820789c7, type: 3}
