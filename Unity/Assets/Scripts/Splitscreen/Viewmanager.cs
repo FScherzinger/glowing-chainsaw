@@ -10,41 +10,43 @@ public class Viewmanager : MonoBehaviour
     private int max_number_of_camera = 4;
     private int last_count = 0;
     private Camera[] cameras;
+    private Camera camPC;
+    private Camera camGear;
+    private Camera camTango;
+    private Camera camVive;
 
-	public void AssignCamPostion(Device device, Vector3 pos){
-		cameras = Camera.allCameras;
+    public void AssignCamPostion(Device device, Vector3 pos){
 
 		switch(device){
 		case Device.GEARVR:
-			cameras[0].transform.position = pos;
+			camGear.transform.position = pos;
 			break;
 		case Device.PC:
-			cameras[1].transform.position = pos;
+			camPC.transform.position = pos;
 			break;
 		case Device.TANGO:
-			cameras[2].transform.position = pos;
+			camTango.transform.position = pos;
 			break;
 		case Device.VIVE:
-			cameras[3].transform.position = pos;
+			camVive.transform.position = pos;
 			break;
 		}
 	}
 
 	public void AssignCamDirection(Device device, Quaternion dir){
-		cameras = Camera.allCameras;
 
 		switch(device){
 		case Device.GEARVR:
-			cameras[0].transform.rotation = dir;
+			camGear.transform.rotation = dir;
 			break;
 		case Device.PC:
-			cameras[1].transform.rotation = dir;
+			camPC.transform.rotation = dir;
 			break;
 		case Device.TANGO:
-			cameras[2].transform.rotation = dir;
+			camTango.transform.rotation = dir;
 			break;
 		case Device.VIVE:
-			cameras[3].transform.rotation = dir;
+			camVive.transform.rotation = dir;
 			break;
 		}
 	}
@@ -57,6 +59,11 @@ public class Viewmanager : MonoBehaviour
         // label each view to see whitch device we are watching
         foreach( Camera camera in cameras )
             camera.gameObject.GetComponentInChildren<Text>().text = camera.name;
+
+        camPC = GameObject.Find("PC View").GetComponent<Camera>();
+        camGear = GameObject.Find("GearVR View").GetComponent<Camera>();
+        camTango = GameObject.Find("Tango VIew").GetComponent<Camera>();
+        camVive = GameObject.Find("Vive View").GetComponent<Camera>();
     }
 
     private void UpdateCameras( int count )

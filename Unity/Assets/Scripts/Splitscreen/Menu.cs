@@ -21,9 +21,13 @@ public class Menu : MonoBehaviour
             /*ToggleMenu();*/
 			if(maincam!=null)
 				maincam.SetActive (switchScreen);
-			if(splitscreen!=null)
-				splitscreen.SetActive (!switchScreen);
-			switchScreen = !switchScreen;
+            if (splitscreen != null) {
+                splitscreen.SetActive(!switchScreen);
+                switchScreen = !switchScreen;
+                Camera PCSplitScreen = GameObject.Find("PC View").GetComponent<Camera>();
+                PCSplitScreen.transform.position = maincam.transform.position;
+                PCSplitScreen.transform.rotation = maincam.transform.rotation;
+                    }
         }
     }
 
