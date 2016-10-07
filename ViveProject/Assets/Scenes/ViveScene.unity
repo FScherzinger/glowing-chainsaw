@@ -117,7 +117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1793eaee7ed730046a0dbb5795b83ac8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  serverAddress: 192.168.1.172
+  serverAddress: 192.168.1.169
   serverPort: 9987
   serverPassword: secret
   nickName: client
@@ -306,8 +306,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 192.168.1.172
-  rpc_serveraddress: 192.168.1.172
+  ps_serveraddress: 192.168.1.169
+  rpc_serveraddress: 192.168.1.169
   device: 2
   objectInitializer: {fileID: 1630807793}
 --- !u!4 &262771326
@@ -471,12 +471,12 @@ Prefab:
         type: 2}
       propertyPath: m_Mesh
       value: 
-      objectReference: {fileID: 1462863436}
+      objectReference: {fileID: 1454493205}
     - target: {fileID: 23000010880446368, guid: 232ece81fe00b90468089e0f9f296c9b,
         type: 2}
       propertyPath: m_Materials.Array.data[0]
       value: 
-      objectReference: {fileID: 2138974585}
+      objectReference: {fileID: 1658048164}
     - target: {fileID: 114000013175756398, guid: 232ece81fe00b90468089e0f9f296c9b,
         type: 2}
       propertyPath: buttons.Array.data[1].OnClick.m_PersistentCalls.m_Calls.Array.data[2].m_MethodName
@@ -1002,6 +1002,18 @@ Prefab:
       propertyPath: buttons.Array.data[1].OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_CallState
       value: 2
       objectReference: {fileID: 0}
+    - target: {fileID: 114000013175756398, guid: 232ece81fe00b90468089e0f9f296c9b,
+        type: 2}
+      propertyPath: buttons.Array.data[1].ButtonIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 4fde175e4c962684d9b184aba7870856,
+        type: 3}
+    - target: {fileID: 114000012739955804, guid: 232ece81fe00b90468089e0f9f296c9b,
+        type: 2}
+      propertyPath: buttons.Array.data[1].ButtonIcon
+      value: 
+      objectReference: {fileID: 21300000, guid: 4fde175e4c962684d9b184aba7870856,
+        type: 3}
     m_RemovedComponents:
     - {fileID: 114000011387209734, guid: 232ece81fe00b90468089e0f9f296c9b, type: 2}
   m_ParentPrefab: {fileID: 100100000, guid: 232ece81fe00b90468089e0f9f296c9b, type: 2}
@@ -1261,7 +1273,7 @@ Prefab:
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 255333d57084e4e46b3d948279746a47, type: 2}
   m_IsPrefabParent: 0
---- !u!43 &1462863436
+--- !u!43 &1454493205
 Mesh:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
@@ -1486,6 +1498,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 9
+--- !u!21 &1658048164
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_Name: Sprites/Default
+  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 5
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  m_SavedProperties:
+    serializedVersion: 2
+    m_TexEnvs:
+    - first:
+        name: _MainTex
+      second:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - first:
+        name: PixelSnap
+      second: 0
+    m_Colors:
+    - first:
+        name: _Color
+      second: {r: 1, g: 1, b: 1, a: 1}
 --- !u!1 &1674961003 stripped
 GameObject:
   m_PrefabParentObject: {fileID: 1000012364391006, guid: 232ece81fe00b90468089e0f9f296c9b,
@@ -1502,7 +1543,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 192.168.1.172
+  ps_server: 192.168.1.169
   ps_port: 9000
   device: 2
   camID: 0
@@ -1752,32 +1793,3 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 1
---- !u!21 &2138974585
-Material:
-  serializedVersion: 6
-  m_ObjectHideFlags: 0
-  m_PrefabParentObject: {fileID: 0}
-  m_PrefabInternal: {fileID: 0}
-  m_Name: Sprites/Default
-  m_Shader: {fileID: 10753, guid: 0000000000000000f000000000000000, type: 0}
-  m_ShaderKeywords: 
-  m_LightmapFlags: 5
-  m_CustomRenderQueue: -1
-  stringTagMap: {}
-  m_SavedProperties:
-    serializedVersion: 2
-    m_TexEnvs:
-    - first:
-        name: _MainTex
-      second:
-        m_Texture: {fileID: 0}
-        m_Scale: {x: 1, y: 1}
-        m_Offset: {x: 0, y: 0}
-    m_Floats:
-    - first:
-        name: PixelSnap
-      second: 0
-    m_Colors:
-    - first:
-        name: _Color
-      second: {r: 1, g: 1, b: 1, a: 1}

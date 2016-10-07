@@ -58,7 +58,7 @@ Transform:
   m_GameObject: {fileID: 1000010535058262}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -1.4, y: -0.136, z: 2.847}
-  m_LocalScale: {x: 0.05, y: 0.03, z: 0.08}
+  m_LocalScale: {x: 0.05, y: 0.03, z: 0.05}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_Children:
   - {fileID: 4000014269267216}
@@ -204,6 +204,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   noUpdate: 0
+  dev: 4
 --- !u!114 &114000012426437820
 MonoBehaviour:
   m_ObjectHideFlags: 1
