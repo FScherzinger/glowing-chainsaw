@@ -27,6 +27,13 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     public Publisher ps_publisher { get; set; }
     public GameObject baxterCommunicator;
 
+	const float max_x = 1.42f;
+	const float min_x = 0.7f;
+	const float max_y = 1.05f;
+	const float min_y = 0.9f;
+	const float max_z = 0.95f;
+	const float min_z = 0.2f;
+
 
     void Start()
     {
@@ -43,7 +50,7 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		//invoke publishers
 		publish_posrot = publishPositionRotation(0.1f);
 		StartCoroutine(publish_posrot);
-		StartCoroutine(publishAnnotationsNotes(2f));
+		StartCoroutine(publishAnnotationsNotes(1f));
     }
 
 
@@ -63,7 +70,6 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 				curposition = SceneObjects [pe.Id].transform.position;
 				currotation = SceneObjects [pe.Id].transform.eulerAngles;
 				destination = new Vector3 ((float)pe.Position.X, (float)pe.Position.Y, (float)pe.Position.Z);
-
 			} else 
 				return;
 			
@@ -76,12 +82,12 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 				if (t.Second == null) {
 					//
 					if (baxterCommunicator != null)
-						baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
+							baxterCommunicator.GetComponent<SendPickAndPlace> ().SendPAP (curposition, destination, currotation, currotation);
 					else
 						SceneObjects [t.First.Id].transform.position = destination;
 						
 				} else {
-                if (baxterCommunicator != null)
+				if (baxterCommunicator != null)
                     baxterCommunicator.GetComponent<SendPickAndPlace>().SendPAP(curposition, destination, currotation, direction.eulerAngles);
                 else
                 {
@@ -93,6 +99,16 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
 		}
 				
 				
+	}
+
+	bool posCheck(Vector3 pos){
+		if(pos.x < min_x || pos.x > max_x)
+			return false;
+		if(pos.y < min_y || pos.y > max_y)
+			return false;
+		if(pos.z < min_z || pos.z > max_z)
+			return false;
+		return true;
 	}
 			
 	IEnumerator publishPositionRotation(float intervall){
@@ -342,6 +358,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     public bool Move( PositionEvent e )
     {
         Debug.Log( "Move entered." );
+		if(!posCheck(new Vector3((float)e.Position.X, (float)e.Position.Y, (float)e.Position.Z)))
+			return false;
         //Game Object should be locked before move
         if( Can_Interact( e.Id ) )
         {
@@ -361,6 +379,8 @@ public class SceneHandler : MonoBehaviour, Scene.Iface
     {
         if( e.Id != d.Id )
             return false;
+		if(!posCheck(new Vector3((float)e.Position.X, (float)e.Position.Y, (float)e.Position.Z)))
+			return false;
         Debug.Log( "Move_And_Rotate entered." );
         // GameObject should be locked vefore move
         if( Can_Interact( e.Id ) )

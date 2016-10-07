@@ -655,8 +655,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ps_port: 9000
   rpc_port: 9001
-  ps_serveraddress: 10.9.33.1
-  rpc_serveraddress: 10.9.33.1
+  ps_serveraddress: 192.168.1.172
+  rpc_serveraddress: 192.168.1.172
   device: 1
   objectInitializer: {fileID: 1563991089}
 --- !u!4 &1483119076
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e40316a61f341b841b0389e0cec2d552, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ps_server: 10.9.33.1
+  ps_server: 192.168.1.172
   ps_port: 9000
   device: 1
   camera: {fileID: 2116470497}
