@@ -19,7 +19,6 @@ public class TangoInputHandler : MonoBehaviour {
 
 	void Awake () {
 		id = this.gameObject.GetComponent<MetaData>().id;
-		over.SetActive(false);
 	}
 
 	private void OnEnable()
